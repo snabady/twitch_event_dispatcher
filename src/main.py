@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import events
 from events import twitch_events
 import asyncio
@@ -6,12 +8,12 @@ from handlers.twitch_event_handler import handle_twitch_subscribe_event
 
 
 async def main():
-
+    load_dotenv()
 
     subscribe_event("twitch_subscribe_event", handle_twitch_subscribe_event)
 
 
-    async with twitch_events.TwitchEvents(dotenv_path="/home/sna/src/twitch/src/events/.env_twitch_events", use_cli=True) as tevents:
+    async with twitch_events.TwitchEvents(dotenv_path= (os.getenv("TWITCH_EVENT_DOTENVPATH")), use_cli=os.getenv("USE_CLI")) as tevents:
         try:
             #print (type(tevents))
             subscribe_event_ids = await tevents.listen_subscribe_events()

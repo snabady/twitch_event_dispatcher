@@ -13,5 +13,3 @@ def post_event(event_type, data: str) :
     for fn in subscribers[event_type]:
         print(f"calling {fn.__name__}")
         fn(data)
-    
-    

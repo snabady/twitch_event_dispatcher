@@ -1,11 +1,15 @@
 import events
 from events import twitch_events
 import asyncio
-
-
+from dispatcher.event_dispatcher import subscribe_event
+from handlers.twitch_event_handler import handle_twitch_subscribe_event
 
 
 async def main():
+
+
+    subscribe_event("twitch_subscribe_event", handle_twitch_subscribe_event)
+
 
     async with twitch_events.TwitchEvents(dotenv_path="/home/sna/src/twitch/src/events/.env_twitch_events", use_cli=True) as tevents:
         try:

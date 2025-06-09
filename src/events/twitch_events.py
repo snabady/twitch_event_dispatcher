@@ -9,7 +9,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from typing import Union, cast
 from utils import log
-from event_dispatcher import post_event
+from dispatcher.event_dispatcher import post_event
 from events.twitch_auth_scopes import TARGET_SCOPES, CLI_SCOPES
 import logging #.config
 import colorlog

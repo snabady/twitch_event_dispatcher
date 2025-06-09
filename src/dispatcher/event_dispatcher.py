@@ -2,10 +2,8 @@ from collections import defaultdict
 
 subscribers = defaultdict(list)
 
-def blub():
-    raise NotImplementedError()
-
-def subscribe_event(event_type:str, fn):
+def subscribe_event(event_type, fn):
+    print(f"registered event_type {event_type} with fkt: {fn.__name__}")
     subscribers[event_type].append(fn)
 
 def post_event(event_type, data: str) :

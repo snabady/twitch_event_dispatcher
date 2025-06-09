@@ -1,23 +1,13 @@
 import os
+import asyncio
 from dotenv import load_dotenv
 import events
 from events import twitch_events
-import asyncio
 from dispatcher.event_dispatcher import subscribe_event
 from handlers.twitch_event_handler import handle_twitch_subscribe_event
-import subprocess
+from utils.run_commands import run_subprocess
 
 
-
-async def run_subprocess(cmd):
-    process = await asyncio.create_subprocess_shell(
-                            cmd,
-                            stdout=asyncio.subprocess.PIPE,
-                            stderr=asyncio.subprocess.PIPE
-                        )
-
-    tdout, stderr = await process.communicate()
-    print(f"stdout: {tdout}")
 
 
 async def main():

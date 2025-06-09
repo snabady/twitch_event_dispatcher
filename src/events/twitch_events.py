@@ -14,6 +14,7 @@ from events.twitch_auth_scopes import TARGET_SCOPES, CLI_SCOPES
 import logging #.config
 import colorlog
 import datetime
+from utils.log import add_logger_handler
 
 class TwitchEvents:
     """
@@ -27,9 +28,26 @@ class TwitchEvents:
     user: Optional[TwitchUser]              = None
 
     def __init__(self, dotenv_path: str, use_cli: bool):
+        """
+        load_dotenv(dotenv_path=dotenv_path)
+        self.setEnv()
+
+        self.logger = logging.getLogger(__name__)
+        #self.logger = add_logger_handler(self.logger)
+        self.logger.setLevel(logging.DEBUG)      
+
+
+        self.use_cli_conn = use_cli
+        self.event_mapping = self.get_eventmap()
+
+        self.live_auth_scope = TARGET_SCOPES
+        self.cli_auth_scopes = CLI_SCOPES
+    """
+
+
         
         self.logger = logging.getLogger(__name__)
-        self.add_logger_handler()
+        add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)        
         self.use_cli_conn = use_cli
         self.event_mapping = self.get_eventmap()
@@ -175,10 +193,10 @@ class TwitchEvents:
                 "timestamp": ts, 
                 "event_source": event_source,
                 "type": self.event_mapping[type(x)],
-                "data": x.to_dict()
+                "data": x
             }
             self.logger.debug(f"posting event:\t {self.event_mapping[type(x)]}")
-            self.logger.debug(f"posting_event_data:\t {data}")
+            #self.logger.debug(f"posting_event_data:\t {data}")
             post_event(self.event_mapping[type(x)], data)
     
 
@@ -390,12 +408,12 @@ class TwitchEvents:
         
         self.logger.info("subscribed to subscribe_events")
         
-
+        # -> cli-command name as key, for automation
         return  {
-            "subscribe_id":subscribe_id,
-            "subscription_end_id":subscription_end_id,
-            "subscription_gift_id": subscription_gift_id,
-            "subscription_message_id": subscription_message_id
+            "channel.subscribe":subscribe_id,
+            "channel.subscription.end":subscription_end_id,
+            "channel.subscription.gift": subscription_gift_id,
+            "channel.subsscription.message": subscription_message_id
         }
 
     async def listen_moderate_events(self):
@@ -470,26 +488,3 @@ class TwitchEvents:
 
 
 
-    def add_logger_handler(self):
-        handler = colorlog.StreamHandler()
-        formatter = colorlog.ColoredFormatter(
-            '%(asctime)s - %(log_color)s%(levelname)-8s%(reset)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S',
-            log_colors={
-                'DEBUG': 'blue',
-                'INFO': 'green',
-                'WARNING': 'yellow',
-                'ERROR': 'red',
-                'CRITICAL': 'bold_red',
-            }
-        )
-
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        
-    def logger(msg):
-            logging.basicConfig(level=logging.INFO)
-            logger = logging.getLogger(f'{datetime.datetime.now().strftime( "%H:%M" )}')
-            logger.info(str(msg))
-
-    

@@ -11,5 +11,5 @@ def post_event(event_type, data: str) :
         print("no subscribers registered")
         return
     for fn in subscribers[event_type]:
-        print(f"calling {fn.__name__}")
+        print(f"dispatcher calling {fn.__name__}")
         fn(data)

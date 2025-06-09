@@ -1,11 +1,11 @@
 import logging #.config
 import colorlog
  
-def add_logger_handler(self):
+def add_logger_handler(logger):
     handler = colorlog.StreamHandler()
     formatter = colorlog.ColoredFormatter(
-        '%(asctime)s - %(log_color)s%(levelname)-8s%(reset)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S',
+        '%(asctime)s - %(log_color)s%(levelname)-8s%(reset)s - %(name)s - %(message)s',
+        datefmt='%H:%M:%S',
         log_colors={
             'DEBUG': 'blue',
             'INFO': 'green',
@@ -16,11 +16,7 @@ def add_logger_handler(self):
     )
 
     handler.setFormatter(formatter)
-    self.logger.addHandler(handler)
-    
-def logger(msg):
-        logging.basicConfig(level=logging.INFO)
-        logger = logging.getLogger(f'{datetime.datetime.now().strftime( "%H:%M" )}')
-        logger.info(str(msg))
+    logger.addHandler(handler)
 
+    return logger
     

@@ -1,24 +1,19 @@
+from collections import defaultdict
 
-event_map= {
-}
-
+subscribers = defaultdict(list)
 
 def blub():
     raise NotImplementedError()
 
-def register_event_source(event_name):
-    if event_name not in event_map:
-        event_map[event_name] = []
+def subscribe_event(event_type:str, fn):
+    subscribers[event_type].append(fn)
 
-def register_handler(event_name, handler):
-    if event_name not in event_map:
-        register_event_source(event_name)
-    event_map[event_name].append(handler)
+def post_event(event_type, data: str) :
+    if not event_type in subscribers:
+        print("no subscribers registered")
+        return
+    for fn in subscribers[event_type]:
+        print(f"calling {fn.__name__}")
+        fn(data)
     
-def dispatch_event(event_name, data) -> str:
-    if event_name not in event_map:
-        raise ValueError (f"{event_name} not registered. could not dispatch")
-    if not event_map[event_name]:
-        raise ValueError( f"no handler registered for {event_name}")
-    return f"successfully dispatched {event_name}"
     

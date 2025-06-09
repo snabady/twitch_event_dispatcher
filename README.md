@@ -1,5 +1,5 @@
 # twitch_event_dispatcher
-to install twitch-cli:
+first install twitch-cli for detailed information check  [Twitch Docs](https://dev.twitch.tv/docs/cli/)
 ```sh
 #!/bin/bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -13,3 +13,11 @@ twitch token
 twitch mock-api generate
 ```
 copy your generated credentials and userID into .env_twitch_cli
+
+then start the twitch-mocking-service and the websocket to listen for the events.
+```sh
+twitch mock-api start -p 5555 &
+twitch event websocket start -p 5556 &
+```
+check .env file u should be ready to run
+main.py

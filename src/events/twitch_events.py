@@ -28,29 +28,29 @@ class TwitchEvents:
     user: Optional[TwitchUser]              = None
 
     def __init__(self, dotenv_path: str, use_cli: bool):
-        """
+        self.use_cli_conn = use_cli
         load_dotenv(dotenv_path=dotenv_path)
-        self.setEnv()
+
 
         self.logger = logging.getLogger(__name__)
-        #self.logger = add_logger_handler(self.logger)
+        self.logger = add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)      
 
-
+        self.logger.debug(f"use_cli: {use_cli}")
         self.use_cli_conn = use_cli
         self.event_mapping = self.get_eventmap()
 
         self.live_auth_scope = TARGET_SCOPES
         self.cli_auth_scopes = CLI_SCOPES
-        """
-        self.use_cli_conn = use_cli
+        
+        
         self.event_map = self.get_eventmap()
         load_dotenv(dotenv_path=dotenv_path)
-        self.setEnv()
+
         self.live_auth_scope = TARGET_SCOPES
         self.cli_auth_scopes = CLI_SCOPES
         self.twitch_cli_commands = []
-            
+        self.setEnv()
     async def __aenter__(self):
         
         if self.use_cli_conn:
@@ -189,7 +189,7 @@ class TwitchEvents:
             
             self.event_mapping
             x = cast(ChannelSubscribeEvent, x)
-            
+            self.logger.debug(f"**** event_type: {x.subscription.type}")
             
             data = {
                 "timestamp_received": ts, 
@@ -197,7 +197,7 @@ class TwitchEvents:
                 "event_source": event_source,
                 "event_id": x.subscription.id,
                 "event_type": x.subscription.type,
-                "event_map": self.event_map,
+                
                 "type": self.event_map[type(x)],
                 "event_data": x.event.to_dict()
             }

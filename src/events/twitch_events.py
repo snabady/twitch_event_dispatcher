@@ -432,7 +432,7 @@ class TwitchEvents:
             "channel.subscribe":subscribe_id,
             "channel.subscription.end":subscription_end_id,
             "channel.subscription.gift": subscription_gift_id,
-            "channel.subsscription.message": subscription_message_id
+            "channel.subscription.message": subscription_message_id
         }
 
     async def listen_moderate_events(self):

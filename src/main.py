@@ -54,7 +54,7 @@ async def main():
 
             for x in subscribe_event_ids:
                 await trigger_cli_event(x, subscribe_event_ids[x])
-                break
+                
         except Exception as e:
             print(e)
             print(f'error while scubscribing........\n\t{e}')

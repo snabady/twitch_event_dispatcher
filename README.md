@@ -13,7 +13,7 @@ twitch token
 twitch mock-api generate
 ```
 copy your generated credentials and userID into .env_twitch_cli
-
+$HOME/.config/twitch-cli/.twitch-cli.env
 then start the twitch-mocking-service and the websocket to listen for the events.
 ```sh
 twitch mock-api start -p 5555 &

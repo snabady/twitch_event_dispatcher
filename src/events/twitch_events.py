@@ -187,8 +187,9 @@ class TwitchEvents:
         self.logger.debug(f'x: {type(x)}')
         if self.event_map[type(x)] != None:
             
-            self.event_mapping
+            
             x = cast(ChannelSubscribeEvent, x)
+
             self.logger.debug(f"**** event_type: {x.subscription.type}")
             
             data = {
@@ -201,6 +202,7 @@ class TwitchEvents:
                 "type": self.event_map[type(x)],
                 "event_data": x.event.to_dict()
             }
+            #self.logger.debug(f'EVENTDATA-DISPATCHER?? {x.event.to_dict()}')
             self.logger.debug(f"POST:{self.event_map[type(x)]} ")
             self.logger.debug(f"event_type: {x.subscription.type}")
             #self.logger.debug(f"posting_event_data:\t {data}")
@@ -229,12 +231,12 @@ class TwitchEvents:
         streamonline_id     = await self.eventsub.listen_stream_online(self.user.id, self.dispatch_twitch_event)  
         streamoffline_id    = await self.eventsub.listen_stream_offline(self.user.id, self.dispatch_twitch_event)   
         channelupdatev2_id  = await self.eventsub.listen_channel_update_v2(self.user.id, self.dispatch_twitch_event)
-        channelupdate_id    = await self.eventsub.listen_channel_update(self.user.id,self.on_twitch_event)
+        channelupdate_id    = await self.eventsub.listen_channel_update(self.user.id,self.dispatch_twitch_event)
         return {
-            "listen.stream.online": streamonline_id,
-            "listen.stream.offline": streamoffline_id,
-            "listen.channel.update_v2": channelupdatev2_id,
-            "listen.channel.update": channelupdate_id
+            "stream.online": streamonline_id,
+            "stream.offline": streamoffline_id,
+            "channel.update_v2": channelupdatev2_id,
+            "channel.update": channelupdate_id
         }
 
     async def listen_channel_goal_events(self):
@@ -309,11 +311,12 @@ class TwitchEvents:
         channel.channel_points_custom_reward_redemption.update
         """
         try:
-            reward_add_id        = await self.eventsub.listen_channel_points_custom_reward_add(self.user.id, self.dispatch_twitch_event)
-            reward_remove_id     = await self.eventsub.listen_channel_points_custom_reward_remove(self.user.id, self.dispatch_twitch_event)
-            reward_update_id     = await self.eventsub.listen_channel_points_custom_reward_update(self.user.id, self.dispatch_twitch_event)
-            redemption_add_id    = await self.eventsub.listen_channel_points_custom_reward_redemption_add(self.user.id, self.dispatch_twitch_event)
-            redemption_update_id = await self.eventsub.listen_channel_points_custom_reward_redemption_update(self.user.id, self.dispatch_twitch_event)
+            reward_add_id                       = await self.eventsub.listen_channel_points_custom_reward_add(self.user.id, self.dispatch_twitch_event)
+            reward_remove_id                    = await self.eventsub.listen_channel_points_custom_reward_remove(self.user.id, self.dispatch_twitch_event)
+            reward_update_id                    = await self.eventsub.listen_channel_points_custom_reward_update(self.user.id, self.dispatch_twitch_event)
+            redemption_add_id                   = await self.eventsub.listen_channel_points_custom_reward_redemption_add(self.user.id, self.dispatch_twitch_event)
+            redemption_update_id                = await self.eventsub.listen_channel_points_custom_reward_redemption_update(self.user.id, self.dispatch_twitch_event)
+            automatic_reward_redemption_add_id  = await self.eventsub.listen_channel_points_automatic_reward_redemption_add(self.user.id, self.dispatch_twitch_event)
             #auto_reward_redemption = await self.eventsub.listen_channel_points_automatic_reward_redemption_add(self.user.id, self.on_twitch_event)
         except Exception as e:
             self.logger.error(e)
@@ -325,7 +328,8 @@ class TwitchEvents:
             "channel.channel_points_custom_reward.remove" : reward_remove_id,
             "channel.channel_points_custom_reward.update" : reward_update_id,
             "channel.channel_points_custom_reward_redemption.add": redemption_add_id,
-            "channel.channel_points_custom_reward_redemption.update": redemption_update_id
+            "channel.channel_points_custom_reward_redemption.update": redemption_update_id,
+            "channel.channel_points_automatic_reward_redemption.add": automatic_reward_redemption_add_id
         }
 
 
@@ -460,13 +464,8 @@ class TwitchEvents:
         channel.follow 
         channel.raid 
         """
-        raid_id = await self.eventsub.listen_channel_raid(self.dispatch_twitch_event, 
-                                                        None,self.user.id)
-        follow_id = await self.eventsub.listen_channel_follow_v2(self.user.id, 
-                                                                self.user.id, 
-                                                                self.dispatch_twitch_event)
-        
-        
+        raid_id = await self.eventsub.listen_channel_raid(self.dispatch_twitch_event, None,self.user.id)
+        follow_id = await self.eventsub.listen_channel_follow_v2(self.user.id, self.user.id, self.dispatch_twitch_event)
         channel_cheer_id = await self.eventsub.listen_channel_cheer(self.user.id, self.dispatch_twitch_event)
         
         return {

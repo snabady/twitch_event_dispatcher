@@ -23,37 +23,51 @@ def my_event_subscriptions():
     subscribe_event("twitch_action_events", handler.handle_twitch_action_event)
     subscribe_event("twitch_moderate_event", handler.hanle_twitch_moderate_event)
 
+
+
 async def trigger_cli_event(event_key, event_id):
+
+    if event_key.find("channel.update_v2") != -1 or event_key.find("channel.update") != -1 :
+        event_key = "channel.update"
+        command = f"twitch event trigger {event_key} -u {event_id} -t {os.getenv("CLI_USER_ID")} -v 2 -T websocket"
+    elif event_key.find("channel.channel_points_custom_reward_redemption.addv2") != -1:
+
+        command = f"twitch event trigger {event_key} -u {event_id} -t {os.getenv("CLI_USER_ID")} -v 2 -T websocket"
+    else:
+        command = f"twitch event trigger {event_key} -u {event_id} -t {os.getenv("CLI_USER_ID")} -T websocket"
     
-    command = f"twitch event trigger {event_key} -u {event_id} -t {os.getenv("CLI_USER_ID")} -T websocket"
-    print (f"---------------------------------------------------------------{command}")
+    
+    print (f"#######{command}")
     await run_subprocess(command)
 
 
 async def main():
     #load_dotenv(dotenv_path="/home/sna/src/twitch/events/.env_twitch_events")
+    # TODO .envs anpassen
     my_event_subscriptions()
     async with twitch_events.TwitchEvents(dotenv_path= "/home/sna/src/twitch/src/events/.env_twitch_events", use_cli=True) as tevents:
         print (f"dotenv_path: ")
         try:
             #print (type(tevents))
-            subscribe_event_ids = await tevents.listen_subscribe_events()
-   
-                
+            #test_ids = await tevents.listen_subscribe_events()
+            #test_ids = await tevents.listen_ban_events()
             #twitch_ban_event_ids = await tevents.listen_ban_events()
-            #await tevents.listen_channel_goal_events()
-            #await tevents.listen_channel_points()
-            #await tevents.listen_channel_polls()
-            #await tevents.listen_channel_predictions()
-            #await tevents.listen_hype_train()
-            #await tevents.listen_shoutout_events()
-            #await tevents.listen_stream_info_events()
-            ##await tevents.listen_charity_events()
-            #await tevents.listen_channel_action_events()
-            ##await tevents.listen_channel_moderate_events()
+            #test_ids = await tevents.listen_stream_info_events()
+            
+            
+            #test_ids = await tevents.listen_channel_goal_events()
+            test_ids = await tevents.listen_channel_points()
+            #test_ids = await tevents.listen_channel_polls()
+            #test_ids = await tevents.listen_channel_predictions()
+            #test_ids = await tevents.listen_hype_train()
+            #test_ids = await tevents.listen_shoutout_events()
+          
+            #test_ids = await tevents.listen_charity_events()
+            #test_ids = await tevents.listen_channel_action_events()
+            #test_ids = await tevents.listen_channel_moderate_events()
 
-            for x in subscribe_event_ids:
-                await trigger_cli_event(x, subscribe_event_ids[x])
+            for x in test_ids:
+                await trigger_cli_event(x, test_ids[x])
                 
         except Exception as e:
             print(e)

@@ -201,7 +201,8 @@ class TwitchEvents:
                 "type": self.event_map[type(x)],
                 "event_data": x.event.to_dict()
             }
-            self.logger.debug(f"POST:{self.event_map[type(x)]} \t event_type: {x.subscription.type}")
+            self.logger.debug(f"POST:{self.event_map[type(x)]} ")
+            self.logger.debug(f"event_type: {x.subscription.type}")
             #self.logger.debug(f"posting_event_data:\t {data}")
             post_event(self.event_map[type(x)], data)
     
@@ -230,10 +231,10 @@ class TwitchEvents:
         channelupdatev2_id  = await self.eventsub.listen_channel_update_v2(self.user.id, self.dispatch_twitch_event)
         channelupdate_id    = await self.eventsub.listen_channel_update(self.user.id,self.on_twitch_event)
         return {
-            "listen_stream_online": streamonline_id,
-            "listen_stream_offline": streamoffline_id,
-            "listen_channel_update_v2": channelupdatev2_id,
-            "listen_channel_update": channelupdate_id
+            "listen.stream.online": streamonline_id,
+            "listen.stream.offline": streamoffline_id,
+            "listen.channel.update_v2": channelupdatev2_id,
+            "listen.channel.update": channelupdate_id
         }
 
     async def listen_channel_goal_events(self):
@@ -470,7 +471,7 @@ class TwitchEvents:
         
         return {
             "channel.cheer" : channel_cheer_id,
-            "channel.follow" : follow_id,
+            "channel.follow" : fochannel.hype_train.progressllow_id,
             "channel.raid" : raid_id
         }
 

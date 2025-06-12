@@ -12,7 +12,7 @@ def my_event_subscriptions():
     subscribe_event("twitch_subscribe_event", handler.handle_twitch_subscribe_event)
     subscribe_event("twitch_ban_event", handler.handle_twitch_ban_event)
     subscribe_event("twitch_goal_event", handler.handle_twitch_goal_event)
-    subscribe_event("twitch_channelpoint_event", handler.handle_twitch_channelpint_event)
+    subscribe_event("twitch_channelpoint_event", handler.handle_twitch_channelpoint_event)
     subscribe_event("twitch_channel_poll", handler.handle_twitch_poll_event)
     subscribe_event("twitch_predictions_event", handler.handle_twitch_prediction_event)
     subscribe_event("twitch_hypetrain_event", handler.handle_twitch_hypetrain_event)

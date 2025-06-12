@@ -13,7 +13,7 @@ def my_event_subscriptions():
     subscribe_event("twitch_ban_event", handler.handle_twitch_ban_event)
     subscribe_event("twitch_goal_event", handler.handle_twitch_goal_event)
     subscribe_event("twitch_channelpoint_event", handler.handle_twitch_channelpoint_event)
-    subscribe_event("twitch_channel_poll", handler.handle_twitch_poll_event)
+    subscribe_event("twitch_poll_event", handler.handle_twitch_poll_event)
     subscribe_event("twitch_predictions_event", handler.handle_twitch_prediction_event)
     subscribe_event("twitch_hypetrain_event", handler.handle_twitch_hypetrain_event)
     subscribe_event("twitch_shoutout_event", handler.handle_twitch_shoutout_event)
@@ -56,8 +56,8 @@ async def main():
             
             
             #test_ids = await tevents.listen_channel_goal_events()
-            test_ids = await tevents.listen_channel_points()
-            #test_ids = await tevents.listen_channel_polls()
+            #test_ids = await tevents.listen_channel_points()
+            test_ids = await tevents.listen_channel_polls()
             #test_ids = await tevents.listen_channel_predictions()
             #test_ids = await tevents.listen_hype_train()
             #test_ids = await tevents.listen_shoutout_events()
@@ -68,6 +68,7 @@ async def main():
 
             for x in test_ids:
                 await trigger_cli_event(x, test_ids[x])
+                
                 
         except Exception as e:
             print(e)

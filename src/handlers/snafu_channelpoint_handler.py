@@ -52,18 +52,7 @@ def handle_reward_remove (event: dict):
     global_cooldown                 = event_data.get("global_cooldown")#{'is_enabled': True, 'seconds': 300}
     cooldown_expires_at             = event_data.get("cooldown_expire")
     redemptions_redeemed_current_stream = event_data.get("redemptions_redeemed_current_stream")
-"""
-{'id': '26738b30-8a96-dcba-538e-07959b80f8df', 'broadcaster_user_id': '42226127', 'broadcaster_user_login'
-: 'testBroadcaster', 'broadcaster_user_name': 'testBroadcaster', 'is_enabled': True, 'is_paused': False, 'is_in_stock
-': True, 'title': 'Test Reward from CLI', 'cost': 150, 'prompt': 'Redeem Your Test Reward from CLI', 'is_user_input_r
-equired': True, 'should_redemptions_skip_request_queue': False, 'max_per_stream': {'is_enabled': True, 'value': 100},
- 'max_per_user_per_stream': {'is_enabled': True, 'value': 100}, 'background_color': '#c0ffee', 'image': {'url_1x': 'h
-ttps://static-cdn.jtvnw.net/image-1.png', 'url_2x': 'https://static-cdn.jtvnw.net/image-2.png', 'url_4x': 'https://st
-atic-cdn.jtvnw.net/image-4.png'}, 'default_image': {'url_1x': 'https://static-cdn.jtvnw.net/default-1.png', 'url_2x':
- 'https://static-cdn.jtvnw.net/default-2.png', 'url_4x': 'https://static-cdn.jtvnw.net/default-4.png'}, 'global_coold
-own': {'is_enabled': True, 'seconds': 300}, 'cooldown_expires_at': '2025-06-12T04:52:42.115952+00:00', 'redemptions_r
-edeemed_current_stream': 0}
-"""
+
 
 
 def handle_reward_update (event: dict):

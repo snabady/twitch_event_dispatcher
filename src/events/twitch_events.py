@@ -255,7 +255,7 @@ class TwitchEvents:
 
         "channel.goal.begin": goal_begin_id,
         "channel.goal.end" : goal_end_id,
-        "channe.goal.progress": goal_progress_id
+        "channel.goal.progress": goal_progress_id
 
         }
 
@@ -271,7 +271,6 @@ class TwitchEvents:
 
         self.logger.info("successfully subscribed to channel_poll_events")
         return {
-
             "channel.poll.begin" : poll_begin_id, 
             "channel.poll.end": poll_end_id,
             "channel.poll.progress"   : poll_progress_id

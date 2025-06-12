@@ -76,10 +76,10 @@ def handle_twitch_goal_event(event):
     goal_events = {
         "channel.goal.begin": snafu_goal_handler.handle_goal_begin, 
         "channel.goal.end" : snafu_goal_handler.handle_goal_end,
-        "channel.goal.progress": snafu_goal_progress.handle_goal_progress
+        "channel.goal.progress": snafu_goal_handler.handle_goal_progress
     }
     event_type = event.get("event_type")
-    fn = streaminfo_events.get(event_type)
+    fn = goal_events.get(event_type)
     fn(event)
 
 def handle_twitch_channelpoint_event(event):
@@ -102,7 +102,7 @@ def handle_twitch_poll_event(event):
         "channel.poll.progress": snafu_poll_handler.handle_poll_progress
     }
     event_type = event.get("event_type")
-    fn = streaminfo_events.get(event_type)
+    fn = poll_events.get(event_type)
     fn(event)
 
 def handle_twitch_prediction_event(event):

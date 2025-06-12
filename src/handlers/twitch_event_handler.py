@@ -48,7 +48,7 @@ def handle_twitch_action_event(event):
         "channel.raid":     snafu_action_handler.hanlde_channel_raid
     }
     event_type = event.get("event_type")
-    fn = streaminfo_events.get(event_type)
+    fn = action_events.get(event_type)
     fn(event)
 
 def hanle_twitch_moderate_event(event):
@@ -118,12 +118,12 @@ def handle_twitch_prediction_event(event):
 
 def handle_twitch_hypetrain_event(event):
     hypetrain_events = {
-        "channel.hype_train.begin" : snafu_hype_train_handler.handle_hype_train_begin, 
-        "channel.hype_train.end" : snafu_hype_train_handler.handle_hype_train_end,
-        "channel.hype_train.progress":snafu_hype_train_handler.handle_hype_train_end
+        "channel.hype_train.begin" : snafu_hypetrain_handler.handle_hypetrain_begin, 
+        "channel.hype_train.end" : snafu_hypetrain_handler.handle_hypetrain_end,
+        "channel.hype_train.progress":snafu_hypetrain_handler.handle_hypetrain_end
     }
     event_type = event.get("event_type")
-    fn = streaminfo_events.get(event_type)
+    fn = hypetrain_events.get(event_type)
     fn(event)
 
 def handle_twitch_shoutout_event(event):

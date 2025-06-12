@@ -146,7 +146,6 @@ class TwitchEvents:
         ChannelRaidEvent:"twitch_action_event",
         ChannelFollowEvent:"twitch_action_event",
         ChannelCheerEvent:"twitch_action_event",
-        ChannelCheerEvent:"twitch_action_event",
         StreamOnlineEvent:"twitch_streaminfo_event",
         StreamOfflineEvent:"twitch_streaminfo_event",
         ChannelUpdateEvent:"twitch_streaminfo_event",
@@ -179,7 +178,7 @@ class TwitchEvents:
 
 
     
-    async def dispatch_twitch_event(self, x: Union[ChannelSubscribeEvent, ChannelBanEvent]):
+    async def dispatch_twitch_event(self, x: Union[ChannelSubscribeEvent, ChannelBanEvent, ChannelFollowEvent, ChannelRaidEvent, ChannelCheerEvent]):
         self.logger.debug("in dispatch_twitch_event")
         event_source = "twitch_event"
         ts = datetime.datetime.now()
@@ -469,7 +468,7 @@ class TwitchEvents:
         
         return {
             "channel.cheer" : channel_cheer_id,
-            "channel.follow" : fochannel.hype_train.progressllow_id,
+            "channel.follow" : follow_id,
             "channel.raid" : raid_id
         }
 

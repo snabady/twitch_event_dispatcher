@@ -57,13 +57,14 @@ async def main():
             
             #test_ids = await tevents.listen_channel_goal_events()
             #test_ids = await tevents.listen_channel_points()
-            test_ids = await tevents.listen_channel_polls()
+            #test_ids = await tevents.listen_channel_polls()
             #test_ids = await tevents.listen_channel_predictions()
+            
             #test_ids = await tevents.listen_hype_train()
             #test_ids = await tevents.listen_shoutout_events()
           
             #test_ids = await tevents.listen_charity_events()
-            #test_ids = await tevents.listen_channel_action_events()
+            test_ids = await tevents.listen_channel_action_events()
             #test_ids = await tevents.listen_channel_moderate_events()
 
             for x in test_ids:

@@ -16,11 +16,7 @@ def handle_goal_begin(event: dict):
     
     event_data = event.get("event_data")
     print(f'EVENT_DATA: {event_data}')
-    event_id = event_data.get("id")
-    broadcaster_user_login = event_data.get("broadcaster_user_login")
-    broadcaster_user_id = event_data.get("broadcaster_user_id")
-    broadcaster_user_name = event_data.get("broadcaster_user_name")
-    event_type = event_data.get("type")
+
     description = event_data.get("description")
     current_amount = event_data.get("current_amount")
     target_amount = event_data.get("target_amount")

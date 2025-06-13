@@ -7,6 +7,7 @@ def subscribe_event(event_type, fn):
     subscribers[event_type].append(fn)
 
 def post_event(event_type, data: str) :
+    print(f'event_type: {event_type}\nsubscribers: {subscribers}')
     if not event_type in subscribers:
         print("no subscribers registered")
         return

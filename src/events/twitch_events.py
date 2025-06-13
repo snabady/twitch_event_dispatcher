@@ -462,7 +462,7 @@ class TwitchEvents:
         channel.follow 
         channel.raid 
         """
-        raid_id = await self.eventsub.listen_channel_raid(self.dispatch_twitch_event, None,self.user.id)
+        raid_id = await self.eventsub.listen_channel_raid(self.dispatch_twitch_event, self.user.id, None)
         follow_id = await self.eventsub.listen_channel_follow_v2(self.user.id, self.user.id, self.dispatch_twitch_event)
         channel_cheer_id = await self.eventsub.listen_channel_cheer(self.user.id, self.dispatch_twitch_event)
         

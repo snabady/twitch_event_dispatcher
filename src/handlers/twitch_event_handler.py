@@ -1,7 +1,7 @@
 
 from dispatcher.event_dispatcher import subscribe_event
 
-from handlers import snafu_subscribe_handler, snafu_streaminfo_handler,snafu_charity_handler, snafu_action_handler, snafu_moderate_handler, snafu_ban_handler, snafu_goal_handler, snafu_channelpoint_handler, snafu_poll_handler, snafu_prediction_handler, snafu_hypetrain_handler, snafu_shoutout_handler
+from handlers.snafu import snafu_subscribe_handler, snafu_streaminfo_handler,snafu_charity_handler, snafu_action_handler, snafu_moderate_handler, snafu_ban_handler, snafu_goal_handler, snafu_channelpoint_handler, snafu_poll_handler, snafu_prediction_handler, snafu_hypetrain_handler, snafu_shoutout_handler
 
 
 def handle_twitch_subscribe_event(event):

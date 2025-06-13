@@ -5,7 +5,7 @@ import events
 from events import twitch_events
 from dispatcher.event_dispatcher import subscribe_event
 import handlers.twitch_event_handler as handler
-from utils.run_commands import run_subprocess
+from utils.run_command import run_subprocess
 from utils import log
 
 def my_event_subscriptions():
@@ -20,7 +20,7 @@ def my_event_subscriptions():
 
     subscribe_event("twitch_streaminfo_event", handler.handle_twitch_streaminfo_event)
     subscribe_event("twitch_charity_event", handler.handle_twitch_charity_event)
-    subscribe_event("twitch_action_events", handler.handle_twitch_action_event)
+    subscribe_event("twitch_action_event", handler.handle_twitch_action_event)
     subscribe_event("twitch_moderate_event", handler.hanle_twitch_moderate_event)
 
 

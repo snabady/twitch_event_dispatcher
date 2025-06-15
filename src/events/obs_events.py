@@ -25,15 +25,18 @@ def setEnv():
     print(obs_url)
 
 def init_obswebsocket_ws():
-    global ws
     ws  = simpleobsws.WebSocketClient(url=obs_url, password=password)
     await ws.connect()
     await ws.wait_until_identified()
 
 
+async def on_event(eventType, eventData):
+    print('New event! Type: {} | Raw Data: {}'.format(eventType, eventData)) # Print the event data. Note that `update-type` is also provided in the data
+
+
 def get_scene_item_id(scene_name, source_name):
     ''' it is actually the source_id...'''
-    global ws
+    
     request = simpleobsws.Request("GetSceneItemId", {
                         "sceneName": scene_name,
                         "sourceName": source_name
@@ -56,10 +59,6 @@ def set_source_visibility(scene_name, scene_item_id, visible=False):
         return True
     return False 
 
-
-
-async def on_event(eventType, eventData):
-    print('New event! Type: {} | Raw Data: {}'.format(eventType, eventData)) # Print the event data. Note that `update-type` is also provided in the data
 
 async def on_switchscenes(eventData):
     print('Scene switched to "{}".'.format(eventData['sceneName']))

@@ -1,21 +1,48 @@
 import asyncio
 import subprocess
+import queue
 from threading import Thread
 
 
 
-class GatherTasks():
+class EventQueue:
+
     def __init__(self):
+        self.taskqueue = queue.Queue()
+        self.thread_worker = threading.Thread()
+        self.running = True
+        self.thread_worker.start()
+    
+    def enqueue(self, event):
+        self.taskqueue.put(gathertask)
+
+    def dequeue( self ):
+        while self.running:
+            #self.taskqueue.qsize()
+            task = self.taskqueue.get()
+            if task == None:
+                break
+            task.run_tasks()
+        self.taskqueue.task_done() 
+
+    
+
+class GatherTasks():
+    def __init__(self): 
         self.task_list = []
 
     def add_task(self, fn):
         self.task_list.append(fn)
 
     def run_tasks(self):
-        
+        threads = []
         for task in self.task_list:
             t = Thread(target=task)
-            t.start()    
+            t.start() 
+            threads.append(t)
+               
+            
+        for t in threads: 
             t.join()
 
 async def run_subprocess(cmd):
@@ -40,6 +67,10 @@ def run_xcowsay(image:str , text: str, time: int, monitor:int):
     cow_time  = f"--time={str(time)}"
     monitor = f'--monitor={str(monitor)}'
     subprocess.Popen(['xcowsay', text , "--image" , image, '--think', monitor , cow_time])
+
+
+def run_tts(text:str , volume: int):
+    subprocess.Popen([ 'espeak-ng', '-v', 'de', text])
     
 #run_xcowsay("/home/sna/5n4fu_stream/media/img/sna.png", "blub" , 20, 1)
 #run_mpv(True, 120, "/home/sna/5n4fu_stream/media/alerts/new_follower.mp3" )

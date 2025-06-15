@@ -6,15 +6,11 @@ from utils.run_command import GatherTasks
 
 
 env_file_path = "/home/sna/src/twitch/src/handlers/snafu/.env_snafu_handlers"
-#run_mpv('/home/sna/src/scripte_twitch/audio/blub.mp3', 150, no_video=True)
+
 
 def handle_channel_cheer(event: dict ):
     event_data = event.get("event_data")
     print(f"EVENT_DATA: {event_data}")
-
-    """{'is_anonymous': False, 'user_id': '54233921', 'user_login': 'testFromUser', 'user_name': 'testFromUser',
-    'broadcaster_user_id': '42226127', 'broadcaster_user_login': 'testBroadcaster', 'broadcaster_user_name': 'testBroadc
-    aster', 'message': 'This is a test event.', 'bits': 100}"""
 
     is_anonymous = event_data.get("is_anonymous")
     user_id = event_data.get("user_id")
@@ -24,13 +20,19 @@ def handle_channel_cheer(event: dict ):
     broadcaster_user_login = event_data.get("broadcaster_user_login")
     broadcaster_user_name = event_data.get("broadcaster_user_name")
     message = event_data.get("message")
-    
-    
-    
+    bits = event_data.get("bits")
+    if is_anonymous:
+        user_name = "anonymous"
+    load_dotenv(env_file_path)
+    message = os.getenv("CHEER_TEXT")
+    text = text.replace("{user_name}", user_name)
+    text = text.replace("{bits}", bits)
+    tasks = GatherTasks()
+
+    tasks.add_task(lambda: run_tts(text, os.getenv("VOLUME")))
 
 
-
-    print ("WE DID IT")
+    
 def handle_channel_follow(event: dict):
     event_data = event.get("event_data")
     print(f"EVENT_DATA: {event_data}")
@@ -50,7 +52,7 @@ def handle_channel_follow(event: dict):
     gather_tasks.add_task(lambda: run_xcowsay(os.getenv("SNAAA"), follow_txt, os.getenv("FOLLOW_DISPLAY_TIME"), os.getenv("STREAM_MONITOR") ))
 
     path_follower_mp3 = os.getenv("ALERTS") + "mp3/new_follower.mp3"
-    gather_tasks.add_task(lambda: run_mpv(path_follower_mp3, os.getenv("MPV_VOLUME"), no_video=True))
+    gather_tasks.add_task(lambda: run_mpv(path_follower_mp3, os.getenv("VOLUME"), no_video=True))
 
     gather_tasks.run_tasks()    
 
@@ -68,18 +70,23 @@ def hanlde_channel_raid(event: dict):
 
     viewers = event_data.get("viewers")
 
-    raid_text = f'{from_broadcaster_user_name} fährt das Piratenschiff in unseren Hafen mit {viewers} Piraten'
-    
+    load_dotenv(dotenv_path=env_file_path)
+    raid_text = os.getenv("RAID_TEXT")
+    print(raid_text)
+    raid_text = raid_text.replace("{broadcaster}", from_broadcaster_user_name)
+    raid_text = raid_text.replace("{viewers}", str(viewers))
+    #raid_text = "blub"
     tasks = GatherTasks()
     alert_image = os.getenv("ALERTS", "schimpf")+"img/raid.png"
     alert_sound = os.getenv("ALERTS") + "raidsound.webm"
 
-    tasks.add_task(lambda: run_mpv(alert_sound, os.getenv("MPV_VOLUME"), True))
+    tasks.add_task(lambda: run_mpv(alert_sound, os.getenv("VOLUME"), True))
     tasks.add_task(lambda: run_xcowsay(alert_image, raid_text, os.getenv("RAID_DISPLAY_TIME"), os.getenv("STREAM_MONITOR")) )
-   
-    
+    # TODO
+    # !alarm in chat triggern
+    # automatischen shoutout
     # OBS!!!! kümmern
     #raid_id = await wst.get_scene_item_id("raid","__raid")
     tasks.run_tasks()
-    print ("WE DID IT")
+    
     

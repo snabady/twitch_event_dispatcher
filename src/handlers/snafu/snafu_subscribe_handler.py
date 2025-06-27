@@ -1,8 +1,8 @@
 def handle_channel_subscribe(event):
-    print ("handle_channel_subscribe")
+    logger.debug ("handle_channel_subscribe")
 
     event_data = event.get("event_data")
-    print(f"event_data: {event_data}")
+    logger.debug(f"event_data: {event_data}")
     user_id = event_data["user_id"] 
     user_login = event_data["user_login"]
     user_name = event_data["user_name"]
@@ -11,13 +11,13 @@ def handle_channel_subscribe(event):
     broadcaster_user_name = event_data["broadcaster_user_name"]
     tier = event_data["tier"]
     is_gift = event_data["is_gift"]
-    print ("yes we did it \n################################################################################")
+    logger.debug ("yes we did it \n################################################################################")
 
 def handle_subscription_end(event):
 
     created_at = event.get("timestamp_created")
     event_data = event.get("event_data")
-    print(f"event_data: {event_data}")
+    logger.debug(f"event_data: {event_data}")
     user_id = event_data["user_id"] 
     user_login = event_data["user_login"]
     user_name = event_data["user_name"]
@@ -26,11 +26,11 @@ def handle_subscription_end(event):
     broadcaster_user_name = event_data["broadcaster_user_name"]
     tier = event_data["tier"]
     is_gift = event_data["is_gift"]
-    print ("yes we did it \n################################################################################")
+    logger.debug ("yes we did it \n################################################################################")
 
 def channel_subscription_grift(event):
     event_data = event.get("event_data")
-    print(f"event_data: {event_data}")
+    logger.debug(f"event_data: {event_data}")
     user_id = event_data["user_id"] 
     user_login = event_data["user_login"]
     user_name = event_data["user_name"]
@@ -42,13 +42,13 @@ def channel_subscription_grift(event):
     
     cumulative_total = event_data["cumulative_total"]
     total = event_data["total"]
-    print ("yes we did it \n################################################################################")
+    logger.debug ("yes we did it \n################################################################################")
 
 
 
 def channel_subscription_message(event):
     event_data = event.get("event_data")
-    print(f"event_data: {event_data}")
+    logger.debug(f"event_data: {event_data}")
     user_id = event_data["user_id"] 
     user_login = event_data["user_login"]
     user_name = event_data["user_name"]
@@ -63,4 +63,4 @@ def channel_subscription_message(event):
     
     cumulative_months = event_data["cumulative_months"]
     duration_months = event_data["duration_months"]
-    print ("yes we did it \n################################################################################")
+    logger.debug ("yes we did it \n################################################################################")

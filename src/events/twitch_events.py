@@ -33,7 +33,7 @@ class TwitchEvents:
 
 
         self.logger = logging.getLogger(__name__)
-        self.logger = add_logger_handler(self.logger)
+        self.log = add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)      
 
         self.logger.debug(f"use_cli: {use_cli}")
@@ -75,7 +75,7 @@ class TwitchEvents:
         adjust variables in .env File 
         """
         dotenv_path = find_dotenv()
-        print ( dotenv_path )
+        self.logger.debug ( dotenv_path )
         if self.use_cli_conn:
             self.TWITCH_CLI_MOCK_API_URL    = os.getenv("TWITCH_CLI_MOCK_API_URL", "BASE_URL not found") 
             self.AUTH_BASE_URL              = os.getenv("AUTH_BASE_URL", "BASE_URL not found")
@@ -128,7 +128,7 @@ class TwitchEvents:
                                              self.cli_auth_scopes)
         #self.logger.debug(f"scopes: {self.cli_auth_scopes}" )
         user = await first(twitch.get_users())
-        self.logger.debug(f"auth: {user}")
+        #self.logger.debug(f"auth: {user}")
         eventsub = EventSubWebsocket(twitch,
                                     connection_url=self.TWITCH_CLI_CONNECTION_URL,
                                     subscription_url=self.TWITCH_SUBSCRIPTION_URL)
@@ -189,7 +189,7 @@ class TwitchEvents:
             
             x = cast(ChannelSubscribeEvent, x)
 
-            self.logger.debug(f"**** event_type: {x.subscription.type}")
+            self.logger.debug(f"**** event_type:---------------------------------------> >>> {x.subscription.type} <<<")
             
             data = {
                 "timestamp_received": ts, 
@@ -203,7 +203,7 @@ class TwitchEvents:
             }
             #self.logger.debug(f'EVENTDATA-DISPATCHER?? {x.event.to_dict()}')
             self.logger.debug(f"POST:{self.event_map[type(x)]} ")
-            self.logger.debug(f"event_type: {x.subscription.type}")
+            #self.logger.debug(f"event_type: {x.subscription.type}")
             #self.logger.debug(f"posting_event_data:\t {data}")
             post_event(self.event_map[type(x)], data)
     

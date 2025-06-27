@@ -3,7 +3,7 @@
 
 
 def handle_custom_reward_add (event: dict):
-    print("---------------->")
+    logger.debug("---------------->")
     event_data = event.get("event_data")
     
     event_id    = event_data.get("id")
@@ -26,11 +26,11 @@ def handle_custom_reward_add (event: dict):
     global_cooldown                 = event_data.get("global_cooldown")#{'is_enabled': True, 'seconds': 300}
     cooldown_expires_at             = event_data.get("cooldown_expire")
     redemptions_redeemed_current_stream = event_data.get("redemptions_redeemed_current_stream")
-    print ("WE DID IT")
+    logger.debug ("WE DID IT")
 
 def handle_reward_remove (event: dict):
     event_data = event.get("event_data")
-    print(f"EVENT_DATA:{event_data}")
+    logger.debug(f"EVENT_DATA:{event_data}")
     
     event_id    = event_data.get("id")
     broadcaster_user_id             = event_data.get("broadcaster_user_id")
@@ -58,15 +58,15 @@ def handle_reward_remove (event: dict):
 def handle_reward_update (event: dict):
 
     event_data = event.get("event_data")
-    print(f"EVENT_DATA:{ event_data}")
+    logger.debug(f"EVENT_DATA:{ event_data}")
     
 def handle_reward_redemption_add (event: dict):
     event_data = event.get("event_data")
-    print(f"EVENT_DATA:{ event_data}")
+    logger.debug(f"EVENT_DATA:{ event_data}")
     
 def handle_redemption_update(event: dict):
     event_data = event.get("event_data")
-    print(f"EVENT_DATA:{ event_data}")
+    logger.debug(f"EVENT_DATA:{ event_data}")
 
 # v1 // v2
 def handle_automatic_reward_redemption_add(event: dict):

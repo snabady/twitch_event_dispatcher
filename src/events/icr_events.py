@@ -47,7 +47,7 @@ async def unify_chat_command(cmd: ChatCommand):
     return "unified_chat_command"
 
 async def unify_chat_event(chatevent: ChatEvent):
-    print(type(chatevent))
+    logger.debug(type(chatevent))
     return "unified_chat_event"
 
 async def on_command(cmd: ChatCommand):
@@ -110,7 +110,7 @@ async def run():
             time.sleep(0.1)
         #on_test()
     except Exception as e:
-        print(e)
+        logger.debug(e)
     finally:
         chat.stop()
         await twitch.close()

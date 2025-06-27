@@ -22,7 +22,7 @@ def setEnv():
 
     
     obs_url = "ws://" + str(host) + ":" + str(port)
-    print(obs_url)
+    logger.debug(obs_url)
 
 def init_obswebsocket_ws():
     ws  = simpleobsws.WebSocketClient(url=obs_url, password=password)
@@ -31,7 +31,7 @@ def init_obswebsocket_ws():
 
 
 async def on_event(eventType, eventData):
-    print('New event! Type: {} | Raw Data: {}'.format(eventType, eventData)) # Print the event data. Note that `update-type` is also provided in the data
+    logger.debug('New event! Type: {} | Raw Data: {}'.format(eventType, eventData)) # Print the event data. Note that `update-type` is also provided in the data
 
 
 def get_scene_item_id(scene_name, source_name):
@@ -61,7 +61,7 @@ def set_source_visibility(scene_name, scene_item_id, visible=False):
 
 
 async def on_switchscenes(eventData):
-    print('Scene switched to "{}".'.format(eventData['sceneName']))
+    logger.debug('Scene switched to "{}".'.format(eventData['sceneName']))
 
 
 async def sna():
@@ -69,7 +69,7 @@ async def sna():
     load_dotenv(override=True)
     setEnv()
 
-    print(f'hello? {obs_url}')
+    logger.debug(f'hello? {obs_url}')
     #global ws
     #ws  = simpleobsws.WebSocketClient(url='ws://127.0.0.1:4455', password=password)
     
@@ -105,12 +105,12 @@ async def sna():
                 source_name = x["sourceName"]
                 source_uuid = x["sourceUuid"]
                 source_item_id = x["sceneItemId"]
-                print(source_name)
+                logger.debug(source_name)
                 if source_name == 'cam':
-                    print(f"---------------------------{source_name}")
-                    print(f'{source_name} ... {source_uuid}')
-                    print(source_name == 'cam')
-                    print(source_name is 'cam')
+                    logger.debug(f"---------------------------{source_name}")
+                    logger.debug(f'{source_name} ... {source_uuid}')
+                    logger.debug(source_name == 'cam')
+                    logger.debug(source_name is 'cam')
                     
                     
 
@@ -126,7 +126,7 @@ async def sna():
                     #response = await ws.call(request)
                     #scene_item_id = response.responseData["sceneItemId"]#
                     scene_item_id = await get_scene_item_id("main", "cam")
-                    print(f'scene_item_id: {scene_item_id}')
+                    logger.debug(f'scene_item_id: {scene_item_id}')
 
                     request = simpleobsws.Request("SetSceneItemEnabled", {
                         "sceneName": "main", 
@@ -140,7 +140,7 @@ async def sna():
                                                             })
                     response = await ws.call(request)
                     
-                    print(response)
+                    logger.debug(response)
                     response = response.responseData
                     old_positionX   = response["sceneItemTransform"]["positionX"]
                     old_positionY   = response["sceneItemTransform"]["positionY"]
@@ -162,7 +162,7 @@ async def sna():
                                                             })
                     response = await ws.call(request)
                     
-                    print(response)
+                    logger.debug(response)
                     if response.ok():
                         "cam should be changed."
                         return
@@ -181,7 +181,7 @@ async def sna():
             #await asyncio.sleep(10)
         else:
             
-            print("MOEEEEP MOEEEEP")
+            logger.debug("MOEEEEP MOEEEEP")
 
     
 

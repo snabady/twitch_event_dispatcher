@@ -1,16 +1,25 @@
 import os
+import logging
 from dotenv import load_dotenv
 from threading import Thread
-from utils.run_command import run_mpv, run_xcowsay
+from utils.run_command import run_mpv, run_xcowsay, run_tts, create_toilet_file
+import asyncio
 from utils.run_command import GatherTasks
+from utils import log
+from events import obsws
+
+
 
 
 env_file_path = "/home/sna/src/twitch/src/handlers/snafu/.env_snafu_handlers"
 
+logger = logging.getLogger(__name__)
+logger = log.add_logger_handler(logger)
+logger.setLevel(logging.DEBUG)   
 
 def handle_channel_cheer(event: dict ):
     event_data = event.get("event_data")
-    print(f"EVENT_DATA: {event_data}")
+    #logger.debug(f"EVENT_DATA: {event_data}")
 
     is_anonymous = event_data.get("is_anonymous")
     user_id = event_data.get("user_id")
@@ -21,21 +30,25 @@ def handle_channel_cheer(event: dict ):
     broadcaster_user_name = event_data.get("broadcaster_user_name")
     message = event_data.get("message")
     bits = event_data.get("bits")
+
+
     if is_anonymous:
         user_name = "anonymous"
     load_dotenv(env_file_path)
-    message = os.getenv("CHEER_TEXT")
+    text = os.getenv("CHEER_TEXT")
     text = text.replace("{user_name}", user_name)
-    text = text.replace("{bits}", bits)
+    
+    text = text.replace("{bits}",str(bits))
     tasks = GatherTasks()
 
-    tasks.add_task(lambda: run_tts(text, os.getenv("VOLUME")))
+    tasks.add_task(lambda: run_tts(text))
+    tasks.run_tasks()
 
 
     
 def handle_channel_follow(event: dict):
     event_data = event.get("event_data")
-    print(f"EVENT_DATA: {event_data}")
+    #logger.debug(f"EVENT_DATA: {event_data}")
     
     user_id = event_data.get("user_id")
     user_login = event_data.get("user_login")
@@ -53,12 +66,15 @@ def handle_channel_follow(event: dict):
 
     path_follower_mp3 = os.getenv("ALERTS") + "mp3/new_follower.mp3"
     gather_tasks.add_task(lambda: run_mpv(path_follower_mp3, os.getenv("VOLUME"), no_video=True))
-
+    #loop =  asyncio.get_event_loop()
+    text = f'{user_name}\njust followed'
+    gather_tasks.add_task(lambda: create_toilet_file("/home/sna/5n4fu_stream/obs_files/follower/blub.txt", "pagga", text))
+    gather_tasks.add_task(lambda: obsws.set_source_visibility_wrapper("main_view", "test", True ))
     gather_tasks.run_tasks()    
 
 def hanlde_channel_raid(event: dict):
     event_data = event.get("event_data")
-    print(f"EVENT_DATA: {event_data}")
+    #logger.debug(f"EVENT_DATA: {event_data}")
     
     from_broadcaster_user_id = event_data.get("from_broadcaster_user_id")
     from_broadcaster_user_login = event_data.get("from_broadcaster_user_login")
@@ -72,7 +88,7 @@ def hanlde_channel_raid(event: dict):
 
     load_dotenv(dotenv_path=env_file_path)
     raid_text = os.getenv("RAID_TEXT")
-    print(raid_text)
+    logger.debug(raid_text)
     raid_text = raid_text.replace("{broadcaster}", from_broadcaster_user_name)
     raid_text = raid_text.replace("{viewers}", str(viewers))
     #raid_text = "blub"
@@ -81,6 +97,7 @@ def hanlde_channel_raid(event: dict):
     alert_sound = os.getenv("ALERTS") + "raidsound.webm"
 
     tasks.add_task(lambda: run_mpv(alert_sound, os.getenv("VOLUME"), True))
+    tasks.add_task(lambda: obsws.set_source_visibility_wrapper("main_view", "raid", True ))
     tasks.add_task(lambda: run_xcowsay(alert_image, raid_text, os.getenv("RAID_DISPLAY_TIME"), os.getenv("STREAM_MONITOR")) )
     # TODO
     # !alarm in chat triggern

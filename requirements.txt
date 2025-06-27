@@ -1,3 +1,6 @@
 twitchApi 
 dotenv
 colorlog
+simpleobsws
+mysql-connector-python
+num2words

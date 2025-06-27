@@ -24,7 +24,7 @@ def handle_poll_begin(event: dict):
 
     """
     event_data = event.get("event_data")
-    print(f'EVENT_DATA: {event_data}')
+    logger.debug(f'EVENT_DATA: {event_data}')
     event_id                = event_data.get("id")
     broadcaster_user_login  = event_data.get("broadcaster_user_login")
     broadcaster_user_id     = event_data.get("broadcaster_user_id")
@@ -36,7 +36,7 @@ def handle_poll_begin(event: dict):
     started_at              = event_data.get("started_at")
     ends_at                 = event_data.get("ends_at")
     
-    print("WE DID IT")
+    logger.debug("WE DID IT")
 
 
 def handle_poll_end(event: dict):
@@ -73,7 +73,7 @@ def handle_poll_end(event: dict):
     'ended_at': '2025-06-12T08:48:31.664116+00:00'}
 """
     event_data = event.get("event_data")
-    print(f'EVENT_DATA: {event_data}')
+    logger.debug(f'EVENT_DATA: {event_data}')
     event_id                = event_data.get("id")
     broadcaster_user_login  = event_data.get("broadcaster_user_login")
     broadcaster_user_id     = event_data.get("broadcaster_user_id")
@@ -122,7 +122,7 @@ def handle_poll_progress(event: dict):
     'ends_at': '2025-06-12T09:03:54.169711+00:00'}
     """
     event_data = event.get("event_data")
-    print(f'EVENT_DATA: {event_data}')
+    logger.debug(f'EVENT_DATA: {event_data}')
     event_id                = event_data.get("id")
     broadcaster_user_login  = event_data.get("broadcaster_user_login")
     broadcaster_user_id     = event_data.get("broadcaster_user_id")

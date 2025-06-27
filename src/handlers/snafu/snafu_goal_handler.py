@@ -15,7 +15,7 @@ def handle_goal_begin(event: dict):
     """
     
     event_data = event.get("event_data")
-    print(f'EVENT_DATA: {event_data}')
+    logger.debug(f'EVENT_DATA: {event_data}')
 
     description = event_data.get("description")
     current_amount = event_data.get("current_amount")
@@ -38,7 +38,7 @@ def handle_goal_end(event: dict):
     'ended_at': '2025-06-13T06:33:19+00:00'}
 """
     event_data = event.get("event_data")
-    print(f'EVENT_DATA: {event_data}')
+    logger.debug(f'EVENT_DATA: {event_data}')
 
     event_id = event_data.get("id")
     broadcaster_user_id = event_data.get("broadcaster_user_id")
@@ -51,7 +51,7 @@ def handle_goal_end(event: dict):
     target_amount = event_data.get("target_amount")
     started_at = event_data.get("started_at")
     ended_at = event_data.get("ended_at")
-    print("WE_DID_IT")
+    logger.debug("WE_DID_IT")
 
 def handle_goal_progress(event: dict):
     """
@@ -66,7 +66,7 @@ def handle_goal_progress(event: dict):
     'started_at': '2025-06-12T06:37:42.612681+00:00'}
     """
     event_data = event.get("event_data")
-    print(f'EVENT_DATA: {event_data}')
+    logger.debug(f'EVENT_DATA: {event_data}')
 
     event_id = event_data.get("id")
     broadcaster_user_id = event_data.get("broadcaster_user_id")

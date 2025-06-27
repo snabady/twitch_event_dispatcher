@@ -35,15 +35,15 @@ def handle_hypetrain_begin(event: dict):
     """ like begin +++
         cooldown_ends_at """
 
-    print(f"EVENT_DATA: {event_data}")
+    logger.debug(f"EVENT_DATA: {event_data}")
 
 
 
 def handle_hypetrain_end(event: dict):
     event_data = event.get("event_data")
-    print(f"EVENT_DATA: {event_data}")
+    logger.debug(f"EVENT_DATA: {event_data}")
     raise NotImplementedError
 def handle_hypetrain_end(event: dict):
     event_data = event.get("event_data")
-    print(f"EVENT_DATA: {event_data}")
+    logger.debug(f"EVENT_DATA: {event_data}")
     raise NotImplementedError

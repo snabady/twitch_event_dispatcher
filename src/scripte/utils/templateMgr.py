@@ -23,7 +23,7 @@ class TemplateManager:
                 #print("Loaded content:", repr(content))  
 
         except FileNotFoundError:
-            print("File not found, using default values.")
+            logger.debug("File not found, using default values.")
             pass        
 
     async def load_existing_valuesxx(self):
@@ -88,7 +88,7 @@ class TemplateManager:
                 self.last_subscriber = sub_match.group(1)
 
         except FileNotFoundError:
-            print("File not found, using default values.")
+            logger.debug("File not found, using default values.")
             pass
 
 
@@ -110,7 +110,7 @@ class TemplateManager:
         await self.load_existing_values()  # Vorhandene Werte laden
 
         # Debugging-Ausgabe vor der Dateigenerierung
-        print(f"Generating file with values: Bait={self.bait_name}, Weight={self.weight}, Follower={self.last_follower}, Subscriber={self.last_subscriber}")
+        logger.debug(f"Generating file with values: Bait={self.bait_name}, Weight={self.weight}, Follower={self.last_follower}, Subscriber={self.last_subscriber}")
 
         async with aiofiles.open(self.TEMPLATE_PATH, mode='r', encoding='utf-8') as file:
             template_content = await file.read()
@@ -168,7 +168,7 @@ class TemplateManager:
         
 
         except FileNotFoundError:
-            print("File not found, using default values.")
+            logger.debug("File not found, using default values.")
             pass
 
 

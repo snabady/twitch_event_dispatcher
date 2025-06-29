@@ -18,21 +18,30 @@ def set_source_visibility_wrapper(scene_name, source_name, visible):
     
     logger.debug(f'scene_name: {scene_name}\tsource_name: {source_name}\tvisible: {visible}')
     async def runner():
-        logger.debug ("###################### ----------> OBS runner()")
+        logger.debug ("############# ----------> OBS set_source_visibility_wrapper")
         obs = Obsws()
-        await obs.init_obswebsocket_ws()
-        scene_item_id = await obs.get_scene_item_id(scene_name, source_name)
-        
+        scene_item_id = await obs.get_scene_item_id(scene_name, source_name)        
         await obs.set_source_visibility(scene_name, scene_item_id, not visible)
         await asyncio.sleep(0.1)
         await obs.set_source_visibility(scene_name, scene_item_id, visible)
-        #await asyncio.sleep(10)
-        #await obs.set_source_visibility(scene_name, scene_item_id, False)
 
-    try:
-        Obsws().enqueue(runner())#.put_nowait(runner())
-    except Exception as e:
-        lgoger.debug(e)
+    Obsws().enqueue(runner())#.put_nowait(runner())
+
+
+
+def switch_scene_wrapper(scene_name: str):
+    logger.debug ("############# ----------> OBS switch_scene_wrapper")
+    async def runner():
+        obs = Obsws()
+        await obs.switch_scene(scene_name)
+    Obsws().enqueue(runner())
+
+def trigger_hotkey_by_name_wrapper(hotkey_name: str):
+    logger.debug ("############# ----------> OBS trigger_hotkey_by_name_wrapper")
+    async def runner():
+        obs=Obsws()
+        await obs.trigger_hotkey_by_name(hotkey_name)
+    Obsws().enqueue(runner())
 
 class Singleton(type):
     _instances = {}
@@ -49,10 +58,21 @@ class Obsws(metaclass=Singleton):
         self.obs_task_queue = asyncio.Queue()
         self.ws = None
         self.logger = logging.getLogger(__name__)
-        self.logger = log.add_logger_handler(self.logger)
-        self.logger.setLevel(logging.DEBUG)   
+        if not self.logger.hasHandlers():
+            log.add_logger_handler(self.logger)
+        self.logger.setLevel(logging.DEBUG)
+        asyncio.create_task(self.obs_task_worker())
+        asyncio.create_task(self.subscribe_events())
+        
         self.setEnv()#
    
+    async def __aenter__(self):
+
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        await self.ws.disconnect()
+
     def setEnv(self):
         """
         loads the .env variables
@@ -73,7 +93,7 @@ class Obsws(metaclass=Singleton):
         self.logger.debug("cant be TREUUUSADFsdfas")
         self.logger.debug(self)
         while True:
-            self.logger.debug("jo")
+            self.logger.debug("taskworker working :D")
             #if self.obs_task_queue.qsize() > 0:
             task_coro_func = await self.obs_task_queue.get()
             try:
@@ -86,7 +106,7 @@ class Obsws(metaclass=Singleton):
 
     def enqueue(self, coro):
         self.logger.debug(self)
-        self.logger.debug(f"enqueued: {coro}")
+        self.logger.debug(f"enqueued: {coro.__name__}")
         self.obs_task_queue.put_nowait(coro)
         self.logger.debug(f"OBS_QUEUE: {self.obs_task_queue.qsize()}")
 
@@ -102,6 +122,8 @@ class Obsws(metaclass=Singleton):
             self.logger.debug("init_obswebsocket_ws done")
         except Exception as e:
             self.logger.debug(f'moep {e}')
+
+        self.ws.register_event_callback(self.on_event)
 
     async def get_scene_item_id(self, scene_name, source_name):
         ''' it is actually the source_id...'''
@@ -126,12 +148,19 @@ class Obsws(metaclass=Singleton):
                             "sceneItemEnabled": visible
                         })
         response = await self.ws.call(request)
-        if response.ok():
-            return True
-        return False 
+        
+
+    async def switch_scene(self, scene_name):
+        request = simpleobsws.Request(
+        requestType='SetCurrentProgramScene',
+        requestData={'sceneName': scene_name})
+
+        response = await self.ws.call(request)
 
     async def on_event(self, eventType, eventData):
-        print('New event! Type: {} | Raw Data: {}'.format(eventType, eventData)) 
+        #self.logger.debug(eventData.get("inputName"))
+        if not (eventType =="InputSettingsChanged" and eventData.get("inputName") == "TimerText"):
+            self.logger.info('event_triggered Type: {} | Raw Data: {}'.format(eventType, eventData)) 
 
     async def on_switchscenes(eventData):
         print('Scene switched to "{}".'.format(eventData['sceneName']))
@@ -142,3 +171,44 @@ class Obsws(metaclass=Singleton):
         print(f'hello? {obs_url}')
         self.ws = await init_obswebsocket_ws()
         await asyncio.Future()
+
+
+    async def trigger_hotkey_by_name(self, hotkey_name):
+        request = simpleobsws.Request("TriggerHotkeyByName", {"hotkeyName": hotkey_name})
+        response = await self.ws.call(request)
+        self.logger.debug(response.ok())
+
+    async def reload_browser_source(self, browser_source_name: str):
+
+
+        
+        request = simpleobsws.Request(
+            "PressInputPropertiesButton",
+            {
+                "inputName": browser_source_name,
+                "propertyName": "refreshnocache"  
+            }
+        )
+        response = await self.ws.call(request)
+        self.logger.debug("Reload requested:", response.ok())
+        await self.ws.disconnect()
+
+    async def subscribe_events(self):
+        event_subs = (
+            simpleobsws.enums.EventSubscription.MediaInputs |
+            simpleobsws.enums.EventSubscription.SceneItems |
+            simpleobsws.enums.EventSubscription.Transitions |
+            simpleobsws.enums.EventSubscription.Outputs |
+            simpleobsws.enums.EventSubscription.Filters | 
+            simpleobsws.enums.EventSubscription.General |
+            simpleobsws.enums.EventSubscription.Config | 
+            simpleobsws.enums.EventSubscription.Scenes | 
+            simpleobsws.enums.EventSubscription.Inputs | 
+            simpleobsws.enums.EventSubscription.Vendors | 
+            simpleobsws.enums.EventSubscription.Ui 
+        )
+        request = simpleobsws.Request("SubscribeEvents", {
+            "eventSubscriptions": event_subs
+        })
+        response = await self.ws.call(request)
+        self.logger("Subscribed:", response.ok())

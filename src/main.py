@@ -9,8 +9,14 @@ from dispatcher.event_dispatcher import subscribe_event
 import handlers.twitch_event_handler as twitch_handler
 import  handlers.obsws_handler as obsws_handler
 import handlers.stream_stats as stream_stats
+import handlers.twitchapi_handler as twitchapi_handler
+from  handlers import db_handler
+#from handlers import twitchapi
 from utils.run_command import run_subprocess
 from utils import log
+#from data import stream_stats_data
+
+#stream_stats_data = stream_stats_data.ChatStats()
 
 
 logger = logging.getLogger(__name__)
@@ -35,7 +41,9 @@ def my_event_subscriptions():
     subscribe_event("twitch_moderate_event", twitch_handler.hanle_twitch_moderate_event)
     
     subscribe_event("twitch_streaminfo_event", obsws_handler.handle_twitch_streaminfo_event)
-    subscribe_event("twitch_stream_info_event", stream_stats.handle_twitch_streaminfo_event)
+    subscribe_event("twitchapi_follower_counter", twitchapi_handler.handle_follower_count)
+    #subscribe_event("twitch_stream_info_event", stream_stats.handle_twitch_streaminfo_event)
+    
 
 async def trigger_cli_event(event_key, event_id):
 
@@ -87,8 +95,9 @@ async def twitch_listen():
 
             for x in test_ids:
                 await trigger_cli_event(x, test_ids[x])
+                break
 
-                
+                #break
             
                 
         except Exception as e:
@@ -105,8 +114,13 @@ async def obs_listen():
 
     obs = obsws.Obsws()
     await obs.init_obswebsocket_ws()
-    asyncio.create_task(obs.obs_task_worker())
+    
+    #asyncio.create_task(obs.obs_task_worker())
     logger.debug(obs)
+
+async def tapi_listen():
+    tapi = twitchapi.myTwitch()
+    await tapi.get_twitch_api_conn()
 
 async def main():
     await asyncio.gather(obs_listen(),

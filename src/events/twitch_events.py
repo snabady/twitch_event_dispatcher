@@ -51,6 +51,7 @@ class TwitchEvents:
         self.cli_auth_scopes = CLI_SCOPES
         self.twitch_cli_commands = []
         self.setEnv()
+        
     async def __aenter__(self):
         
         if self.use_cli_conn:

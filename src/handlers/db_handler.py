@@ -2,6 +2,15 @@ import mysql.connector
 from datetime import datetime
 
 
+
+
+"""event_types = {
+            "stream.online": handle_stream_online,
+            "stream.offline": handle_stream_offline,
+            "channel.update_v2": handle_channel_update_v2,
+            "channel.update": handle_channel_update
+        }"""
+
 def get_db_conn():
     conn =  mysql.connector.connect(
         host="localhost",      
@@ -24,3 +33,5 @@ def insert_new_follwer(follower:dict) -> str:
     cursor.close()
     conn.close()
 
+def handle_stwitch_streaminfo_event(event: dict):
+    pass    

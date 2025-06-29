@@ -4,24 +4,7 @@ import json
 from twitchAPI.chat import ChatCommand, ChatMessage
 import asyncio
 import aiofiles
-
-
-"""
 import scripte.async_file_io as as_file_io
-
-logger = logging.getLogger(__name__)
-logger = log.add_logger_handler(logger)
-logger.setLevel(logging.DEBUG)   
-
-logger.debug(stream_stats_data)
-
-event_types = {
-            "stream.online": handle_stream_online,
-            "stream.offline": handle_stream_offline,
-            "channel.update_v2": handle_channel_update_v2,
-            "channel.update": handle_channel_update
-        }
-
 
 class Singleton(type):
     _instances = {}
@@ -32,22 +15,6 @@ class Singleton(type):
             cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
-create table stream_stats(
-streamid int , 
-stream_date date not null,
-total_chat_messages int not null,
-new_subscribers int not null,
-new_follower int not null, 
-new_chatters int not null, 
-channel_joins int not null, 
-first_messages int not null,
-
-constraint pk_streamid 
-foreign key (streamid) 
-references streams(id)
-on delete cascade 
-on update restrict
-)
 
 
 class ChatStats(metaclass=Singleton):
@@ -64,6 +31,7 @@ class ChatStats(metaclass=Singleton):
                 "!dynamite",
                 "!slap",
                 "!sna",
+                "!stats",
                 "!today",
                 "!stats", 
                 "!stalk",
@@ -111,7 +79,7 @@ class ChatStats(metaclass=Singleton):
         if not msg.user.name == "snabotski" and msg_ not in self.cmd_list:
             self.daily_msg += 1
             self.msg_per_user[msg.user.name] += 1
-        self.cnt_cmd(msg)
+        await self.cnt_cmd(msg)
 
     def get_user_stats(self, user):
         return self.msg_per_user(user)
@@ -155,11 +123,11 @@ class ChatStats(metaclass=Singleton):
         self.total_msg += self.daily_msg
         date = datetime.now()
         line = f'{date};{self.total_msg};{self.new_subs};{self.new_follower};{self.new_chatter};{self.channel_joins};{self.first_message};{len(self.unique_viewers)};{self.total_channel_joins};{self.daily_msg};{self.total_subs};{self.total_follower}'
-        self.stats_hist_io.write_snafu_stats_history(line)
+        await self.stats_hist_io.write_snafu_stats_history(line)
     
     def init_stats(self):
         
-        lastline = self.stats_hist_io.read_last_line()
+        lastline = await self.stats_hist_io.read_last_line()
         lastline = lastline.split(";")
         print(type(lastline[self.stats_history_map['total_msg']]))
         print(lastline[self.stats_history_map['total_msg']])
@@ -176,36 +144,3 @@ class ChatStats(metaclass=Singleton):
                 
 
 
-
-
-
-def handle_twitch_streaminfo_event(event: dict):
-    fn = event.get("event_type")
-    fn(event)
-
-def handle_stream_online(event: dict):
-    logger.debug("handle_stream_online")
-    event_data = event.get("event_data")
-    started_at              = event.get("started_at")
-    
-    logger.debug("WE DID IT ")
-
-    #stream_stats_data.stream_start_time = started_at
-
-
-def handle_stream_offline(event: dict):
-    logger.debug("handle_stream_offline")
-    event_data = event.get("event_data")
-    logger.debug(f"event_data: {event_data}")
-    
-    
-
-    #stream_stats_data.stream_start_time = started_at
-
-
-def handle_channel_update_v2(event: dict):
-    logger.debug("handle_channel_update_v2")
-
-def handle_channel_udpate(event: dict):
-    logger.debug("handle_channel_update")
-"""

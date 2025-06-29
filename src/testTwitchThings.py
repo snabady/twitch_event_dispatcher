@@ -7,9 +7,10 @@ async def main():
         #await twitch_instance.get_followers()
         print("-------------------------------------")
         await twitch_instance.get_current_subscribers()
+        await twitch_instance.create_clip()
         while True:
             await asyncio.sleep(1)
-            #await twitch_instance.create_clip()
+            
             
 
 asyncio.run(main())

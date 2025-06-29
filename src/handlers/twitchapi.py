@@ -10,6 +10,7 @@ from twitchAPI.twitch import Twitch, TwitchUser
 from twitchAPI.oauth import UserAuthenticator, UserAuthenticationStorageHelper
 from utils import log
 from handlers import db_handler
+from dispatcher.event_dispatcher import post_event
 
 load_dotenv(dotenv_path="/home/sna/src/twitch/src/handlers/.env_twitchapi")
 
@@ -30,11 +31,35 @@ class myTwitch(metaclass=Singleton):
         self.logger = log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)  
         self.scopes = TARGET_SCOPES
+        #asyncio.create_task(self.get_twitch_api_conn())
 
     async def __aenter__(self):
         self.twitch, self.user = await self.get_twitch_api_conn()
         return self
 
+
+    async def dispatch_twitch_event(self, event ):
+        self.logger.debug("in dispatch_twitch_event")
+        event_source = "twitch_event"
+        ts = datetime.datetime.now()
+        data = ""
+        self.logger.debug(f'x: {type(x)}')
+        if self.event_map[type(x)] != None:
+            self.logger.debug(f"**** event_type:-----------------> >>> {x.subscription.type} <<<")
+            data = {
+                "timestamp_received": ts, 
+                "event_source": event_source,
+                "event_type": x.subscription.type,
+                "type": self.event_map[type(x)],
+                "event_data": x.event.to_dict()
+            }
+            
+            self.logger.debug(f"POST:{self.event_map[type(x)]} ")
+            post_event(self.event_map[type(x)], data)
+    
+
+    def trigger_follower_count(self):
+        asyncio.create_task(self.get_follower_count())
     async def __aexit__(self, exc_type,exc_val, exc_tb):
         await self.twitch.close()
 
@@ -79,6 +104,14 @@ class myTwitch(metaclass=Singleton):
             follower.append(data)
             self.logger.debug(follower)
         return follower
+    
+    async def get_follower_count(self):
+        result = await self.twitch.get_channel_followers(self.user.id)
+        data = { "event_type" : "follower_count", 
+                "event_data" : {"total_follower": result.total} }
+        self.logger.info(f"total_followers: {result.total}")
+        post_event("twitchapi_follower_counter", data)
+        
 
     async def create_clip(self):
         clip = await self.twitch.create_clip(self.user.id)
@@ -87,8 +120,9 @@ class myTwitch(metaclass=Singleton):
 
     async def get_current_subscribers(self):
         subscribers = await self.twitch.get_broadcaster_subscriptions(self.user.id)
+        self.logger.info (f"subcount:  {subscribers.total}")
         async for x in subscribers:
-            self.logger.debug(x.user_name)
+            self.logger.debug(f"subs: {x.user_name}")
 
         """
         await self.twitch.add_channel_vip(broadcaster_id=self.user.id, user_id=1287837934)

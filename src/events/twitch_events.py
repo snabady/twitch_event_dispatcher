@@ -16,6 +16,7 @@ import colorlog
 import datetime
 from utils.log import add_logger_handler
 
+
 class TwitchEvents:
     """
     Connects to Twitch-Event-Sub via websockets
@@ -31,8 +32,10 @@ class TwitchEvents:
         self.use_cli_conn = use_cli
         load_dotenv(dotenv_path=dotenv_path)
 
-
-        self.logger = logging.getLogger(__name__)
+        if not use_cli:
+            self.logger = logging.getLogger("** 5n4fu_LIVE **")
+        else:
+            self.logger = logging.getLogger(__name__)
         self.log = add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)      
 
@@ -43,9 +46,9 @@ class TwitchEvents:
         self.live_auth_scope = TARGET_SCOPES
         self.cli_auth_scopes = CLI_SCOPES
         
-        
+        self.dotenv_path = dotenv_path
         self.event_map = self.get_eventmap()
-        load_dotenv(dotenv_path=dotenv_path)
+        load_dotenv(dotenv_path=self.dotenv_path)
 
         self.live_auth_scope = TARGET_SCOPES
         self.cli_auth_scopes = CLI_SCOPES
@@ -75,6 +78,7 @@ class TwitchEvents:
         loads the .env variables
         adjust variables in .env File 
         """
+        load_dotenv(dotenv_path=self.dotenv_path)
         dotenv_path = find_dotenv()
         self.logger.debug ( dotenv_path )
         if self.use_cli_conn:
@@ -85,6 +89,7 @@ class TwitchEvents:
             self.CLI_CLIENT_SECRET          = os.getenv("CLI_CLIENT_SECRET", "CLI_S not found")
             self.CLI_USER_ID                = os.getenv("CLI_USER_ID", "CLI_UID not found")
             self.CLI_CLIENTID               = os.getenv("CLI_CLIENTID", "CLI_ID not found")
+            
         else:
             self.CLIENT_ID          = os.getenv("CLIENT_ID", "CLIENT_ID not found")
             self.CLIENT_S           = os.getenv("CLIENT_S", "CLIENT_S not found")
@@ -95,11 +100,20 @@ class TwitchEvents:
         """
         creates a connection to Twitch EventSub using websockets
         u need a app registered at twitch -> .env
+                twitch = await Twitch(self.CLIENT_ID, self.CLIENT_S,)
+        helper = UserAuthenticationStorageHelper(twitch, auth_scope.TARGET_SCOPES)
+        await helper.bind()
+        user = await first(twitch.get_users())
+
+        eventsub = EventSubWebsocket(twitch)
+        
+        return eventsub, twitch, user
         """
         twitch = await Twitch(self.CLIENT_ID, self.CLIENT_S,)
         helper = UserAuthenticationStorageHelper(twitch, self.live_auth_scope)
         await helper.bind()
         user = await first(twitch.get_users())
+        eventsub = EventSubWebsocket(twitch)
         return eventsub, twitch, user
 
     async def climockingConn(self) -> Tuple[EventSubWebsocket, Twitch, TwitchUser]:

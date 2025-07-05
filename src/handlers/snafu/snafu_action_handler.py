@@ -7,6 +7,7 @@ import asyncio
 from utils.run_command import GatherTasks
 from utils import log
 from events import obsws
+from dispatcher.event_dispatcher import post_event, subscribe_event
 
 
 
@@ -69,7 +70,8 @@ def handle_channel_follow(event: dict):
     #loop =  asyncio.get_event_loop()
     text = f'{user_name}\njust followed'
     gather_tasks.add_task(lambda: create_toilet_file("/home/sna/5n4fu_stream/obs_files/follower/blub.txt", "pagga", text))
-    gather_tasks.add_task(lambda: obsws.set_source_visibility_wrapper("main_view", "test", True ))
+    #gather_tasks.add_task(lambda: obsws.set_source_visibility_wrapper("main_view", "test", True ))
+    gather_tasks.add_task(lambda: post_event("obs_set_source_visibility", {"event_type": "obs_set_source_visibility", "event_data": {"scene_name": "main_view", "source_name": "test"}}))
     gather_tasks.run_tasks()    
 
 def hanlde_channel_raid(event: dict):
@@ -97,7 +99,8 @@ def hanlde_channel_raid(event: dict):
     alert_sound = os.getenv("ALERTS") + "raidsound.webm"
 
     tasks.add_task(lambda: run_mpv(alert_sound, os.getenv("VOLUME"), True))
-    tasks.add_task(lambda: obsws.set_source_visibility_wrapper("main_view", "raid", True ))
+    #tasks.add_task(lambda: obsws.set_source_visibility_wrapper("main_view", "raid", True ))
+    tasks.add_task(lambda: post_event("obs_set_source_visibility", {"event_type": "obs_set_source_visibility", "event_data": {"scene_name": "main_view", "source_name": "raid_overlay"}}))
     tasks.add_task(lambda: run_xcowsay(alert_image, raid_text, os.getenv("RAID_DISPLAY_TIME"), os.getenv("STREAM_MONITOR")) )
     # TODO
     # !alarm in chat triggern

@@ -1,5 +1,5 @@
 def write_file(filepath=str, mode= str , text= str):
-    with open(filepath, OpenTextMode=mode) as f:
+    with open(filepath, mode) as f:
         f.write(text)
     
 

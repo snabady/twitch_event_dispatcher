@@ -5,6 +5,7 @@ import json
 import simpleobsws
 from dotenv import load_dotenv
 from utils import log
+from dispatcher.event_dispatcher import post_event, subscribe_event
 
 
 
@@ -27,6 +28,8 @@ def set_source_visibility_wrapper(scene_name, source_name, visible):
 
     Obsws().enqueue(runner())#.put_nowait(runner())
 
+
+    
 
 
 def switch_scene_wrapper(scene_name: str):
@@ -63,7 +66,9 @@ class Obsws(metaclass=Singleton):
         self.logger.setLevel(logging.DEBUG)
         asyncio.create_task(self.obs_task_worker())
         asyncio.create_task(self.subscribe_events())
-        
+        self.stream_online = False
+        subscribe_event("obs_set_source_visibility", self.obs_set_source_visibility)
+        subscribe_event("obs_scene_change", self.obs_scene_change)
         self.setEnv()#
    
     async def __aenter__(self):
@@ -104,6 +109,20 @@ class Obsws(metaclass=Singleton):
                 self.obs_task_queue.task_done()   
             await asyncio.sleep(0.01)
 
+    def obs_set_source_visibility(self, event):
+        event = event.get("event_data")
+        self.logger.debug(event)
+        
+        # scene_id
+        if not event.get("visible"):
+            self.enqueue( self.set_source_visibility(event.get("scene_name"), event.get("source_name"), False ) )
+            self.enqueue( self.set_source_visibility(event.get("scene_name"), event.get("source_name"), True ) )
+        else:
+            self.enqueue( self.set_source_visibility(event.get("scene_name"), event.get("source_name"), event.get("visible") ) )
+
+    def obs_scene_change(self, event): 
+        raise NotImplementedError
+
     def enqueue(self, coro):
         self.logger.debug(self)
         self.logger.debug(f"enqueued: {coro.__name__}")
@@ -141,6 +160,9 @@ class Obsws(metaclass=Singleton):
             return Null
 
     async def set_source_visibility(self,scene_name, scene_item_id, visible=False):
+
+        if isinstance(scene_item_id, str):
+            scene_item_id = await self.get_scene_item_id(scene_name, scene_item_id)
         
         request = simpleobsws.Request("SetSceneItemEnabled", {
                             "sceneName": scene_name, 
@@ -162,8 +184,6 @@ class Obsws(metaclass=Singleton):
         if not (eventType =="InputSettingsChanged" and eventData.get("inputName") == "TimerText"):
             self.logger.info('event_triggered Type: {} | Raw Data: {}'.format(eventType, eventData)) 
 
-    async def on_switchscenes(eventData):
-        print('Scene switched to "{}".'.format(eventData['sceneName']))
 
     async def sna():    
         load_dotenv(override=True)

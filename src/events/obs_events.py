@@ -31,7 +31,7 @@ def init_obswebsocket_ws():
 
 
 async def on_event(eventType, eventData):
-    logger.debug('New event! Type: {} | Raw Data: {}'.format(eventType, eventData)) # Print the event data. Note that `update-type` is also provided in the data
+    logger.debug('New event! Type: {} | Raw Data: {}'.format(eventType, eventData))
 
 
 def get_scene_item_id(scene_name, source_name):

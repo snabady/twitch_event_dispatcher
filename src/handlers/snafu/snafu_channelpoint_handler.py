@@ -1,5 +1,9 @@
+import logging 
+from utils import log
 
-
+logger = logging.getLogger(__name__)
+logger = log.add_logger_handler(logger)
+logger.setLevel(logging.DEBUG)   
 
 
 def handle_custom_reward_add (event: dict):

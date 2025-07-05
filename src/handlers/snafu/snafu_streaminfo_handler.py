@@ -1,8 +1,9 @@
 import logging
 from utils import log
 from events import obsws
-#from handlers import twitchapi
-from handlers import twitchapi
+from handlers.twitchapi import trigger_follower_count, trigger_sub_count
+from dispatcher.event_dispatcher import post_event
+#from handlers.twitchapi import myTwitch
 
 
 logger = logging.getLogger(__name__)
@@ -21,14 +22,17 @@ def handle_stream_online(event: dict):
     started_at              = event.get("started_at")
     # obs:
     
-    # check followercount
-    #tapi.trigger_follower_count()
-    # check subportercount
+    
+    trigger_follower_count()
+    trigger_sub_count()
+    
     # fishies!
     
     logger.info("Stream just went ONLINE... setting up things")
     obsws.trigger_hotkey_by_name_wrapper("timer_start_hotkey")
-    logger.debug("WE DID IT ")
+    post_event("set_stream_online", {"event_type": "set_stream_online", "event_data": True})
+    obsws.stream_online = True
+    
 
 
 def handle_stream_offline(event: dict):
@@ -46,7 +50,7 @@ def handle_stream_offline(event: dict):
 
     obsws.trigger_hotkey_by_name_wrapper("timer_stop_hotkey")
     # stats schreiben
-
+    post_event("set_stream_online", {"event_type": "set_stream_online", "event_data": False})
     logger.debug("WE DID IT ")
 
     

@@ -11,10 +11,10 @@ def subscribe_event(event_type, fn):
     logger.debug(f"registered event_type {event_type} with fkt: {fn.__name__}")
     subscribers[event_type].append(fn)
 
-def post_event(event_type, data: str) :
+def post_event(event_type, data) :
     #logger.debug(f'event_type: {event_type}\nsubscribers: {subscribers}')
     if not event_type in subscribers:
-        logger.debug("no subscribers registered")
+        logger.debug(f"no subscribers registered for event_type {event_type}")
         return
     for fn in subscribers[event_type]:
         logger.debug(f"dispatcher calling {fn.__name__}")

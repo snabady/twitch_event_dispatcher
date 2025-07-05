@@ -1,19 +1,22 @@
-import os
+
 import asyncio
 import logging
 from dotenv import load_dotenv
-import events
-from events import twitch_events,obsws
+from events import twitch_events,obsws, irc_events
 #from events.obsws import Obsws
 from dispatcher.event_dispatcher import subscribe_event
 import handlers.twitch_event_handler as twitch_handler
 import  handlers.obsws_handler as obsws_handler
 import handlers.stream_stats as stream_stats
 import handlers.twitchapi_handler as twitchapi_handler
+import handlers.sna_irc_handler as sna_irc_handler
 from  handlers import db_handler
-#from handlers import twitchapi
+from handlers import bait_handler
+from handlers import twitchapi
 from utils.run_command import run_subprocess
 from utils import log
+from baitgame.bait import FishGame
+from utils.wled import WLEDController
 #from data import stream_stats_data
 
 #stream_stats_data = stream_stats_data.ChatStats()
@@ -41,7 +44,20 @@ def my_event_subscriptions():
     subscribe_event("twitch_moderate_event", twitch_handler.hanle_twitch_moderate_event)
     
     subscribe_event("twitch_streaminfo_event", obsws_handler.handle_twitch_streaminfo_event)
+    subscribe_event("stream_online_event", sna_irc_handler.handle_stream_online)
     subscribe_event("twitchapi_follower_counter", twitchapi_handler.handle_follower_count)
+    subscribe_event("twitchapi_sub_count", twitchapi_handler.handle_sub_count)
+
+    subscribe_event("irc_chat_command", sna_irc_handler.handle_chat_command )
+    subscribe_event("irc_chat_event", sna_irc_handler.handle_chat_event)
+    subscribe_event("chat_command", sna_irc_handler.handle_chat_command)
+    subscribe_event("fish_result", bait_handler.handle_fish_result)
+    #subscribe_event("followage_command", sna_irc_handler.handle_followage_command)
+    subscribe_event("db_get_followage_by_user", db_handler.handle_get_followage_by_user) 
+    subscribe_event("twapi_user_id_result", db_handler.handle_get_followage)
+    subscribe_event("snafu_flash_event", sna_irc_handler.handle_snafu_flash_event)
+
+    #subscribe_event("irc_bait_event", bait_game.handle_bait)
     #subscribe_event("twitch_stream_info_event", stream_stats.handle_twitch_streaminfo_event)
     
 
@@ -90,12 +106,12 @@ async def twitch_listen():
             #test_ids = await tevents.listen_shoutout_events()
           
             #test_ids = await tevents.listen_charity_events()
-            #test_ids = await tevents.listen_channel_action_events()
+            test_ids = await tevents.listen_channel_action_events()
             #test_ids = await tevents.listen_channel_moderate_events()
 
             for x in test_ids:
                 await trigger_cli_event(x, test_ids[x])
-                break
+                #break
 
                 #break
             
@@ -103,7 +119,48 @@ async def twitch_listen():
         except Exception as e:
             logger.debug(e)
             logger.debug(f'twitch-listen: error while scubscribing... {e}')
-        
+
+        try:
+            while True:
+                await asyncio.sleep(0.1)
+         
+        except asyncio.CancelledError:
+            logger.debug("cu later...")
+
+
+
+async def twitch_listen_live():
+    #load_dotenv(dotenv_path="/home/sna/src/twitch/events/.env_twitch_events")
+    # TODO .envs anpassen
+    
+    my_event_subscriptions()
+    async with twitch_events.TwitchEvents(dotenv_path= "/home/sna/src/twitch/src/events/.env_twitch_events", use_cli=False) as tevents:
+        #logger.debug (f"dotenv_path: ")
+        try:
+            
+            print (type(tevents))
+            test_ids = await tevents.listen_subscribe_events()
+            #test_ids = await tevents.listen_ban_events()
+            #twitch_ban_event_ids = await tevents.listen_ban_events()
+            test_ids = await tevents.listen_stream_info_events()
+            
+            
+            test_ids = await tevents.listen_channel_goal_events()
+            test_ids = await tevents.listen_channel_points()
+            test_ids = await tevents.listen_channel_polls()
+            test_ids = await tevents.listen_channel_predictions()
+           # 
+            test_ids = await tevents.listen_hype_train()
+            test_ids = await tevents.listen_shoutout_events()
+         # 
+            #test_ids = await tevents.listen_charity_events()
+            test_ids = await tevents.listen_channel_action_events()
+            #test_ids = await tevents.listen_channel_moderate_events()
+            logger.debug("successfully subscribed for 5n4fu AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        except Exception as e:
+            logger.debug(e)
+            logger.debug(f'LIVE_EVENTS: 5n4fu error while scubscribing... {e}')
+
         try:
             while True:
                 await asyncio.sleep(0.1)
@@ -118,11 +175,56 @@ async def obs_listen():
     #asyncio.create_task(obs.obs_task_worker())
     logger.debug(obs)
 
+async def tapi_listenxxx():
+    #async with twitchapi.myTwitch() as twitch_instance:
+    twitch_instance = twitchapi.myTwitch()
+    try:
+        await twitch_instance.init_sna()
+        logger.debug(f"Angemeldeter Nutzer: {twitch_instance.user.display_name}")
+        await twitch_instance.twapi_task_runner()
+    except Exception as e: 
+
+        logger.debug("ARGHSDLAKSDJFLAKSJDFASKLF")
+
 async def tapi_listen():
-    tapi = twitchapi.myTwitch()
-    await tapi.get_twitch_api_conn()
+    #async with twitchapi.myTwitch() as twitch_instance:
+    twitch_instance = twitchapi.myTwitch()
+    try:
+        await twitch_instance.init_sna()
+        logger.debug(f"Angemeldeter Nutzer: {twitch_instance.user.display_name}")
+        await twitch_instance.twapi_task_runner()
+    except Exception as e: 
+
+        logger.debug("ARGHSDLAKSDJFLAKSJDFASKLF")
+
+async def irc_listen():
+
+    
+    
+    sna = irc_events.Irc()
+    
+    asyncio.create_task( sna.run())
+    asyncio.create_task(sna.irc_task_runner())
+
+"""async def main():
+    fishis = FishGame()
+    await asyncio.gather(obs_listen(),twitch_listen(), tapi_listen(), irc_listen())
+    await asyncio.gather(obs_listen(),twitch_listen(), tapi_listen(), twitch_listen_live())
+
+asyncio.run(main())
+"""
+
+async def tapi_listen():
+    async with twitchapi.myTwitch() as twitch_instance:
+        print(f"Angemeldeter Nutzer: {twitch_instance.user.display_name}")
+        await twitch_instance.twapi_task_runner()
+        while True:
+            await asyncio.sleep(1)
 
 async def main():
-    await asyncio.gather(obs_listen(),
-                         twitch_listen())
+    fishis = FishGame()
+    wled = WLEDController("192.168.0.60")
+    await asyncio.gather(obs_listen(),twitch_listen(),  tapi_listen(),irc_listen())
+    #await asyncio.gather( twitch_listen(), tapi_listen(), irc_listen(), obs_listen(), twitch_listen_live())
+    #await asyncio.gather()
 asyncio.run(main())

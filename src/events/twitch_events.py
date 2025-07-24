@@ -15,7 +15,7 @@ import logging #.config
 import colorlog
 import datetime
 from utils.log import add_logger_handler
-
+from handlers.db_handler import get_active_channelpoint_rewards
 
 class TwitchEvents:
     """
@@ -50,11 +50,15 @@ class TwitchEvents:
         self.event_map = self.get_eventmap()
         load_dotenv(dotenv_path=self.dotenv_path)
 
+        self.channelpoint_rewards = self.init_active_channelpoint_rewards()
         self.live_auth_scope = TARGET_SCOPES
         self.cli_auth_scopes = CLI_SCOPES
         self.twitch_cli_commands = []
         self.setEnv()
         
+
+    def init_active_channelpoint_rewards(self):
+        self.channelpoint_reward =  get_active_channelpoint_rewards()  
     async def __aenter__(self):
         
         if self.use_cli_conn:

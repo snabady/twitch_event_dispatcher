@@ -10,7 +10,7 @@ from twitchAPI.twitch import Twitch, TwitchUser
 from twitchAPI.oauth import UserAuthenticator, UserAuthenticationStorageHelper
 from utils import log
 from handlers import db_handler
-
+from twitchAPI.type import CustomRewardRedemptionStatus
 from dispatcher.event_dispatcher import post_event
 
 
@@ -42,6 +42,13 @@ def trigger_get_user_id(user_name: str):
         twapi = myTwitch()
         await twapi.get_user_id(user_name)
     myTwitch().enqueue(runner())
+
+def trigger_create_clip(user_name: str): 
+    async def runner():
+        twapi = myTwitch()
+        await twapi.create_clip()
+    myTwitch().enqueue(runner())
+
 
 class Singleton(type):
     _instances = {}
@@ -101,6 +108,7 @@ class myTwitch(metaclass=Singleton):
                 finally:
                     self.twapi_queue.task_done()   
                     self.logger.debug(f"twapi-queue-size: {self.twapi_queue.qsize()}")
+                await asyncio.sleep(0.5)
                
         except Exception as e:
             self.logger.critical(f"TWAPI_TASK_RUNNER Exception: {e}", exc_info=True)
@@ -150,10 +158,10 @@ class myTwitch(metaclass=Singleton):
         load_dotenv("/home/sna/src/twitch/src/handlers/.env_twitchapi")
         await asyncio.sleep(1)
         client_id = os.getenv("CLIENT_ID", "ERROR_CLIENT_ID")
-        self.logger.debug(f"client_id: {client_id}")
+        #self.logger.debug(f"client_id: {client_id}")
         client_s = os.getenv("CLIENT_SECRET", "ERROR_CLIENT_SECRET")
         client_id = "0oyr3pfdb6p825pypylc4j5ymvpjzv"
-        self.logger.debug(f"client_secret: {client_s}")
+        #self.logger.debug(f"client_secret: {client_s}")
         auth_base_url = os.getenv("AUTH_BASE_URL", "ERROR_AUTH_BASE_URL")
         twitch = await Twitch(client_id,client_s )
         #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json")#/home/sna/src/twitch/auth_storage
@@ -198,9 +206,9 @@ class myTwitch(metaclass=Singleton):
 
     async def create_clip(self):
         clip = await self.twitch.create_clip(self.user.id)
-        async for x in clip:
-            print (x)
-
+        clip_id =clip.id 
+        clip_edit_url = clip.edit_url
+        self.logger.debug(f"CLIP: {clip_edit_url} id: {clip_id}")
     async def get_current_subscribers(self):
         subscribers = await self.twitch.get_broadcaster_subscriptions(self.user.id)
         self.logger.info (f"subcount:  {subscribers.total}")
@@ -237,8 +245,36 @@ class myTwitch(metaclass=Singleton):
         self.logger.info (f"subcount:  {subscribers.total}")
         data = { "event_type" : "sub_count", 
                  "event_data" : {"total_subs": subscribers.total} }
+        for x in data:
+            self.logger.debug(f"sub: {x}")
         self.logger.info(f"xx total_subs: {subscribers.total}")
         post_event("twitchapi_sub_count", data)
+
+    async def create_custom_reward(self):
+
+        #raise NotImplementedError
+       # x = await first (self.twitch.get_custom_reward_redemption(broadcaster_id= self.user.id,
+       #                                                           status=CustomRewardRedemptionStatus.UNFULFILLED,
+       #                                                           reward_id="7dfeb87a-ef51-47f3-b6b1-f476d7ea14f1"))
+       # self.logger.debug(x)
+
+        #res = await update_redemption_status(broadcaster_id=self.user.id, reward_id="", redemption_ids, status)
+        await self.twitch.create_custom_reward(broadcaster_id=self.user.id, 
+                                               title="snaAlarm", 
+                                               cost=300, 
+                                               is_enabled=True,
+                                               prompt="what is your alarm for?", 
+                                               is_user_input_required=True,
+                                               is_max_per_user_per_stream_enabled=False,
+                                               is_global_cooldown_enabled=False)
+        
+    async def create_stream_marker(self):
+        await self.twitch.create_stream_marker()
+
+    # broadcaster_id, reward_id, redemption_ids, status (ids: Union/list/str
+    async def update_redemption_status(self):
+        self.twitch.update_redemption_status(self.user_id, )
+        
 
 TARGET_SCOPES = [
                  AuthScope.MODERATOR_READ_FOLLOWERS,
@@ -283,5 +319,6 @@ TARGET_SCOPES = [
                  AuthScope.MODERATOR_READ_CHATTERS,
                  AuthScope.CHANNEL_READ_GOALS,
                  AuthScope.USER_READ_BLOCKED_USERS,
-                 AuthScope.USER_WRITE_CHAT
+                 AuthScope.USER_WRITE_CHAT,
+                 AuthScope.CHANNEL_READ_REDEMPTIONS
                  ]

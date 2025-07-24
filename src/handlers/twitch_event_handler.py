@@ -1,11 +1,11 @@
 
 import logging
 
-from dispatcher.event_dispatcher import subscribe_event
+from dispatcher.event_dispatcher import subscribe_event,post_event
 from handlers.snafu import snafu_subscribe_handler, snafu_streaminfo_handler,snafu_charity_handler, snafu_action_handler, snafu_moderate_handler, snafu_ban_handler, snafu_goal_handler, snafu_channelpoint_handler, snafu_poll_handler, snafu_prediction_handler, snafu_hypetrain_handler, snafu_shoutout_handler
 from utils.run_command import EventQueue
 from utils import log
-
+from utils.file_io import  write_event_received
 
 alerts = EventQueue()
 logger = logging.getLogger(__name__)
@@ -28,8 +28,8 @@ def handle_twitch_subscribe_event(event):
     fn = subscribe_events.get(event_type)
 
     alerts.enqueue(lambda: fn(event))
+    write_event_received(f"event_type: {event_type}")
     logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
-
 def handle_twitch_streaminfo_event(event):
     streaminfo_events = { 
         "stream.online":         snafu_streaminfo_handler.handle_stream_online,
@@ -42,6 +42,8 @@ def handle_twitch_streaminfo_event(event):
     fn = streaminfo_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_charity_event(event):
     charity_events = {
         "channel.charity_campaign.donate":      snafu_charity_handler.handle_charity_campaign_donate,
@@ -53,6 +55,8 @@ def handle_twitch_charity_event(event):
     fn = streaminfo_events.get(event_type)
     alerts.enqueue(lambda: fn(event))    
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_action_event(event):
     action_events = {
         "channel.cheer":    snafu_action_handler.handle_channel_cheer,
@@ -64,6 +68,8 @@ def handle_twitch_action_event(event):
     alerts.enqueue(lambda: fn(event))
     logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def hanle_twitch_moderate_event(event):
     moderate_event = {
         "channel.moderator.add": snafu_moderate_handler.handle_moderator_add,
@@ -74,6 +80,8 @@ def hanle_twitch_moderate_event(event):
     fn = streaminfo_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_ban_event(event):
     ban_events = {
         "channel.ban" :                     snafu_ban_handler.handle_channel_ban,
@@ -85,6 +93,8 @@ def handle_twitch_ban_event(event):
     fn = streaminfo_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_goal_event(event):
     goal_events = {
         "channel.goal.begin": snafu_goal_handler.handle_goal_begin, 
@@ -95,6 +105,8 @@ def handle_twitch_goal_event(event):
     fn = goal_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_channelpoint_event(event):
     channelpoint_events ={
         "channel.channel_points_custom_reward.add" : snafu_channelpoint_handler.handle_custom_reward_add,
@@ -108,6 +120,8 @@ def handle_twitch_channelpoint_event(event):
     fn = channelpoint_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type} {event}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_poll_event(event):
     poll_events = {
         "channel.poll.begin" : snafu_poll_handler.handle_poll_begin, 
@@ -118,6 +132,8 @@ def handle_twitch_poll_event(event):
     fn = poll_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_prediction_event(event):
     prediction_events = {
         "channel.prediction.begin": snafu_prediction_handler.handle_prediction_begin,
@@ -129,6 +145,8 @@ def handle_twitch_prediction_event(event):
     fn = streaminfo_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_hypetrain_event(event):
     hypetrain_events = {
         "channel.hype_train.begin" : snafu_hypetrain_handler.handle_hypetrain_begin, 
@@ -139,6 +157,8 @@ def handle_twitch_hypetrain_event(event):
     fn = hypetrain_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 def handle_twitch_shoutout_event(event):
     shoutout_events= {
         "channel.shoutout.create": snafu_shoutout_handler.handle_shoutout_create, 
@@ -148,6 +168,8 @@ def handle_twitch_shoutout_event(event):
     fn = streaminfo_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
+    write_event_received(f"event_type: {event_type}")
+    logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
 
 
 

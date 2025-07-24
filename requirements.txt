@@ -1,3 +1,7 @@
+flask
+python-xlib
+pillow
+pygame
 twitchApi 
 dotenv
 colorlog

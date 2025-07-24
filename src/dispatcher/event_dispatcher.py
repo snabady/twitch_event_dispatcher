@@ -11,6 +11,10 @@ def subscribe_event(event_type, fn):
     logger.debug(f"registered event_type {event_type} with fkt: {fn.__name__}")
     subscribers[event_type].append(fn)
 
+def get_handlers(event_name):
+    """Retrieve all handlers for a given event name."""
+    return _event_handlers.get(event_name, [])
+
 def post_event(event_type, data) :
     #logger.debug(f'event_type: {event_type}\nsubscribers: {subscribers}')
     if not event_type in subscribers:

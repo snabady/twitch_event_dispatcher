@@ -57,6 +57,19 @@ class GatherTasks():
         for t in threads: 
             t.join()
 
+class EventTimer:
+    def __init__(self, interval, callback, *args, **kwargs):
+        self.interval = interval
+        self.callback = callback
+        self.args = args
+        self.kwargs = kwargs
+        self.thread = None
+
+    def start(self):
+        self.thread = threading.Timer(self.interval, self.callback, self.args, self.kwargs)
+        self.thread.start()
+
+
 async def run_subprocess(cmd):
     process = await asyncio.create_subprocess_shell(
                             cmd,
@@ -68,8 +81,13 @@ async def run_subprocess(cmd):
     #logger.info(f"stdout: {tdout}")
 
 def run_mpv(filepath: str,  volume: str , no_video=False):
-    volume = "--volume="+str(volume)
-    subprocess.run(['mpv', '--no-video=', str(no_video) ,volume,filepath, '--really-quiet'])
+    
+    #    no_vid = f"--no-video"
+    #volume = "--volume="+str(volume)
+    #if no_vid:
+    #    subprocess.run(['mpv', no_vid,volume,filepath])
+    #else:
+    subprocess.run(['mpv', filepath])
 
 
 def run_xcowsay(image:str , text: str, time: int, monitor:int, block=True):
@@ -88,7 +106,8 @@ def run_tts(text:str):
     for num in numbers:
         num_str = num2words(num, lang='de')
         text = text.replace(num, num_str, 1)
-
+    
+    text = text.replace("!tts", "", 1)
     logger.debug(f"tts_text: {text}")
     subprocess.run(["tts", "--text", text, "--model_name", "tts_models/de/css10/vits-neon", "--out_path", tts_wav_filepath])
     subprocess.run(["mpv" , tts_wav_filepath])

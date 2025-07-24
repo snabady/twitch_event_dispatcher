@@ -7,6 +7,7 @@ from dispatcher.event_dispatcher import post_event, subscribe_event
 import time
 from collections import defaultdict
 from utils import file_io
+from utils.file_io import write_bait_counter, bait_quotes_array
 from events.obsws import set_source_visibility_wrapper
 
 MAX_SLOTS           = 10
@@ -164,27 +165,74 @@ class FishSlotManager_:
 class FishPopulation:
 
     #FISHIS = ["🐟", "🐠", "🐡", "🍥", "🦞", "🦐"]
-    FISHIS = ["<><", "><>", ">33))°>", "<°((--<", ">->>^>", "><(((º>", "><(((‘>", "<º)))><"]
-    ZONKS = ["⚓", "🚲", "🥠", "🧦", "✂"]
+    FISHIS = ["<><", "><°>", ">3)°>", "<°(--<", ">-->>^>", "><((((º>", ">--((((‘>", "<º)))}-=><"]
+    #ZONKS = ["⚓", "🚲", "🥠", "🧦", "✂"]
+    ZONKS = ["🥠", " ", "🥠", "🥠", " ","⚓"," ", " ", " ", " ", " ", " ",  "🚲", "🥠", "🧦", "✂"]
 
-    def __init__(self, max_fish=5000):
+    def __init__(self, max_fish=300):
         self.max_fish = max_fish
-        self.population = self.create_population_with_weights(max_fish)
+        self.max_weight = 869
+        self.min_weight = 200
+        self.population = self.create_population_with_weights(max_fish, self.min_weight, self.max_weight)
         random.shuffle(self.population)
 
-    def create_population_with_weights(self, max_fish, min_weight=200, max_weight=600):
-        return [random.randint(min_weight, max_weight) for _ in range(max_fish)]
+    def create_population_with_weights(self, max_fish, min_weight=200, max_weight=869):
+        #return [random.randint(min_weight, max_weight) for _ in range(max_fish)]
+        possible_weights = list(range(min_weight, max_weight + 1))
+        if max_fish > len(possible_weights):
+            raise ValueError("max_fish is greater than the number of unique weights possible in the range.")
+    
+        population = [max_weight]
+        possible_weights.remove(max_weight)
+        remaining_weights = random.sample(possible_weights, max_fish - 1)
+        population.extend(remaining_weights)
+        random.shuffle(population)
+        return population
+
+
+    def get_fishi_for_weight(self, weight):
+        """
+        Returns the FISHI symbol for a specific weight based on its ordering in the population.
+        - FISHIS[0] is for the smallest weight.
+        - FISHIS[-1] is for the largest weight (max_weight).
+        - The rest are distributed evenly among intermediate weights.
+        """
+        x = self.population.copy()
+        x.append(weight)
+        sorted_weights = sorted(x)
+        n = len(sorted_weights)
+        fishis_count = len(self.FISHIS)
+
+        if n < fishis_count:
+            raise ValueError("Population must be at least as large as FISHIS list.")
+
+        # Find index of the weight in the sorted population
+        idx = sorted_weights.index(weight)
+
+        if idx == 0:
+            return self.FISHIS[0]
+        elif idx == n - 1:
+            return self.FISHIS[-1]
+        else:
+            # Distribute remaining fishis over intermediate weights
+            # Map idx 1...(n-2) to FISHIS[1]...(FISHIS[-2])
+            step = (n - 2) / (fishis_count - 2)
+            fishi_idx = 1 + int((idx - 1) / step)
+            # Clamp index to allowed range
+            fishi_idx = min(fishi_idx, fishis_count - 2)
+            return self.FISHIS[fishi_idx]
 
     def catch_fish(self):
         if not self.population:
             return -1, random.choice(self.ZONKS)
         gramm = self.population.pop()
         if random.choice([True, False]):
-            return gramm, random.choice(self.FISHIS)
+
+            return gramm, self.get_fishi_for_weight(gramm)
         else:
             self.population.insert(0, gramm)
             return -1, random.choice(self.ZONKS)
-
+        
     def fish_left(self):
         return len(self.population)
 
@@ -230,6 +278,42 @@ class FishHighscore:
         self.low_score = (None, float('inf'))
         self.first_catch = None
 
+class FishHighscore:
+
+    def __init__(self):
+        self.top_score = (None, 0)
+        self.low_score = (None, float('inf'))
+        self.first_catch = None
+
+    def update(self, user, gramm):
+        is_top = False
+        is_low = False
+        is_first = False
+        if gramm > 0:
+            if gramm > self.top_score[1]:
+                self.top_score = (user, gramm)
+                is_top = True
+            if gramm < self.low_score[1]:
+                self.low_score = (user, gramm)
+                is_low = True
+            if not self.first_catch:
+                self.first_catch = (user, gramm)
+                is_first = True
+        return is_top, is_low, is_first
+
+    def get_highscore(self):
+        return self.top_score
+
+    def get_lowscore(self):
+        return self.low_score
+
+    def get_firstcatch(self):
+        return self.first_catch
+
+    def reset(self):
+        self.top_score = (None, 0)
+        self.low_score = (None, float('inf'))
+        self.first_catch = None
 
 class FishGame:
 
@@ -239,9 +323,12 @@ class FishGame:
         self.bait_slot_manager = RandomBaitSlotManager()
         self.highscore = FishHighscore()
         self.fishstats = FishStats()
-        self.logger = logger or logging.getLogger("FishGame")
-        self.stream_online = False
+        self.logger = logging.getLogger(__name__)
+        self.logger = log.add_logger_handler(self.logger)
+        self.logger.setLevel(logging.DEBUG)   
 
+        self.stream_online = False
+        
         # Registriere Event-Handler
         subscribe_event("fish_bait", self.on_bait)
         subscribe_event("fish_dynamite", self.on_dynamite)
@@ -251,7 +338,18 @@ class FishGame:
         subscribe_event("total_bait", self.on_topbait)
         subscribe_event("mytopbait_command", self.on_mytopbait)
         subscribe_event("set_stream_online", self.set_stream_online)
+        subscribe_event("mytopbait_command_maxgramm", self.on_mytopbait_maxgramm)
+        subscribe_event("mytopbait_command_personal", self.mytopbait_command_personal)
+        subscribe_event("mybaitstats_command", self.mybaitstats_command)
+        subscribe_event("obs_hangry_cat", self.on_obs_hangry_cat)
 
+        self.logger.debug("---------------------->init success")
+        self.init_bait_quotes()
+        self.logger.debug(f"---------------------->init success {type(self.bait_quotes)}")
+
+    def init_bait_quotes(self):
+        self.logger.debug("blub blub blub")
+        self.bait_quotes = bait_quotes_array()
     def set_stream_online(self, event_data):
         value = event_data.get("event_data")
         self.stream_online = value
@@ -294,8 +392,7 @@ class FishGame:
 
     def on_topbait(self, event_data):
         msg =self.fishstats.top_bait()
-        post_event("irc_send_message", {"event_type": "irc_chat_command", 
-                                        "event_data": msg})
+        post_event("irc_send_message", msg)
 
     def on_mytopbait(self,event_data):
         self.logger.debug(f"event_data: {event_data}")
@@ -308,6 +405,22 @@ class FishGame:
                 msg = (f"{user} FishingeDespair try !bait first")
         #msg = user+" 's topbait: "+ str(msg) + "g"
         post_event("irc_send_message", msg)
+    def on_mytopbait_maxgramm(self, event_data):
+        msg = event_data.get('event_data') +" "
+        msg += self.fishstats.personal_catch_gramm_string(event_data.get("event_data"))
+        post_event("irc_send_message", msg)
+    def mytopbait_command_personal(self, event_data):
+        user = event_data.get("event_data")
+        msg = user+" "
+        msg += self.fishstats.personal_catches_string(user)
+        post_event("irc_send_message", msg)
+
+    def mybaitstats_command(self, event_data):
+        user = event_data.get("event_data")
+        msg = self.fishstats.generate_mybaitstats_string(user) 
+        self.logger.debug(f"msg {msg}")
+        post_event("irc_send_message", msg)
+
 
     def process_task(self, user, task):
         gramm, fish = self.population.catch_fish()
@@ -318,22 +431,30 @@ class FishGame:
         self.logger.debug(f"{hasattr(task, "slot_text")} hasatrr? {task.slot_text}")
         if hasattr(task, "slot_text"):
 
-            set_source_visibility_wrapper("fishers", task.slot_text, False)
+            #set_source_visibility_wrapper("fishers", task.slot_text, False)
             post_event("obs_set_source_visibility", {"event_type": "obs_set_source_visibility", "event_data":{"scene_name": "fishers", "source_name": task.slot_text, "visible": False}})
             f = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{task.slot_text}.txt"
             self.bait_slot_manager.release_slot(task.slot_text)
             file_io.write_file(f, "w", "")
-        if self.stream_online:
-
-            self.logger.debug("stream online, no irc msg")
             file_io.write_file("/home/sna/5n4fu_stream/obs_files/fishis/bait_history.txt", "a", msg_obs)
-        else:
+        if not self.stream_online:
             post_event("irc_send_message", msg_irc)
+        
         self.fishstats.record_catch(user, gramm, fish)
-        # Task beenden und nächsten aus der Queue holen
+
+        if is_top and not gramm == -1:
+
+            file_io.write_top_baiter(user)
+        
+        if fish == "🥠":
+            self.logger.debug(f"{len(self.bait_quotes)} {type(self.bait_quotes)}")
+            x = random.randint(0, len(self.bait_quotes)-1)
+            s =  f"{user} got a fortune🥠{self.bait_quotes[x]}"
+            post_event("irc_send_message",s)
+        
         next_user, next_task = self.slots.finish_task(user)
+        
         if next_user and next_task:
-            # --- RANDOM DELAY für Nachrücker ---
             delay = random.uniform(10,66)
             self.logger.info(f"starting queued-bait {next_user} | queue-size: {self.slots.queue.qsize()}")
             msg=f"next from queue: {next_user},  {delay:.1f} "
@@ -355,8 +476,13 @@ class FishGame:
             timer = threading.Timer(delay, self.process_task, args=(next_user, next_task))
             timer.start()
 
-    def on_dynamite(self, user):
+    def on_obs_hangry_cat(self,event_data):
+        event_data = event.get("event_data")
+        weighted_user = event_data.get("user")
+        # TODO choose fish/player who looses a fish
+        raise NotImplementedError
 
+    def on_dynamite(self, user):
         #fishresult {'user': 'roll0r', 'message': 'roll0r jeBaited u got 🧦.'}
         results = []
         for _ in range(3):
@@ -384,18 +510,12 @@ class FishGame:
             msg_obs = f"{user}: jeBaited \n"
         return msg_irc, msg_obs
 
-    
-
-
-
 class FishTask:
 
     def __init__(self, user):
         self.user = user
         self.result = None
         self.slot_text = ""
-
-
 
 class FishStats:
     """
@@ -417,6 +537,7 @@ class FishStats:
         self.user_total_gramm = defaultdict(int)
         self.user_jebaited = defaultdict(int)
         self.user_top_bait = dict()  # user -> (gramm, fish)
+        self.total_baits= 0
 
     def record_catch(self, user, gramm, fish):
         with self.lock:
@@ -426,21 +547,23 @@ class FishStats:
                 "fish": fish,
                 "timestamp": time.time(),
             }
-            self.catches.append(entry)
+            self.total_baits +=1
+            x = f"{self.total_baits}"
+            write_bait_counter(x)
             if gramm > 0:
                 self.user_catch_count[user] += 1
+                self.catches.append(entry) # without -1
                 self.user_total_gramm[user] += gramm
-                # update personal top bait
                 if (user not in self.user_top_bait) or (gramm > self.user_top_bait[user][0]):
                     self.user_top_bait[user] = (gramm, fish)
             else:
                 self.user_jebaited[user] += 1
+
     def top_bait(self):
         if not self.catches:
             return "no catches"
         top_catch = max(self.catches, key=lambda x: x["gramm"])
-        return f" {top_catch["user"]} with {top_catch["gramm"]}g {top_catch["fish"]}"
-
+        return f"current TOPbait {top_catch["user"]} with {top_catch["gramm"]}g {top_catch["fish"]}"
         
     def total_catches(self):
         with self.lock:
@@ -462,22 +585,61 @@ class FishStats:
         with self.lock:
             return list(self.user_catch_count.keys()) + list(self.user_jebaited.keys())
 
-    # Neue Funktionen für Statistiken:
     def personal_top_bait(self, user):
-        
+      
         with self.lock:
             return self.user_top_bait.get(user)
 
     def personal_catches(self, user):
-        """Anzahl der erfolgreichen Fänge (keine Zonks) für den User."""
         with self.lock:
-            return self.user_catch_count[user]
+            print (f" {type(self.user_catch_count)}")
+
+#            return self.user_catch_count[user]
 
     def personal_jebaited(self, user):
-        """Anzahl der jeBaited (Zonks) für den User."""
         with self.lock:
             return self.user_jebaited[user]
 
+    def personal_catches_sorted(self, user):
+        with self.lock:
+            user_catches = [c for c in self.catches if c["user"] == user]
+            return sorted(user_catches, key=lambda c: c["gramm"], reverse=True)
+
+    def personal_catches_string(self, user):
+        with self.lock:
+            user_catches = [c for c in self.catches if c["user"] == user]
+            sorted_catches = sorted(user_catches, key=lambda c: c["gramm"], reverse=True)
+            return ", ".join(f'{c["gramm"]}g {c["fish"]}' for c in sorted_catches)
+
+    def personal_catch_gramm_string(self, user):
+
+        with self.lock:
+            user_catches = [c["gramm"] for c in self.catches if c["user"] == user]
+            sorted_gramms = sorted(user_catches, reverse=True)
+            total = sum(sorted_gramms)
+            return ", ".join(f"{g}g" for g in sorted_gramms) + f" (total: {total}g)"
+
+    def generate_mybaitstats_string(self, user):
+        with self.lock:
+
+            user_catches = [c["gramm"] for c in self.catches if c["user"] == user]
+            sorted_g = sorted(user_catches)
+
+            jebaited = (self.user_jebaited[user])
+            total_catches = len(sorted_g) +jebaited 
+            total_g = sum(sorted_g)
+            if len(sorted_g) == 1:
+                max_g = max(sorted_g)
+                min_g = 0
+            elif len(sorted_g) > 0:
+                max_g = max(sorted_g)
+                min_g = min(sorted_g)
+            else:
+                max_g = 0
+                min_g = 0    
+            
+            return (f"{user} 's stats: total baits: {total_catches} | total_gramm: {total_g} | min_g: {min_g} | max_g: {max_g} | +baits: {len(sorted_g)} | jebaited: {jebaited}.")
+            
     def reset(self):
         with self.lock:
             self.catches.clear()

@@ -26,6 +26,21 @@ def get_db_conn():
     )
     return conn
 
+
+def execute_query(query: str, values: []) -> bool:
+    conn = get_db_conn()
+    cursor = conn.cursor()
+
+    # TODO check return...
+    ret = cursor.execute(query, values)
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return ret 
+
+
 def insert_new_follwer(follower:dict) -> str:
     conn = get_db_conn()
     cursor = conn.cursor()
@@ -86,15 +101,103 @@ def handle_get_followage(user_id: int):
     else: 
         post_event("irc_send_message", "moep, what about a follow first?")
 
-
     cursor.close()
     conn.close()
 
+def write_cli_params(cli_ids):
+    conn = get_db_conn()
+    cursor = conn.cursor()
+
+    query = "delete from cli_sub_ids;"
+    cursor.execute(query)
+    conn.commit()
+    data = [(name, id) for name, id in cli_ids.items()]
+    cursor.executemany("INSERT INTO cli_sub_ids (cli_command_name, cli_command_id) VALUES (%s,%s)", data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
 def get_chat_commands():
     logger.debug("get_chat_command")
     conn = get_db_conn()
     cursor = conn.cursor()
-    query = "SELECT chat_command FROM chat_command WHERE is_active=1"
+    query = "SELECT chat_command, params, command_type FROM chat_command WHERE is_active=1"
     cursor.execute(query)
     
     return cursor.fetchall()
+
+
+def insert_stream_stats(db_values):
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    column_names = get_table_column_names("stream_stats", "twitch")
+    logger.debug(f"stream_stats, twitch: {len(column_names)} {len(db_values)} \n\n{db_values}\n\n{column_names} ")
+    s_ = ', '.join(['%s'] * len(db_values))
+
+    query = f"""INSERT INTO stream_stats (stream_date, 
+                                        total_chat_messages, 
+                                        new_subscribers, 
+                                        new_follower, 
+                                        new_chatters, 
+                                        channel_joins, 
+                                        first_messages, 
+                                        unique_viewer_count, 
+                                        total_channel_joins, 
+                                        daily_messages, 
+                                        total_subs, 
+                                        total_follower, 
+                                        raids_received) 
+            VALUES ({s_})"""
+
+    cursor.execute(query,db_values) 
+    print(f"{cursor.statement}")
+    conn.commit() 
+    cursor.close()
+    conn.close()
+
+
+def get_table_column_names(table: str, schema: str):
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    query = f"""SELECT column_name 
+            FROM information_schema.columns 
+            WHERE table_name = '{table}' and table_schema='{schema}'"""
+    cursor.execute(query)
+    ret = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return ret
+
+
+
+
+def get_stats_columns():
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    query = """SELECT column_name, data_type 
+            FROM information_schema.columns 
+            WHERE table_name = 'stream_stats' and table_schema='twitch'"""
+    cursor.execute(query)
+    ret = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return ret
+
+def get_active_channelpoint_rewards():
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    query ="SELECT id,name,params from custom_rewards where active=1"
+    cursor.execute(query)
+    ret =  cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return ret
+
+def select_something(query: str) :
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    cursor.execute(query)
+    ret = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return ret

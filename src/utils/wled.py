@@ -24,8 +24,8 @@ class WLEDController(metaclass=Singleton):
         if not self.logger.hasHandlers():
             log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)
-        self.strobo_thread = threading.Thread(target=self.check_strobo, daemon=True)
-        self.strobo_thread.start()
+        #self.strobo_thread = threading.Thread(target=self.check_strobo, daemon=True)
+        #self.strobo_thread.start()
         self.logger.debug("subscribing to snafu_flash_event")
         subscribe_event("snafu_flash_event", self.add_chatstrobo)
 
@@ -51,14 +51,18 @@ class WLEDController(metaclass=Singleton):
     def add_chatstrobo(self, event):
         self.chatstrobo +=1
 
-    def check_strobo(self):
+
+    async def start(self):
+        asyncio.create_task(self.check_strobo())
+
+    async def check_strobo(self):
         self.logger.debug("running checkstrobo loop")
         while True: 
             if self.chatstrobo > 0:
                 print (f'chatstrobo_cnt: {self.chatstrobo}')
                 self.set_preset(24)
                 self.chatstrobo -=1
-        time.sleep(0.5)
+            await asyncio.sleep(0.5)
 
 
     def set_preset(self, preset_id):

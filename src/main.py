@@ -4,6 +4,7 @@ import asyncio
 import logging
 import time
 from dotenv import load_dotenv
+import signal
 from events import twitch_events,obsws, irc_events, event_timer
 #from events.obsws import Obsws
 from dispatcher.event_dispatcher import subscribe_event
@@ -123,11 +124,10 @@ async def cli_twitch_listen():
             test_ids = await tevents.listen_stream_info_events()
             xxx = test_ids
             cli_ids = append_ids(cli_ids, test_ids)
-            logger.debug(cli_ids)
             db_handler.write_cli_params(cli_ids)
             for x in xxx:
                 await trigger_cli_event(x, xxx[x]) 
-                break
+                return 
         except Exception as e:
             logger.debug(e)
             logger.debug(f'CLI-subscription ERROR {e}')
@@ -152,7 +152,7 @@ async def twitch_listen_live():
             #test_ids = await tevents.listen_charity_events()
             test_ids = await tevents.listen_channel_action_events()
             #test_ids = await tevents.listen_channel_moderate_events()
-            logger.debug("successfully subscribed for 5n4fu AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+            logger.debug("successfully subscribed 5n4fu events")
         except Exception as e:
             logger.debug(e)
             logger.debug(f'LIVE_EVENTS: 5n4fu error while scubscribing... {e}')
@@ -171,9 +171,13 @@ async def obs_listen():
     logger.debug(obs)
 
 async def irc_listen():
-    sna = irc_events.Irc()
-    asyncio.create_task( sna.run())
-    asyncio.create_task(sna.irc_task_runner())
+    try:
+        sna = irc_events.Irc()
+        asyncio.create_task( sna.run())
+        asyncio.create_task(sna.irc_task_runner())
+    except asyncio.CancelledError:
+        logger.debug("irc_listen graceful end")
+        raise 
 
 async def tapi_listen():
     async with twitchapi.myTwitch() as twitch_instance:
@@ -183,15 +187,59 @@ async def tapi_listen():
             await asyncio.sleep(1)
 
 async def wled_listen():
-    wled = WLEDController("192.168.0.60")
-    await wled.start()
-
+    try:
+        wled = WLEDController("192.168.0.60")
+        await wled.start()
+    except asyncio.CancelledError:
+        logger.debug("asyncio wled_listen EXIT--->")
+        await wled.stop()
+        raise
 async def emote_loop():
     start_emote_display()
 
 def run_flask():
     http_event.run(port=5001,use_reloader=False)
+
+
+def handle_exit(*args):
+    logger.debug(f"handle_exit {args}")
+    shutdown_event.set()
+
+shutdown_event = asyncio.Event()
+
 async def main():
+    my_event_subscriptions()
+    fishis = FishGame()
+    flask_thread = threading.Thread(target=run_flask, daemon=True)
+    flask_thread.start()
+    event_timer.MultiTimerClass()
+ 
+    loop = asyncio.get_running_loop()
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(sig, handle_exit)
+
+        tasks = [
+                asyncio.create_task( wled_listen() ), 
+                asyncio.create_task( cli_twitch_listen() ),
+                asyncio.create_task( tapi_listen() ),
+                asyncio.create_task( irc_listen() ),
+                asyncio.create_task( obs_listen() ),
+                asyncio.create_task( twitch_listen_live() )
+                ]
+
+        await shutdown_event.wait()
+
+        for task in tasks: 
+            task.cancel()
+    
+        for task in tasks: 
+            try:
+                await task
+            except asyncio.CancelledError:
+                print("main cancled")
+
+
+async def main1():
     my_event_subscriptions()
     fishis = FishGame()
     flask_thread = threading.Thread(target=run_flask, daemon=True)
@@ -210,5 +258,8 @@ async def main():
                          )
     #await asyncio.gather()
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("exit...........bye.............cya")
 

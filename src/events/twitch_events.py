@@ -31,14 +31,14 @@ class TwitchEvents:
     def __init__(self, dotenv_path: str, use_cli: bool):
         self.use_cli_conn = use_cli
         load_dotenv(dotenv_path=dotenv_path)
-
+        
         if not use_cli:
-            self.logger = logging.getLogger("** 5n4fu_LIVE **")
+            self.logger = logging.getLogger("** 5n4fu_TV_events**")
         else:
-            self.logger = logging.getLogger(__name__)
+            self.logger = logging.getLogger("** TWITCH CLI trigger **")
         self.log = add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)      
-
+        self.logger.info(f"dotenv-file initialized: {dotenv_path}")
         self.logger.debug(f"use_cli: {use_cli}")
         self.use_cli_conn = use_cli
         self.event_mapping = self.get_eventmap()
@@ -48,7 +48,7 @@ class TwitchEvents:
         
         self.dotenv_path = dotenv_path
         self.event_map = self.get_eventmap()
-        load_dotenv(dotenv_path=self.dotenv_path)
+        #load_dotenv(dotenv_path=self.dotenv_path)
 
         self.channelpoint_rewards = self.init_active_channelpoint_rewards()
         self.live_auth_scope = TARGET_SCOPES
@@ -58,7 +58,8 @@ class TwitchEvents:
         
 
     def init_active_channelpoint_rewards(self):
-        self.channelpoint_reward =  get_active_channelpoint_rewards()  
+        self.channelpoint_reward =  get_active_channelpoint_rewards()
+
     async def __aenter__(self):
         
         if self.use_cli_conn:
@@ -66,6 +67,7 @@ class TwitchEvents:
             self.eventsub, self.twitch, self.user = await self.climockingConn()
         else:
             self.logger.debug("__aenter__ live - setting up eventsub")
+            load_dotenv(dotenv_path=self.dotenv_path)
             self.eventsub, self.twitch, self.user = await self.prodConn()
         self.eventsub.start()
         return self
@@ -83,8 +85,8 @@ class TwitchEvents:
         adjust variables in .env File 
         """
         load_dotenv(dotenv_path=self.dotenv_path)
-        dotenv_path = find_dotenv()
-        self.logger.debug ( dotenv_path )
+        #dotenv_path = find_dotenv()
+        self.logger.debug ( f"samma eye das kanns doch nicht sein {self.dotenv_path}" )
         if self.use_cli_conn:
             self.TWITCH_CLI_MOCK_API_URL    = os.getenv("TWITCH_CLI_MOCK_API_URL", "BASE_URL not found") 
             self.AUTH_BASE_URL              = os.getenv("AUTH_BASE_URL", "BASE_URL not found")
@@ -95,9 +97,11 @@ class TwitchEvents:
             self.CLI_CLIENTID               = os.getenv("CLI_CLIENTID", "CLI_ID not found")
             
         else:
+            load_dotenv("/home/sna/src/twitch/src/events/.env_twitch_events", override=True)
             self.CLIENT_ID          = os.getenv("CLIENT_ID", "CLIENT_ID not found")
             self.CLIENT_S           = os.getenv("CLIENT_S", "CLIENT_S not found")
-    
+            #self.CLIENT_ID = "337ngraz2f1kn32dz0k539uuykg5ev"
+            #self.logger.debug(f"............... cid ------> {self.CLIENT_ID}")
 
        
     async def prodConn(self) -> Tuple[EventSubWebsocket, Twitch, TwitchUser]:
@@ -113,6 +117,7 @@ class TwitchEvents:
         
         return eventsub, twitch, user
         """
+        #self.logger.debug(f"c_id: {self.CLIENT_ID} s. {self.CLIENT_S}")
         twitch = await Twitch(self.CLIENT_ID, self.CLIENT_S,)
         helper = UserAuthenticationStorageHelper(twitch, self.live_auth_scope)
         await helper.bind()
@@ -130,7 +135,6 @@ class TwitchEvents:
 
         TODO AuthScopes compare || check if normal working
         """
-        self.logger.critical("a worm inserted your console")
         twitch = await Twitch(self.CLI_CLIENTID,
                             self.CLI_CLIENT_SECRET,
                             base_url        = self.TWITCH_CLI_MOCK_API_URL, 
@@ -192,23 +196,17 @@ class TwitchEvents:
         ChannelPollEndEvent: "twitch_poll_event",
         ChannelPollProgressEvent: "twitch_poll_event"
         } 
-  
-
-
-
     
     async def dispatch_twitch_event(self, x: Union[ChannelSubscribeEvent, ChannelBanEvent, ChannelFollowEvent, ChannelRaidEvent, ChannelCheerEvent]):
-        self.logger.debug("in dispatch_twitch_event")
         event_source = "twitch_event"
         ts = datetime.datetime.now()
         data = ""
         self.logger.debug(f'x: {type(x)}')
         if self.event_map[type(x)] != None:
             
-            
             x = cast(ChannelSubscribeEvent, x)
 
-            self.logger.debug(f"**** event_type:---------------------------------------> >>> {x.subscription.type} <<<")
+            self.logger.debug(f"dispatching **** event_type:------> >>> {x.subscription.type} <<<")
             
             data = {
                 "timestamp_received": ts, 
@@ -216,14 +214,10 @@ class TwitchEvents:
                 "event_source": event_source,
                 "event_id": x.subscription.id,
                 "event_type": x.subscription.type,
-                
                 "type": self.event_map[type(x)],
                 "event_data": x.event.to_dict()
             }
-            #self.logger.debug(f'EVENTDATA-DISPATCHER?? {x.event.to_dict()}')
-            self.logger.debug(f"POST:{self.event_map[type(x)]} ")
-            #self.logger.debug(f"event_type: {x.subscription.type}")
-            #self.logger.debug(f"posting_event_data:\t {data}")
+            self.logger.debug(f"**POST TWITCH EVENT**: {self.event_map[type(x)]} ")
             post_event(self.event_map[type(x)], data)
     
 
@@ -250,6 +244,7 @@ class TwitchEvents:
         streamoffline_id    = await self.eventsub.listen_stream_offline(self.user.id, self.dispatch_twitch_event)   
         channelupdatev2_id  = await self.eventsub.listen_channel_update_v2(self.user.id, self.dispatch_twitch_event)
         channelupdate_id    = await self.eventsub.listen_channel_update(self.user.id,self.dispatch_twitch_event)
+        self.logger.info("successfully subscribed to stream_info_events")
         return {
             "stream.online": streamonline_id,
             "stream.offline": streamoffline_id,
@@ -481,10 +476,19 @@ class TwitchEvents:
         channel.follow 
         channel.raid 
         """
-        raid_id = await self.eventsub.listen_channel_raid(self.dispatch_twitch_event, self.user.id, None)
-        follow_id = await self.eventsub.listen_channel_follow_v2(self.user.id, self.user.id, self.dispatch_twitch_event)
-        channel_cheer_id = await self.eventsub.listen_channel_cheer(self.user.id, self.dispatch_twitch_event)
-        
+        try:
+            self.logger.debug("channel_action_events")
+            raid_id = await self.eventsub.listen_channel_raid(self.dispatch_twitch_event, self.user.id, None)
+            self.logger.debug(f"raid_id {raid_id}")
+            follow_id = await self.eventsub.listen_channel_follow_v2(self.user.id, self.user.id, self.dispatch_twitch_event)
+
+            self.logger.debug(f"follow_id {follow_id}")
+            channel_cheer_id = await self.eventsub.listen_channel_cheer(self.user.id, self.dispatch_twitch_event)
+            
+            self.logger.debug(f"cheer_id {channel_cheer_id}")
+        except Exception as e:
+            self.logger.debug(e)
+        self.logger.info("successfully subscribed to channel_action_events")
         return {
             "channel.cheer" : channel_cheer_id,
             "channel.follow" : follow_id,

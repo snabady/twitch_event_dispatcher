@@ -1,3 +1,4 @@
+import datetime 
 import logging
 from utils import log
 from events import obsws
@@ -22,8 +23,6 @@ def handle_stream_online(event: dict):
     type_                   = event.get("type")
     started_at              = event.get("started_at")
     # obs:
-    
-    
     trigger_follower_count()
     trigger_sub_count()
     
@@ -37,7 +36,9 @@ def handle_stream_online(event: dict):
     post_event("set_stream_online", {"event_type": "set_stream_online", "event_data": True})
     obsws.stream_online = True
     write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.online event\n")
-
+    post_event("stream_online_event", event_data)
+    msg = f"5n4fu is now live!  {datetime.datetime.now()} "
+    post_event("irc_send_message", msg)
 
 def handle_stream_offline(event: dict):
     """
@@ -57,7 +58,9 @@ def handle_stream_offline(event: dict):
     post_event("set_stream_online", {"event_type": "set_stream_online", "event_data": False})
     logger.debug("WE DID IT ")
     write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.offline event\n")
-    
+    post_event("stream_offline_event", event_data)    
+    msg = "5n4fu is now offline. so long and thanks for all the fish.."
+    post_event("irc_send_message", msg)
 def handle_channel_update_v2(event: dict):
     """
     event_data: {'broadcaster_user_id': '42226127', 
@@ -86,7 +89,9 @@ def handle_channel_update_v2(event: dict):
     # refresh fishis
     # check values -> overlay bottom
 
-    
+    msg =f"streamtitle is now: {event_data.get("title")}"
+    post_event("irc_send_message", msg)
+    write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.update event\n")
     logger.debug("WE DID IT ")
     
 def hanlde_channel_update(event: dict):
@@ -102,5 +107,9 @@ def hanlde_channel_update(event: dict):
     event_data = event.get("event_data")
     logger.debug(f"event_data: {event_data}")
     #obsws.switch_scene_wrapper("logview")
-
+    
+    msg =f"streamtitle changed to: {event_data.get("title")}"
+    post_event("irc_send_message", msg)
     write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.update event\n")
+    logger.debug("WE DID IT ")
+    

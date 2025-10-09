@@ -20,13 +20,13 @@
 !_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
 !_TAG_PROGRAM_VERSION	6.2.0	/v6.2.0/
-AsyncFishList	src/baitgame/fishlist.py	/^class AsyncFishList:$/;"	c
-Bait	src/baitgame/fish_game.py	/^class Bait():$/;"	c
 CLI_SCOPES	src/events/twitch_auth_scopes.py	/^CLI_SCOPES = [AuthScope.CHANNEL_READ_SUBSCRIPTIONS,$/;"	v
 ChatStats	data/stream_stats_data.py	/^class ChatStats(metaclass=Singleton):$/;"	c
+ChatStats	src/handlers/stream_stats.py	/^class ChatStats(metaclass=Singleton):$/;"	c
+EMOTE_URL	tests.py	/^EMOTE_URL = "https:\/\/static-cdn.jtvnw.net\/emoticons\/v2\/25\/default\/dark\/3.0"  # Kappa$/;"	v
 EventQueue	src/utils/run_command.py	/^class EventQueue:$/;"	c
 EventTimer	src/utils/run_command.py	/^class EventTimer:$/;"	c
-FISHIS	src/baitgame/bait.py	/^    FISHIS = ["<><", "><>", ">33))°>", "<°((--<", ">->>^>", "><(((º>", "><(((‘>", "<º)))></;"	v	class:FishPopulation
+FISHIS	src/baitgame/bait.py	/^    FISHIS = ["<><", "><°>", ">3)°>", "<°(--<", ">-->>^>", "><((((º>", ">--((((‘>", "<º))/;"	v	class:FishPopulation
 FishGame	src/baitgame/bait.py	/^class FishGame:$/;"	c
 FishHighscore	src/baitgame/bait.py	/^class FishHighscore:$/;"	c
 FishPopulation	src/baitgame/bait.py	/^class FishPopulation:$/;"	c
@@ -36,13 +36,18 @@ FishStats	src/baitgame/bait.py	/^class FishStats:$/;"	c
 FishTask	src/baitgame/bait.py	/^class FishTask:$/;"	c
 GatherTasks	src/utils/run_command.py	/^class GatherTasks():$/;"	c
 Irc	src/events/irc_events.py	/^class Irc(metaclass=Singleton):$/;"	c
-MAX_SLOTS	src/baitgame/bait.py	/^MAX_SLOTS           = 10$/;"	v
+Irc	src/events/twitch_irc_events.py	/^class Irc(metaclass=Singleton):$/;"	c
+MAX_SLOTS	src/baitgame/bait.py	/^MAX_SLOTS           = 12$/;"	v
+MultiTimerClass	event_timer.py	/^class MultiTimerClass:$/;"	c
+MultiTimerClass	src/events/event_timer.py	/^class MultiTimerClass:$/;"	c
 OUTPUT_PATH	src/scripte/utils/templateMgr.py	/^    OUTPUT_PATH = "\/home\/snafu\/src\/twitch-irc\/curses\/test.txt"$/;"	v	class:TemplateManager
 Obsws	src/events/obsws.py	/^class Obsws(metaclass=Singleton):$/;"	c
 RandomBaitSlotManager	src/baitgame/bait.py	/^class RandomBaitSlotManager:$/;"	c
 Singleton	data/stream_stats_data.py	/^class Singleton(type):$/;"	c
 Singleton	src/events/irc_events.py	/^class Singleton(type):$/;"	c
 Singleton	src/events/obsws.py	/^class Singleton(type):$/;"	c
+Singleton	src/events/twitch_irc_events.py	/^class Singleton(type):$/;"	c
+Singleton	src/handlers/stream_stats.py	/^class Singleton(type):$/;"	c
 Singleton	src/handlers/twitchapi.py	/^class Singleton(type):$/;"	c
 Singleton	src/utils/wled.py	/^class Singleton(type):$/;"	c
 TARGET_SCOPES	src/events/twitch_auth_scopes.py	/^TARGET_SCOPES = [$/;"	v
@@ -51,11 +56,10 @@ TEMPLATE_PATH	src/scripte/utils/templateMgr.py	/^    TEMPLATE_PATH = "\/home\/sn
 TemplateManager	src/scripte/utils/templateMgr.py	/^class TemplateManager:$/;"	c
 TwitchEvents	src/events/twitch_events.py	/^class TwitchEvents:$/;"	c
 USER_MAX_SLOTS	src/baitgame/bait.py	/^USER_MAX_SLOTS      = 3$/;"	v
-USER_SCOPE	src/events/icr_events.py	/^USER_SCOPE = [$/;"	v
 USER_SCOPE	src/events/irc_events.py	/^USER_SCOPE = [$/;"	v
+USER_SCOPE	src/events/twitch_irc_events.py	/^USER_SCOPE = [$/;"	v
 WLEDController	src/utils/wled.py	/^class WLEDController(metaclass=Singleton):$/;"	c
-ZONKS	src/baitgame/bait.py	/^    ZONKS = ["⚓", "🚲", "🥠", "🧦", "✂"]$/;"	v	class:FishPopulation
-__aenter__	src/baitgame/fish_game.py	/^    def __aenter__(self, exc_type, exc_value,traceback):$/;"	m	class:Bait
+ZONKS	src/baitgame/bait.py	/^    ZONKS = ["nada niente", "nix", "a 🥠","gar nix", "ueberhaupt nix", "a 🥠", "nada","⚓",/;"	v	class:FishPopulation
 __aenter__	src/events/obsws.py	/^    async def __aenter__(self):$/;"	m	class:Obsws
 __aenter__	src/events/twitch_events.py	/^    async def __aenter__(self):$/;"	m	class:TwitchEvents
 __aenter__	src/handlers/twitchapi.py	/^    async def __aenter__(self):$/;"	m	class:myTwitch
@@ -65,74 +69,109 @@ __aexit__	src/handlers/twitchapi.py	/^    async def __aexit__(self, exc_type,exc
 __call__	data/stream_stats_data.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __call__	src/events/irc_events.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __call__	src/events/obsws.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
+__call__	src/events/twitch_irc_events.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
+__call__	src/handlers/stream_stats.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __call__	src/handlers/twitchapi.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __call__	src/utils/wled.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __init__	data/stream_stats_data.py	/^    def __init__(self):$/;"	m	class:ChatStats
+__init__	event_timer.py	/^    def __init__(self):$/;"	m	class:MultiTimerClass
 __init__	src/baitgame/bait.py	/^    def __init__(self):$/;"	m	class:FishHighscore
 __init__	src/baitgame/bait.py	/^    def __init__(self):$/;"	m	class:FishStats
 __init__	src/baitgame/bait.py	/^    def __init__(self, logger=None):$/;"	m	class:FishGame
-__init__	src/baitgame/bait.py	/^    def __init__(self, max_fish=5000):$/;"	m	class:FishPopulation
+__init__	src/baitgame/bait.py	/^    def __init__(self, max_fish=10, max_weight=1337, min_weight=23):$/;"	m	class:FishPopulation
 __init__	src/baitgame/bait.py	/^    def __init__(self, max_slots=10):$/;"	m	class:RandomBaitSlotManager
 __init__	src/baitgame/bait.py	/^    def __init__(self, max_slots=MAX_SLOTS):$/;"	m	class:FishSlotManager_
 __init__	src/baitgame/bait.py	/^    def __init__(self, max_slots=MAX_SLOTS, user_max_slots=USER_MAX_SLOTS):$/;"	m	class:FishSlotManager
 __init__	src/baitgame/bait.py	/^    def __init__(self, user):$/;"	m	class:FishTask
-__init__	src/baitgame/fish_game.py	/^    def __init__(self, fish_list, topDisplay):$/;"	m	class:Bait
-__init__	src/baitgame/fishlist.py	/^    def __init__(self):$/;"	m	class:AsyncFishList
+__init__	src/events/event_timer.py	/^    def __init__(self):$/;"	m	class:MultiTimerClass
 __init__	src/events/irc_events.py	/^    def __init__(self):$/;"	m	class:Irc
 __init__	src/events/obsws.py	/^    def __init__(self):$/;"	m	class:Obsws
 __init__	src/events/twitch_events.py	/^    def __init__(self, dotenv_path: str, use_cli: bool):$/;"	m	class:TwitchEvents
+__init__	src/events/twitch_irc_events.py	/^    def __init__(self, dotenv_path):$/;"	m	class:Irc
+__init__	src/handlers/stream_stats.py	/^    def __init__(self):$/;"	m	class:ChatStats
 __init__	src/handlers/twitchapi.py	/^    def __init__(self):$/;"	m	class:myTwitch
 __init__	src/scripte/utils/templateMgr.py	/^    def __init__(self):$/;"	m	class:TemplateManager
 __init__	src/utils/run_command.py	/^    def __init__(self): $/;"	m	class:GatherTasks
 __init__	src/utils/run_command.py	/^    def __init__(self):$/;"	m	class:EventQueue
 __init__	src/utils/run_command.py	/^    def __init__(self, interval, callback, *args, **kwargs):$/;"	m	class:EventTimer
 __init__	src/utils/wled.py	/^    def __init__(self, ip_address):$/;"	m	class:WLEDController
+__new__	event_timer.py	/^    def __new__(cls, *args, **kwargs):$/;"	m	class:MultiTimerClass
+__new__	src/events/event_timer.py	/^    def __new__(cls, *args, **kwargs):$/;"	m	class:MultiTimerClass
+_instance	event_timer.py	/^    _instance = None$/;"	v	class:MultiTimerClass
+_instance	src/events/event_timer.py	/^    _instance = None$/;"	v	class:MultiTimerClass
 _instances	data/stream_stats_data.py	/^    _instances = {}$/;"	v	class:Singleton
 _instances	src/events/irc_events.py	/^    _instances = {}$/;"	v	class:Singleton
 _instances	src/events/obsws.py	/^    _instances = {}$/;"	v	class:Singleton
+_instances	src/events/twitch_irc_events.py	/^    _instances = {}$/;"	v	class:Singleton
+_instances	src/handlers/stream_stats.py	/^    _instances = {}$/;"	v	class:Singleton
 _instances	src/handlers/twitchapi.py	/^    _instances = {}$/;"	v	class:Singleton
 _instances	src/utils/wled.py	/^    _instances = {}$/;"	v	class:Singleton
-add_catch	src/baitgame/fishlist.py	/^    async def add_catch(self, user: str, weight: float):$/;"	m	class:AsyncFishList
+_run_timer	event_timer.py	/^    def _run_timer(self, event_name):$/;"	m	class:MultiTimerClass
+_run_timer	src/events/event_timer.py	/^    def _run_timer(self, event_name):$/;"	m	class:MultiTimerClass
 add_channel_join	data/stream_stats_data.py	/^    def add_channel_join(self, user_name: str):$/;"	m	class:ChatStats
+add_channel_join	src/handlers/stream_stats.py	/^    def add_channel_join(self, user_name: str):$/;"	m	class:ChatStats
 add_chatstrobo	src/utils/wled.py	/^    def add_chatstrobo(self, event):$/;"	m	class:WLEDController
-add_logger_handler	src/baitgame/fish_game.py	/^    def add_logger_handler(self):$/;"	m	class:Bait
 add_logger_handler	src/utils/log.py	/^def add_logger_handler(logger):$/;"	f
+add_raids_received	src/handlers/stream_stats.py	/^    def add_raids_received():$/;"	m	class:ChatStats
 add_task	src/baitgame/bait.py	/^    def add_task(self, user, task):$/;"	m	class:FishSlotManager
 add_task	src/baitgame/bait.py	/^    def add_task(self, user, task):$/;"	m	class:FishSlotManager_
 add_task	src/utils/run_command.py	/^    def add_task(self, fn):$/;"	m	class:GatherTasks
 alerts	src/handlers/twitch_event_handler.py	/^alerts = EventQueue()$/;"	v
 all_catches	src/baitgame/bait.py	/^    def all_catches(self):$/;"	m	class:FishStats
 all_users	src/baitgame/bait.py	/^    def all_users(self):$/;"	m	class:FishStats
+app	src/dispatcher/http_event_api.py	/^app = Flask (__name__)$/;"	v
 append_ids	src/main.py	/^def append_ids(cli_ids, test_ids):$/;"	f
+append_ids	src/test_irc.py	/^def append_ids(cli_ids, test_ids):$/;"	f
 as_file_io	data/stream_stats_data.py	/^import scripte.async_file_io as as_file_io$/;"	I	nameref:module:scripte.async_file_io
+asciiquarium_end	src/handlers/asciiquarium.py	/^def asciiquarium_end(event_data):$/;"	f
+asciiquarium_start	src/handlers/asciiquarium.py	/^def asciiquarium_start(event_data):$/;"	f
+asciiquarium_streamend	src/handlers/asciiquarium.py	/^def asciiquarium_streamend(event_data):$/;"	f
+asciiquarium_streamstart	src/handlers/asciiquarium.py	/^def asciiquarium_streamstart(event_data):$/;"	f
 asnyc_write_file	src/utils/file_io.py	/^async def asnyc_write_file(filepath, mode, text):$/;"	f
 assign_slot	src/baitgame/bait.py	/^    def assign_slot(self):$/;"	m	class:RandomBaitSlotManager
-auth_token_generator	src/events/icr_events.py	/^async def auth_token_generator(twitch: Twitch, USER_SCOPE) -> (str, str):$/;"	f	typeref:typename:(str,str)
 auth_token_generator	src/events/irc_events.py	/^    async def auth_token_generator(self,  twitch: Twitch, USER_SCOPE) -> (str, str):$/;"	m	class:Irc	typeref:typename:(str,str)
+auth_token_generator	src/events/twitch_irc_events.py	/^    async def auth_token_generator(self,  twitch: Twitch, USER_SCOPE) -> (str, str):$/;"	m	class:Irc	typeref:typename:(str,str)
 auth_token_generator	src/handlers/twitchapi.py	/^    async def auth_token_generator(self, twitch: Twitch, USER_SCOPE) -> (str, str):$/;"	m	class:myTwitch	typeref:typename:(str,str)
+bait_o_meter	src/test_irc.py	/^def bait_o_meter():$/;"	f
+bait_quotes_array	src/utils/file_io.py	/^def bait_quotes_array():$/;"	f
+bg_color	tests.py	/^bg_color = (0, 255, 0)  # Grün für Chroma-Key$/;"	v
+blub	src/handlers/obs_handler.py	/^def blub():$/;"	f
 bot_cmd_list	src/events/irc_events.py	/^    def bot_cmd_list(self):$/;"	m	class:Irc
 catch_fish	src/baitgame/bait.py	/^    def catch_fish(self):$/;"	m	class:FishPopulation
 catches_per_user	src/baitgame/bait.py	/^    def catches_per_user(self, user):$/;"	m	class:FishStats
 channel_subscription_grift	src/handlers/snafu/snafu_subscribe_handler.py	/^def channel_subscription_grift(event):$/;"	f
 channel_subscription_message	src/handlers/snafu/snafu_subscribe_handler.py	/^def channel_subscription_message(event):$/;"	f
-chat_client	src/events/icr_events.py	/^chat_client = None$/;"	v
 check_strobo	src/utils/wled.py	/^    async def check_strobo(self):$/;"	m	class:WLEDController
-clear_list	src/baitgame/fishlist.py	/^    async def clear_list(self):$/;"	m	class:AsyncFishList
 cli_twitch_listen	src/main.py	/^async def cli_twitch_listen():$/;"	f
+cli_twitch_listen	src/test_irc.py	/^async def cli_twitch_listen():$/;"	f
 climockingConn	src/events/twitch_events.py	/^    async def climockingConn(self) -> Tuple[EventSubWebsocket, Twitch, TwitchUser]:$/;"	m	class:TwitchEvents	typeref:typename:Tuple[EventSubWebsocket,Twitch,TwitchUser]
+clock	tests.py	/^clock = pygame.time.Clock()$/;"	v
 cmd_list	data/stream_stats_data.py	/^    cmd_list = ["!bait",$/;"	v	class:ChatStats
 cnt_cmd	data/stream_stats_data.py	/^    def cnt_cmd(self, msg: ChatMessage):$/;"	m	class:ChatStats
+cnt_cmd	src/handlers/stream_stats.py	/^    def cnt_cmd(self, msg: ChatMessage):$/;"	m	class:ChatStats
 collection_of_events_not_supported_with_cli	src/events/twitch_events.py	/^    async def collection_of_events_not_supported_with_cli(self):$/;"	m	class:TwitchEvents
+create_argb_window	src/scripte/xpysay.py	/^def create_argb_window(disp, width, height, x=100, y=100):$/;"	f
+create_auto_command_list	src/events/twitch_irc_events.py	/^    def create_auto_command_list(self):$/;"	m	class:Irc
 create_clip	src/handlers/twitchapi.py	/^    async def create_clip(self):$/;"	m	class:myTwitch
 create_custom_reward	src/handlers/twitchapi.py	/^    async def create_custom_reward(self):$/;"	m	class:myTwitch
-create_population_with_weights	src/baitgame/bait.py	/^    def create_population_with_weights(self, max_fish, min_weight=200, max_weight=600):$/;"	m	class:FishPopulation
+create_population_with_weights	src/baitgame/bait.py	/^    def create_population_with_weights(self, max_fish, min_weight=200, max_weight=1337):$/;"	m	class:FishPopulation
 create_stream_marker	src/handlers/twitchapi.py	/^    async def create_stream_marker(self):$/;"	m	class:myTwitch
 create_toilet_file	src/utils/run_command.py	/^def create_toilet_file(filepath: str, font: str, text: str):$/;"	f
+db_cmd_list	src/handlers/stream_stats.py	/^    db_cmd_list = get_chat_commands() $/;"	v	class:ChatStats
 dequeue	src/utils/run_command.py	/^    def dequeue( self ):$/;"	m	class:EventQueue
+disp	src/scripte/xpysay.py	/^    disp = display.Display()$/;"	v
+dispatch_event	src/events/twitch_irc_events.py	/^    async def dispatch_event(self, event_type, event):$/;"	m	class:Irc
 dispatch_twitch_event	src/events/twitch_events.py	/^    async def dispatch_twitch_event(self, x: Union[ChannelSubscribeEvent, ChannelBanEvent, Chann/;"	m	class:TwitchEvents
 dispatch_twitch_event	src/handlers/twitchapi.py	/^    async def dispatch_twitch_event(self, event ):$/;"	m	class:myTwitch
+distributed_random_weights	src/baitgame/bait.py	/^    def distributed_random_weights(self, min_weight: int, max_weight: int, n_slots: int) -> list/;"	m	class:FishPopulation	typeref:typename:list
+distributed_random_weightsix	src/baitgame/bait.py	/^    def distributed_random_weightsix(self, min_weight: int, max_weight: int, n_slots: int) -> li/;"	m	class:FishPopulation	typeref:typename:list
 dotenv_path	src/handlers/twitchapi_handler.py	/^dotenv_path = "\/home\/sna\/src\/twitch\/src\/handlers\/.env_obsfiles"$/;"	v
+emote_img	tests.py	/^emote_img = load_emote(EMOTE_URL)$/;"	v
 emote_loop	src/main.py	/^async def emote_loop():$/;"	f
+emote_loop	src/test_irc.py	/^async def emote_loop():$/;"	f
+end_bait	src/baitgame/bait.py	/^    def end_bait(self):$/;"	m	class:FishGame
+end_irc	src/events/irc_events.py	/^        async def end_irc(self):$/;"	f	member:Irc.trigger_send_message	file:
+end_irc	src/events/twitch_irc_events.py	/^    async def end_irc(self):$/;"	m	class:Irc
 enqueue	src/events/irc_events.py	/^    def enqueue(self, coro):$/;"	m	class:Irc
 enqueue	src/events/obsws.py	/^    def enqueue(self, coro):$/;"	m	class:Obsws
 enqueue	src/handlers/twitchapi.py	/^    def enqueue(self, coro):$/;"	m	class:myTwitch
@@ -142,33 +181,29 @@ env_file_path	src/handlers/snafu/snafu_action_handler.py	/^env_file_path = "\/ho
 env_file_path	src/handlers/snafu/snafu_subscribe_handler.py	/^env_file_path = "\/home\/sna\/src\/twitch\/src\/handlers\/snafu\/.env_snafu_handlers"$/;"	v
 event_types	src/handlers/obsws_handler.py	/^event_types = {$/;"	v
 eventsub	src/events/twitch_events.py	/^    eventsub: Optional[EventSubWebsocket]   = None$/;"	v	class:TwitchEvents	typeref:typename:Optional[EventSubWebsocket]
+execute_query	src/handlers/db_handler.py	/^def execute_query(query: str, values: []) -> bool:$/;"	f	typeref:typename:bool
 finish_task	src/baitgame/bait.py	/^    def finish_task(self, user):$/;"	m	class:FishSlotManager_
 finish_task	src/baitgame/bait.py	/^    def finish_task(self, user, task=None):$/;"	m	class:FishSlotManager
-fish_a_fish	src/baitgame/fish_game.py	/^    async def fish_a_fish(self, maxgramm, chance):$/;"	m	class:Bait
-fish_a_fish_old	src/baitgame/fish_game.py	/^    async def fish_a_fish_old(self, maxgramm, chance):$/;"	m	class:Bait
 fish_left	src/baitgame/bait.py	/^    def fish_left(self):$/;"	m	class:FishPopulation
-fish_loser	src/baitgame/fish_game.py	/^    async def fish_loser(self):$/;"	m	class:Bait
-free_fishing_slot	src/baitgame/fishlist.py	/^    async def free_fishing_slot(self,free_slot,cmd):$/;"	m	class:AsyncFishList
-free_fishing_slot_obs	src/baitgame/fishlist.py	/^    async def free_fishing_slot_obs(self,free_slot,cmd):$/;"	m	class:AsyncFishList
 generate_file	src/scripte/utils/templateMgr.py	/^    async def generate_file(self):$/;"	m	class:TemplateManager
 generate_filex	src/scripte/utils/templateMgr.py	/^    async def generate_filex(self):$/;"	m	class:TemplateManager
+generate_mybaitstats_string	src/baitgame/bait.py	/^    def generate_mybaitstats_string(self, user):$/;"	m	class:FishStats
 getUser	src/events/irc_events.py	/^    async def getUser(self, str):$/;"	m	class:Irc
+getUser	src/events/twitch_irc_events.py	/^    async def getUser(self, str):$/;"	m	class:Irc
+get_active_7tv_emote_urls	src/utils/tv7_scrape.py	/^def get_active_7tv_emote_urls(emoteset_id):$/;"	f
 get_active_channelpoint_rewards	src/handlers/db_handler.py	/^def get_active_channelpoint_rewards():$/;"	f
 get_active_slots_for_user	src/baitgame/bait.py	/^    def get_active_slots_for_user(self, user):$/;"	m	class:FishSlotManager
 get_active_users	src/baitgame/bait.py	/^    def get_active_users(self):$/;"	m	class:FishSlotManager
 get_active_users	src/baitgame/bait.py	/^    def get_active_users(self):$/;"	m	class:FishSlotManager_
-get_all_catches	src/baitgame/fishlist.py	/^    async def get_all_catches(self):$/;"	m	class:AsyncFishList
-get_available_positions	src/baitgame/fishlist.py	/^    async def get_available_positions(self):$/;"	m	class:AsyncFishList
-get_catches_by_user	src/baitgame/fishlist.py	/^    async def get_catches_by_user(self, user: str):$/;"	m	class:AsyncFishList
-get_catches_by_user_as_string	src/baitgame/fishlist.py	/^    async def get_catches_by_user_as_string(self, user: str, as_string: bool):$/;"	m	class:AsyncFishList
+get_all_user_bait_stats	src/baitgame/bait.py	/^    def get_all_user_bait_stats(self):$/;"	m	class:FishStats
 get_chat_commands	src/handlers/db_handler.py	/^def get_chat_commands():$/;"	f
 get_cmd_cnt	data/stream_stats_data.py	/^    def get_cmd_cnt(self, cmd):$/;"	m	class:ChatStats
+get_cmd_cnt	src/handlers/stream_stats.py	/^    def get_cmd_cnt(self, cmd):$/;"	m	class:ChatStats
 get_current_subscribers	src/handlers/twitchapi.py	/^    async def get_current_subscribers(self):$/;"	m	class:myTwitch
 get_db_conn	src/handlers/db_handler.py	/^def get_db_conn():$/;"	f
 get_eventmap	src/events/twitch_events.py	/^    def get_eventmap(self):$/;"	m	class:TwitchEvents
 get_firstcatch	src/baitgame/bait.py	/^    def get_firstcatch(self):$/;"	m	class:FishHighscore
-get_fishing_slot	src/baitgame/fishlist.py	/^    async def get_fishing_slot(self, cmd: ChatCommand):$/;"	m	class:AsyncFishList
-get_fishing_slot_obs	src/baitgame/fishlist.py	/^    async def get_fishing_slot_obs(self, cmd: ChatCommand):$/;"	m	class:AsyncFishList
+get_fishi_for_weight	src/baitgame/bait.py	/^    def get_fishi_for_weight(self, weight):$/;"	m	class:FishPopulation
 get_follower_count	src/handlers/twitchapi.py	/^    async def get_follower_count(self):$/;"	m	class:myTwitch
 get_followers	src/handlers/twitchapi.py	/^    async def get_followers(self):$/;"	m	class:myTwitch
 get_free_slots	src/baitgame/bait.py	/^    def get_free_slots(self):$/;"	m	class:RandomBaitSlotManager
@@ -177,7 +212,6 @@ get_highscore	src/baitgame/bait.py	/^    def get_highscore(self):$/;"	m	class:Fi
 get_lowscore	src/baitgame/bait.py	/^    def get_lowscore(self):$/;"	m	class:FishHighscore
 get_max_baits	src/baitgame/bait.py	/^    def get_max_baits(self, event_data):$/;"	m	class:FishGame
 get_occupied_slots	src/baitgame/bait.py	/^    def get_occupied_slots(self):$/;"	m	class:RandomBaitSlotManager
-get_queue	src/baitgame/fishlist.py	/^    async def get_queue(self):$/;"	m	class:AsyncFishList
 get_queue_list	src/baitgame/bait.py	/^    def get_queue_list(self):$/;"	m	class:FishSlotManager
 get_queue_list	src/baitgame/bait.py	/^    def get_queue_list(self):$/;"	m	class:FishSlotManager_
 get_queue_position	src/baitgame/bait.py	/^    def get_queue_position(self, user):$/;"	m	class:FishSlotManager
@@ -185,45 +219,68 @@ get_queue_position	src/baitgame/bait.py	/^    def get_queue_position(self, user)
 get_queue_positions	src/baitgame/bait.py	/^    def get_queue_positions(self, user):$/;"	m	class:FishGame
 get_scene_item_id	src/events/obs_events.py	/^def get_scene_item_id(scene_name, source_name):$/;"	f
 get_scene_item_id	src/events/obsws.py	/^    async def get_scene_item_id(self, scene_name, source_name):$/;"	m	class:Obsws
-get_slap_video	src/baitgame/fish_game.py	/^    async def get_slap_video(self):$/;"	m	class:Bait
+get_stats_columns	src/handlers/db_handler.py	/^def get_stats_columns():$/;"	f
 get_stats_str	data/stream_stats_data.py	/^    def get_stats_str(self):$/;"	m	class:ChatStats
+get_stats_str	src/handlers/stream_stats.py	/^    def get_stats_str(self):$/;"	m	class:ChatStats
 get_sub_count	src/handlers/twitchapi.py	/^    async def get_sub_count(self):$/;"	m	class:myTwitch
-get_top_3_as_string	src/baitgame/fishlist.py	/^    async def get_top_3_as_string(self):$/;"	m	class:AsyncFishList
-get_top_catch	src/baitgame/fishlist.py	/^    async def get_top_catch(self):$/;"	m	class:AsyncFishList
-get_top_catches	src/baitgame/fishlist.py	/^    async def get_top_catches(self, n=3):$/;"	m	class:AsyncFishList
+get_table_column_names	src/handlers/db_handler.py	/^def get_table_column_names(table: str, schema: str):$/;"	f
 get_twitch_api_conn	src/handlers/twitchapi.py	/^    async def get_twitch_api_conn(self) -> Tuple[ Twitch, TwitchUser]:$/;"	m	class:myTwitch	typeref:typename:Tuple[Twitch,TwitchUser]
 get_user_id	src/handlers/twitchapi.py	/^    async def get_user_id(self, user_name: str):$/;"	m	class:myTwitch
 get_user_stats	data/stream_stats_data.py	/^    def get_user_stats(self, user):$/;"	m	class:ChatStats
-get_user_with_biggest_catch	src/baitgame/fishlist.py	/^    async def get_user_with_biggest_catch(self):$/;"	m	class:AsyncFishList
-get_videos	src/baitgame/fish_game.py	/^    def get_videos(self)        :$/;"	m	class:Bait
+get_user_stats	src/handlers/stream_stats.py	/^    def get_user_stats(self, user):$/;"	m	class:ChatStats
 get_view_count	data/stream_stats_data.py	/^    def get_view_count(self):$/;"	m	class:ChatStats
+get_view_count	src/handlers/stream_stats.py	/^    def get_view_count(self):$/;"	m	class:ChatStats
+gif_path	src/scripte/xpysay.py	/^    gif_path = sys.argv[1]$/;"	v
 handle_automatic_reward_redemption_add	src/handlers/snafu/snafu_channelpoint_handler.py	/^def handle_automatic_reward_redemption_add(event: dict):$/;"	f
+handle_bobr_event	src/handlers/sna_irc_handler.py	/^def handle_bobr_event(event_data, irc_instance):$/;"	f
 handle_channel_cheer	src/handlers/snafu/snafu_action_handler.py	/^def handle_channel_cheer(event: dict ):$/;"	f
 handle_channel_follow	src/handlers/snafu/snafu_action_handler.py	/^def handle_channel_follow(event: dict):$/;"	f
 handle_channel_subscribe	src/handlers/snafu/snafu_subscribe_handler.py	/^def handle_channel_subscribe(event):$/;"	f
+handle_channel_udpate	src/handlers/stream_stats.py	/^def handle_channel_udpate(event: dict):$/;"	f
 handle_channel_update	src/handlers/obsws_handler.py	/^def handle_channel_update(event):$/;"	f
 handle_channel_update_v2	src/handlers/obsws_handler.py	/^def handle_channel_update_v2(event):$/;"	f
 handle_channel_update_v2	src/handlers/snafu/snafu_streaminfo_handler.py	/^def handle_channel_update_v2(event: dict):$/;"	f
+handle_channel_update_v2	src/handlers/stream_stats.py	/^def handle_channel_update_v2(event: dict):$/;"	f
+handle_chat_command	src/handlers/sna_irc_handler.py	/^def handle_chat_command(e_data):$/;"	f
+handle_chat_event	src/handlers/sna_irc_handler.py	/^def handle_chat_event(event_data):$/;"	f
 handle_custom_reward_add	src/handlers/snafu/snafu_channelpoint_handler.py	/^def handle_custom_reward_add (event: dict):$/;"	f
+handle_exit	src/main.py	/^def handle_exit(*args):$/;"	f
+handle_exit	src/test_irc.py	/^def handle_exit(*args):$/;"	f
+handle_flash_event	src/handlers/sna_irc_handler.py	/^def handle_flash_event(event_data, irc_instance):$/;"	f
+handle_followage_command	src/handlers/sna_irc_handler.py	/^def handle_followage_command(event_data):$/;"	f
 handle_follower_count	src/handlers/twitchapi_handler.py	/^def handle_follower_count(event: dict):$/;"	f
 handle_get_followage	src/handlers/db_handler.py	/^def handle_get_followage(user_id: int):$/;"	f
 handle_get_followage_by_user	src/handlers/db_handler.py	/^def handle_get_followage_by_user(user_name: str):$/;"	f
 handle_goal_begin	src/handlers/snafu/snafu_goal_handler.py	/^def handle_goal_begin(event: dict):$/;"	f
 handle_goal_end	src/handlers/snafu/snafu_goal_handler.py	/^def handle_goal_end(event: dict):$/;"	f
 handle_goal_progress	src/handlers/snafu/snafu_goal_handler.py	/^def handle_goal_progress(event: dict):$/;"	f
+handle_hungry_event	src/handlers/sna_irc_handler.py	/^def handle_hungry_event(event_data, irc_instance):$/;"	f
 handle_hypetrain_begin	src/handlers/snafu/snafu_hypetrain_handler.py	/^def handle_hypetrain_begin(event: dict):$/;"	f
 handle_hypetrain_end	src/handlers/snafu/snafu_hypetrain_handler.py	/^def handle_hypetrain_end(event: dict):$/;"	f
+handle_increase_event	event_timer.py	/^    def handle_increase_event(self, data):$/;"	m	class:MultiTimerClass
+handle_irc_join	src/handlers/sna_irc_handler.py	/^def handle_irc_join(event_data):$/;"	f
+handle_irc_joined	src/handlers/sna_irc_handler.py	/^def handle_irc_joined( e_data ):$/;"	f
+handle_irc_message	src/handlers/sna_irc_handler.py	/^def handle_irc_message(e_data):$/;"	f
+handle_lightning_event	src/handlers/sna_irc_handler.py	/^def handle_lightning_event(event_data, irc_instance):$/;"	f
 handle_poll_begin	src/handlers/snafu/snafu_poll_handler.py	/^def handle_poll_begin(event: dict):$/;"	f
 handle_poll_end	src/handlers/snafu/snafu_poll_handler.py	/^def handle_poll_end(event: dict):$/;"	f
 handle_poll_progress	src/handlers/snafu/snafu_poll_handler.py	/^def handle_poll_progress(event: dict):$/;"	f
+handle_ready_event	src/handlers/sna_irc_handler.py	/^async def handle_ready_event():$/;"	f
 handle_redemption_update	src/handlers/snafu/snafu_channelpoint_handler.py	/^def handle_redemption_update(event: dict):$/;"	f
 handle_reward_redemption_add	src/handlers/snafu/snafu_channelpoint_handler.py	/^def handle_reward_redemption_add (event: dict):$/;"	f
 handle_reward_remove	src/handlers/snafu/snafu_channelpoint_handler.py	/^def handle_reward_remove (event: dict):$/;"	f
 handle_reward_update	src/handlers/snafu/snafu_channelpoint_handler.py	/^def handle_reward_update (event: dict):$/;"	f
+handle_start_event	event_timer.py	/^    def handle_start_event(self, data):$/;"	m	class:MultiTimerClass
+handle_start_event	src/events/event_timer.py	/^    def handle_start_event(self, data):$/;"	m	class:MultiTimerClass
+handle_status_query	event_timer.py	/^    def handle_status_query(self, data):$/;"	m	class:MultiTimerClass
+handle_status_query	src/events/event_timer.py	/^    def handle_status_query(self, data):$/;"	m	class:MultiTimerClass
+handle_stop_event	src/events/event_timer.py	/^    def handle_stop_event(self, data):$/;"	m	class:MultiTimerClass
 handle_stream_offline	src/handlers/obsws_handler.py	/^def handle_stream_offline(event):$/;"	f
 handle_stream_offline	src/handlers/snafu/snafu_streaminfo_handler.py	/^def handle_stream_offline(event: dict):$/;"	f
+handle_stream_offline	src/handlers/stream_stats.py	/^def handle_stream_offline(event: dict):$/;"	f
 handle_stream_online	src/handlers/obsws_handler.py	/^def handle_stream_online(event):$/;"	f
 handle_stream_online	src/handlers/snafu/snafu_streaminfo_handler.py	/^def handle_stream_online(event: dict):$/;"	f
+handle_stream_online	src/handlers/stream_stats.py	/^def handle_stream_online(event: dict):$/;"	f
 handle_stwitch_streaminfo_event	src/handlers/db_handler.py	/^def handle_stwitch_streaminfo_event(event: dict):$/;"	f
 handle_sub_count	src/handlers/twitchapi_handler.py	/^def handle_sub_count(event: dict):$/;"	f
 handle_subscription_end	src/handlers/snafu/snafu_subscribe_handler.py	/^def handle_subscription_end(event):$/;"	f
@@ -237,6 +294,7 @@ handle_twitch_poll_event	src/handlers/twitch_event_handler.py	/^def handle_twitc
 handle_twitch_prediction_event	src/handlers/twitch_event_handler.py	/^def handle_twitch_prediction_event(event):$/;"	f
 handle_twitch_shoutout_event	src/handlers/twitch_event_handler.py	/^def handle_twitch_shoutout_event(event):$/;"	f
 handle_twitch_streaminfo_event	src/handlers/obsws_handler.py	/^def handle_twitch_streaminfo_event(event: dict):$/;"	f
+handle_twitch_streaminfo_event	src/handlers/stream_stats.py	/^def handle_twitch_streaminfo_event(event: dict):$/;"	f
 handle_twitch_streaminfo_event	src/handlers/twitch_event_handler.py	/^def handle_twitch_streaminfo_event(event):$/;"	f
 handle_twitch_subscribe_event	src/handlers/twitch_event_handler.py	/^def handle_twitch_subscribe_event(event):$/;"	f
 hanlde_channel_raid	src/handlers/snafu/snafu_action_handler.py	/^def hanlde_channel_raid(event: dict):$/;"	f
@@ -244,22 +302,25 @@ hanlde_channel_update	src/handlers/snafu/snafu_streaminfo_handler.py	/^def hanld
 hanle_twitch_moderate_event	src/handlers/twitch_event_handler.py	/^def hanle_twitch_moderate_event(event):$/;"	f
 has_free_slot	src/baitgame/bait.py	/^    def has_free_slot(self):$/;"	m	class:FishSlotManager_
 has_free_slot	src/baitgame/bait.py	/^    def has_free_slot(self, user):$/;"	m	class:FishSlotManager
-init	src/baitgame/fish_game.py	/^    async def init(self):$/;"	m	class:Bait
-init	src/baitgame/fishlist.py	/^    async def init(self):$/;"	m	class:AsyncFishList
+height	src/scripte/xpysay.py	/^    width, height = im.size$/;"	v
+http_event	src/main.py	/^from dispatcher.http_event_api import app as http_event$/;"	Y	nameref:unknown:app
+http_event	src/test_irc.py	/^from dispatcher.http_event_api import app as http_event$/;"	Y	nameref:unknown:app
+im	src/scripte/xpysay.py	/^    im = Image.open(gif_path)$/;"	v
 init_active_channelpoint_rewards	src/events/twitch_events.py	/^    def init_active_channelpoint_rewards(self):$/;"	m	class:TwitchEvents
-init_fish_population	src/baitgame/fish_game.py	/^    async def init_fish_population(self):$/;"	m	class:Bait
+init_bait_quotes	src/baitgame/bait.py	/^    def init_bait_quotes(self):$/;"	m	class:FishGame
+init_cmd_list	src/handlers/stream_stats.py	/^    def init_cmd_list(self):$/;"	m	class:ChatStats
 init_obswebsocket_ws	src/events/obs_events.py	/^def init_obswebsocket_ws():$/;"	f
 init_obswebsocket_ws	src/events/obsws.py	/^    async def init_obswebsocket_ws(self):$/;"	m	class:Obsws
 init_sna	src/handlers/twitchapi.py	/^    async def init_sna(self):$/;"	m	class:myTwitch
+init_snaman_obs_file	src/events/irc_events.py	/^    def init_snaman_obs_file(self):$/;"	m	class:Irc
 init_stats	data/stream_stats_data.py	/^    def init_stats(self):$/;"	m	class:ChatStats
+init_stats	src/handlers/stream_stats.py	/^    def init_stats(self):$/;"	m	class:ChatStats
+insert_bait_stats	src/handlers/db_handler.py	/^def insert_bait_stats(db_values):$/;"	f
 insert_new_follwer	src/handlers/db_handler.py	/^def insert_new_follwer(follower:dict) -> str:$/;"	f	typeref:typename:str
+insert_stream_stats	src/handlers/db_handler.py	/^def insert_stream_stats(db_values):$/;"	f
 irc_listen	src/main.py	/^async def irc_listen():$/;"	f
+irc_listen	src/test_irc.py	/^async def irc_listen():$/;"	f
 irc_task_runner	src/events/irc_events.py	/^    async def irc_task_runner(self):$/;"	m	class:Irc
-is_bait_top_or_low	src/baitgame/fishlist.py	/^    async def is_bait_top_or_low(self, weight: int , is_top: bool):$/;"	m	class:AsyncFishList
-is_best_or_worst_catch	src/baitgame/fishlist.py	/^    async def is_best_or_worst_catch(self, weight: float):$/;"	m	class:AsyncFishList
-is_first_catch	src/baitgame/fishlist.py	/^    async def is_first_catch(self, weight):$/;"	m	class:AsyncFishList
-is_low_bait	src/baitgame/fishlist.py	/^    async def is_low_bait(self, weight):$/;"	m	class:AsyncFishList
-is_top_bait	src/baitgame/fishlist.py	/^    async def is_top_bait(self, weight):$/;"	m	class:AsyncFishList
 listen_ban_events	src/events/twitch_events.py	/^    async def listen_ban_events(self):$/;"	m	class:TwitchEvents
 listen_channel_action_events	src/events/twitch_events.py	/^    async def listen_channel_action_events(self):$/;"	m	class:TwitchEvents
 listen_channel_goal_events	src/events/twitch_events.py	/^    async def listen_channel_goal_events(self):$/;"	m	class:TwitchEvents
@@ -272,20 +333,27 @@ listen_moderate_events	src/events/twitch_events.py	/^    async def listen_modera
 listen_shoutout_events	src/events/twitch_events.py	/^    async def listen_shoutout_events(self):$/;"	m	class:TwitchEvents
 listen_stream_info_events	src/events/twitch_events.py	/^    async def listen_stream_info_events(self):$/;"	m	class:TwitchEvents
 listen_subscribe_events	src/events/twitch_events.py	/^    async def listen_subscribe_events(self) :$/;"	m	class:TwitchEvents
+load_emote	tests.py	/^def load_emote(url):$/;"	f
 load_existing_values	src/scripte/utils/templateMgr.py	/^    async def load_existing_values(self):$/;"	m	class:TemplateManager
 load_existing_values2	src/scripte/utils/templateMgr.py	/^    async def load_existing_values2(self):$/;"	m	class:TemplateManager
 load_existing_valuesx	src/scripte/utils/templateMgr.py	/^    async def load_existing_valuesx(self):$/;"	m	class:TemplateManager
 load_existing_valuesxx	src/scripte/utils/templateMgr.py	/^    async def load_existing_valuesxx(self):$/;"	m	class:TemplateManager
 logger	src/dispatcher/event_dispatcher.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/dispatcher/event_dispatcher.py	/^logger = logging.getLogger(__name__)$/;"	v
-logger	src/events/icr_events.py	/^def logger(msg):$/;"	f
+logger	src/dispatcher/http_event_api.py	/^logger = log.add_logger_handler(logger)$/;"	v
+logger	src/dispatcher/http_event_api.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/events/irc_events.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/events/obsws.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/events/obsws.py	/^logger = logging.getLogger(__name__)$/;"	v
+logger	src/events/twitch_irc_events.py	/^logger = logging.getLogger(__name__)$/;"	v
+logger	src/handlers/asciiquarium.py	/^logger = log.add_logger_handler(logger)$/;"	v
+logger	src/handlers/asciiquarium.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/handlers/db_handler.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/handlers/db_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/handlers/obsws_handler.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/handlers/obsws_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
+logger	src/handlers/sna_irc_handler.py	/^logger = log.add_logger_handler(logger)$/;"	v
+logger	src/handlers/sna_irc_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/handlers/snafu/snafu_action_handler.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/handlers/snafu/snafu_action_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/handlers/snafu/snafu_channelpoint_handler.py	/^logger = log.add_logger_handler(logger)$/;"	v
@@ -294,6 +362,8 @@ logger	src/handlers/snafu/snafu_streaminfo_handler.py	/^logger = log.add_logger_
 logger	src/handlers/snafu/snafu_streaminfo_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/handlers/snafu/snafu_subscribe_handler.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/handlers/snafu/snafu_subscribe_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
+logger	src/handlers/stream_stats.py	/^logger = log.add_logger_handler(logger)$/;"	v
+logger	src/handlers/stream_stats.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/handlers/twitch_event_handler.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/handlers/twitch_event_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/handlers/twitchapi.py	/^logger = log.add_logger_handler(logger)$/;"	v
@@ -302,37 +372,49 @@ logger	src/handlers/twitchapi_handler.py	/^logger = log.add_logger_handler(logge
 logger	src/handlers/twitchapi_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/main.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/main.py	/^logger = logging.getLogger(__name__)$/;"	v
+logger	src/test_irc.py	/^logger = log.add_logger_handler(logger)$/;"	v
+logger	src/test_irc.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	src/utils/run_command.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	src/utils/run_command.py	/^logger = logging.getLogger(__name__)$/;"	v
+loop	src/events/twitch_irc_events.py	/^loop = asyncio.new_event_loop()$/;"	v
+loop	src/handlers/sna_irc_handler.py	/^loop = asyncio.new_event_loop()$/;"	v
 main	src/main.py	/^async def main():$/;"	f
 main	src/scripte/utils/templateMgr.py	/^async def main():$/;"	f
 main	src/testTwitchThings.py	/^async def main():$/;"	f
+main	src/test_irc.py	/^async def main():$/;"	f
 make_result_message	src/baitgame/bait.py	/^    def make_result_message(self, user, gramm, fish, is_top, is_low, is_first):$/;"	m	class:FishGame
-monitor_queue	src/baitgame/fish_game.py	/^    async def monitor_queue(self):$/;"	m	class:Bait
+media_input_playback_ended	src/handlers/obs_handler.py	/^def media_input_playback_ended():$/;"	f
+msg_reaction_functions	src/handlers/sna_irc_handler.py	/^msg_reaction_functions = {$/;"	v
+multi_timer	event_timer.py	/^multi_timer = MultiTimerClass()$/;"	v
 myTwitch	src/handlers/twitchapi.py	/^class myTwitch(metaclass=Singleton):$/;"	c
 my_event_subscriptions	src/main.py	/^def my_event_subscriptions():$/;"	f
+my_event_subscriptions	src/test_irc.py	/^def my_event_subscriptions():$/;"	f
+mybaitstats_command	src/baitgame/bait.py	/^    def mybaitstats_command(self, event_data):$/;"	m	class:FishGame
 mytopbait_command_personal	src/baitgame/bait.py	/^    def mytopbait_command_personal(self, event_data):$/;"	m	class:FishGame
+obs_hangry_cat_activate	src/handlers/obs_hangry_cat.py	/^def obs_hangry_cat_activate():$/;"	f
+obs_hangry_cat_deactivate	src/handlers/obs_hangry_cat.py	/^def obs_hangry_cat_deactivate():$/;"	f
 obs_listen	src/main.py	/^async def obs_listen():$/;"	f
+obs_listen	src/test_irc.py	/^async def obs_listen():$/;"	f
 obs_scene_change	src/events/obsws.py	/^    def obs_scene_change(self, event): $/;"	m	class:Obsws
+obs_set_input_mute	src/events/obsws.py	/^    def obs_set_input_mute(self, event):$/;"	m	class:Obsws
 obs_set_source_visibility	src/events/obsws.py	/^    def obs_set_source_visibility(self, event):$/;"	m	class:Obsws
 obs_task_worker	src/events/obsws.py	/^    async def obs_task_worker(self):$/;"	m	class:Obsws
 obs_url	src/events/obs_events.py	/^obs_url = "ws:\/\/127.0.0.1:4455"$/;"	v
 obsws_handler	src/main.py	/^import  handlers.obsws_handler as obsws_handler$/;"	I	nameref:module:handlers.obsws_handler
+obsws_handler	src/test_irc.py	/^import  handlers.obsws_handler as obsws_handler$/;"	I	nameref:module:handlers.obsws_handler
 on_bait	src/baitgame/bait.py	/^    def on_bait(self, user):$/;"	m	class:FishGame
-on_bait	src/baitgame/fish_game.py	/^    async def on_bait(self, cmd: ChatCommand):$/;"	m	class:Bait
-on_chat_event	src/events/icr_events.py	/^async def on_chat_event(chatevent: ChatEvent):$/;"	f
-on_chat_event	src/events/irc_events.py	/^    async def on_chat_event(self, event: EventData):$/;"	m	class:Irc
+on_chat_event	src/events/irc_events.py	/^        async def on_chat_event(self, event: EventData):$/;"	f	member:Irc.trigger_send_message	file:
 on_chat_msg	src/events/irc_events.py	/^    async def on_chat_msg(self, msg: ChatMessage):$/;"	m	class:Irc
 on_chat_sub	src/events/irc_events.py	/^    async def on_chat_sub(event: ChatSub):$/;"	m	class:Irc
-on_command	src/events/icr_events.py	/^async def on_command(cmd: ChatCommand):$/;"	f
 on_command	src/events/irc_events.py	/^    async def on_command(self, cmd: ChatCommand):$/;"	m	class:Irc
 on_dynamite	src/baitgame/bait.py	/^    def on_dynamite(self, user):$/;"	m	class:FishGame
-on_dynamite	src/baitgame/fish_game.py	/^    async def on_dynamite(self, cmd: ChatCommand):$/;"	m	class:Bait
 on_event	src/events/obs_events.py	/^async def on_event(eventType, eventData):$/;"	f
 on_event	src/events/obsws.py	/^    async def on_event(self, eventType, eventData):$/;"	m	class:Obsws
+on_fishis_left	src/baitgame/bait.py	/^    def on_fishis_left(self, event_data):$/;"	m	class:FishGame
 on_joined	src/events/irc_events.py	/^    async def on_joined(self, chatevent: JoinedEvent):$/;"	m	class:Irc
 on_mytopbait	src/baitgame/bait.py	/^    def on_mytopbait(self,event_data):$/;"	m	class:FishGame
 on_mytopbait_maxgramm	src/baitgame/bait.py	/^    def on_mytopbait_maxgramm(self, event_data):$/;"	m	class:FishGame
+on_obs_hangry_cat	src/baitgame/bait.py	/^    def on_obs_hangry_cat(self,event_data):$/;"	m	class:FishGame
 on_ready	src/events/irc_events.py	/^    async def on_ready(self, event: EventData):$/;"	m	class:Irc
 on_switchscenes	src/events/obs_events.py	/^async def on_switchscenes(eventData):$/;"	f
 on_topbait	src/baitgame/bait.py	/^    def on_topbait(self, event_data):$/;"	m	class:FishGame
@@ -345,24 +427,26 @@ personal_jebaited	src/baitgame/bait.py	/^    def personal_jebaited(self, user):$
 personal_top_bait	src/baitgame/bait.py	/^    def personal_top_bait(self, user):$/;"	m	class:FishStats
 post_event	src/dispatcher/event_dispatcher.py	/^def post_event(event_type, data) :$/;"	f
 print_unique_viewers	data/stream_stats_data.py	/^    def print_unique_viewers(self):$/;"	m	class:ChatStats
+print_unique_viewers	src/handlers/stream_stats.py	/^    def print_unique_viewers(self):$/;"	m	class:ChatStats
 process_msg	data/stream_stats_data.py	/^    def process_msg(self, msg: ChatMessage):$/;"	m	class:ChatStats
+process_msg	src/handlers/stream_stats.py	/^    def process_msg(self, msg: ChatMessage):$/;"	m	class:ChatStats
 process_task	src/baitgame/bait.py	/^    def process_task(self, user, task):$/;"	m	class:FishGame
 prodConn	src/events/twitch_events.py	/^    async def prodConn(self) -> Tuple[EventSubWebsocket, Twitch, TwitchUser]:$/;"	m	class:TwitchEvents	typeref:typename:Tuple[EventSubWebsocket,Twitch,TwitchUser]
-ranking_fish	src/baitgame/fish_game.py	/^    async def ranking_fish(self, cmd: ChatCommand,gramm):$/;"	m	class:Bait
 record_catch	src/baitgame/bait.py	/^    def record_catch(self, user, gramm, fish):$/;"	m	class:FishStats
 release_slot	src/baitgame/bait.py	/^    def release_slot(self, slot):$/;"	m	class:RandomBaitSlotManager
 reload_browser_source	src/events/obsws.py	/^    async def reload_browser_source(self, browser_source_name: str):$/;"	m	class:Obsws
 reset	src/baitgame/bait.py	/^    def reset(self):$/;"	m	class:FishHighscore
 reset	src/baitgame/bait.py	/^    def reset(self):$/;"	m	class:FishPopulation
 reset	src/baitgame/bait.py	/^    def reset(self):$/;"	m	class:FishStats
-run	src/events/icr_events.py	/^async def run():$/;"	f
 run	src/events/irc_events.py	/^    async def run(self):$/;"	m	class:Irc
+run	src/events/twitch_irc_events.py	/^    async def run(self):$/;"	m	class:Irc
+run_flask	src/main.py	/^def run_flask():$/;"	f
+run_flask	src/test_irc.py	/^def run_flask():$/;"	f
 run_mpv	src/scripte/utils/run_sna_command.py	/^def run_mpv():$/;"	f
 run_mpv	src/utils/run_command.py	/^def run_mpv(filepath: str,  volume: str , no_video=False):$/;"	f
 run_subprocess	src/utils/run_command.py	/^async def run_subprocess(cmd):$/;"	f
 run_tasks	src/utils/run_command.py	/^    def run_tasks(self):$/;"	m	class:GatherTasks
 run_tts	src/utils/run_command.py	/^def run_tts(text:str):$/;"	f
-run_xcow_pos	src/baitgame/fish_game.py	/^    async def run_xcow_pos(self, msg, fishing_time, fishing_slot):$/;"	m	class:Bait
 run_xcowsay	src/scripte/utils/run_sna_command.py	/^def run_xcowsay(image, text, time):$/;"	f
 run_xcowsay	src/utils/run_command.py	/^def run_xcowsay(image:str , text: str, time: int, monitor:int, block=True):$/;"	f
 runner	src/events/obsws.py	/^    async def runner():$/;"	f	function:set_source_visibility_wrapper	file:
@@ -373,71 +457,103 @@ runner	src/handlers/twitchapi.py	/^    async def runner():$/;"	f	function:trigge
 runner	src/handlers/twitchapi.py	/^    async def runner():$/;"	f	function:trigger_get_user_id	file:
 runner	src/handlers/twitchapi.py	/^    async def runner():$/;"	f	function:trigger_send_message	file:
 runner	src/handlers/twitchapi.py	/^    async def runner():$/;"	f	function:trigger_sub_count	file:
+running	tests.py	/^            running = False$/;"	v
+running	tests.py	/^        running = False$/;"	v
+running	tests.py	/^running = True$/;"	v
+screen	tests.py	/^screen = pygame.display.set_mode((800, 200), pygame.NOFRAME)  # ohne Rand$/;"	v
 select_something	src/handlers/db_handler.py	/^def select_something(query: str) :$/;"	f
-send_chat_message	src/events/irc_events.py	/^    async def send_chat_message(self, msg):$/;"	m	class:Irc
+send_chat_message	src/events/irc_events.py	/^        async def send_chat_message(self, msg):$/;"	f	member:Irc.trigger_send_message	file:
+send_chat_message	src/events/twitch_irc_events.py	/^    async def send_chat_message(self, msg):$/;"	m	class:Irc
 send_chat_message	src/handlers/twitchapi.py	/^    async def send_chat_message(self, message):$/;"	m	class:myTwitch
-send_message	src/events/icr_events.py	/^def send_message():$/;"	f
 setEnv	src/events/obs_events.py	/^def setEnv():$/;"	f
 setEnv	src/events/obsws.py	/^    def setEnv(self):$/;"	m	class:Obsws
 setEnv	src/events/twitch_events.py	/^    def setEnv(self):$/;"	m	class:TwitchEvents
 set_bait	src/scripte/utils/templateMgr.py	/^    def set_bait(self, name, weight):$/;"	m	class:TemplateManager
 set_effect	src/utils/wled.py	/^    def set_effect(self, effect_id, color=(255, 255, 255), brightness=128, segment_id=0, on=True/;"	m	class:WLEDController
-set_fishing_posis	src/baitgame/fishlist.py	/^    def set_fishing_posis(self):$/;"	m	class:AsyncFishList
+set_event_map	src/events/obsws.py	/^    def set_event_map(self):$/;"	m	class:Obsws
 set_follower	src/scripte/utils/templateMgr.py	/^    def set_follower(self, name):$/;"	m	class:TemplateManager
+set_input_mute	src/events/obsws.py	/^    async def set_input_mute(self, muted: bool, audiosource: str):$/;"	m	class:Obsws
 set_preset	src/utils/wled.py	/^    def set_preset(self, preset_id):$/;"	m	class:WLEDController
 set_source_visibility	src/events/obs_events.py	/^def set_source_visibility(scene_name, scene_item_id, visible=False):$/;"	f
 set_source_visibility	src/events/obsws.py	/^    async def set_source_visibility(self,scene_name, scene_item_id, visible=False):$/;"	m	class:Obsws
 set_source_visibility_wrapper	src/events/obsws.py	/^def set_source_visibility_wrapper(scene_name, source_name, visible):$/;"	f
 set_stream_online	src/baitgame/bait.py	/^    def set_stream_online(self, event_data):$/;"	m	class:FishGame
 set_stream_online	src/events/irc_events.py	/^    def set_stream_online(self, event_data):$/;"	m	class:Irc
+set_stream_online	src/events/twitch_irc_events.py	/^    def set_stream_online(self, event_data):$/;"	m	class:Irc
 set_subscriber	src/scripte/utils/templateMgr.py	/^    def set_subscriber(self, name):$/;"	m	class:TemplateManager
+show_gif_on_window	src/scripte/xpysay.py	/^def show_gif_on_window(win, disp, gif_path):$/;"	f
+shutdown_event	src/main.py	/^shutdown_event = asyncio.Event()$/;"	v
+shutdown_event	src/test_irc.py	/^shutdown_event = asyncio.Event()$/;"	v
 sna	src/events/obs_events.py	/^async def sna():$/;"	f
 sna	src/events/obsws.py	/^    async def sna():    $/;"	m	class:Obsws
 sna_irc_handler	src/main.py	/^import handlers.sna_irc_handler as sna_irc_handler$/;"	I	nameref:module:handlers.sna_irc_handler
+sna_irc_handler	src/test_irc.py	/^import handlers.sna_irc_handler as sna_irc_handler$/;"	I	nameref:module:handlers.sna_irc_handler
 start	src/utils/run_command.py	/^    def start(self):$/;"	m	class:EventTimer
 start	src/utils/wled.py	/^    async def start(self):$/;"	m	class:WLEDController
 stats_history_file	data/stream_stats_data.py	/^    stats_history_file = f'\/home\/sna\/src\/scripte_twitch\/data_files\/stats\/stats_history.cs/;"	v	class:ChatStats
 stats_history_map	data/stream_stats_data.py	/^    stats_history_map = {$/;"	v	class:ChatStats
+stats_history_map	src/handlers/stream_stats.py	/^    stats_history_map = get_stats_columns()$/;"	v	class:ChatStats
 stream_stats	src/main.py	/^import handlers.stream_stats as stream_stats$/;"	I	nameref:module:handlers.stream_stats
+stream_stats	src/test_irc.py	/^import handlers.stream_stats as stream_stats$/;"	I	nameref:module:handlers.stream_stats
 subscribe_event	src/dispatcher/event_dispatcher.py	/^def subscribe_event(event_type, fn):$/;"	f
 subscribe_events	src/events/obsws.py	/^    async def subscribe_events(self):$/;"	m	class:Obsws
 subscribers	src/dispatcher/event_dispatcher.py	/^subscribers = defaultdict(list)$/;"	v
 switch_scene	src/events/obsws.py	/^    async def switch_scene(self, scene_name):$/;"	m	class:Obsws
 switch_scene_wrapper	src/events/obsws.py	/^def switch_scene_wrapper(scene_name: str):$/;"	f
+t	src/events/twitch_irc_events.py	/^t = threading.Thread(target=loop.run_forever, daemon=True)$/;"	v
+t	src/handlers/sna_irc_handler.py	/^t = threading.Thread(target=loop.run_forever, daemon=True)$/;"	v
+t	test.py	/^t = turtle.Turtle()$/;"	v
 tapi_listen	src/main.py	/^async def tapi_listen():$/;"	f
+tapi_listen	src/test_irc.py	/^async def tapi_listen():$/;"	f
 template_manager	src/scripte/utils/templateMgr.py	/^template_manager = TemplateManager()/;"	v
 top_bait	src/baitgame/bait.py	/^    def top_bait(self):$/;"	m	class:FishStats
 total_catches	src/baitgame/bait.py	/^    def total_catches(self):$/;"	m	class:FishStats
 total_gramm_per_user	src/baitgame/bait.py	/^    def total_gramm_per_user(self, user):$/;"	m	class:FishStats
 trigger_cli_event	src/main.py	/^async def trigger_cli_event(event_key, event_id):$/;"	f
+trigger_cli_event	src/test_irc.py	/^async def trigger_cli_event(event_key, event_id):$/;"	f
 trigger_create_clip	src/handlers/twitchapi.py	/^def trigger_create_clip(user_name: str): $/;"	f
+trigger_event	src/dispatcher/http_event_api.py	/^def trigger_event():$/;"	f
 trigger_follower_count	src/handlers/twitchapi.py	/^def trigger_follower_count():$/;"	f
 trigger_get_user_id	src/handlers/twitchapi.py	/^def trigger_get_user_id(user_name: str): $/;"	f
 trigger_hotkey_by_name	src/events/obsws.py	/^    async def trigger_hotkey_by_name(self, hotkey_name):$/;"	m	class:Obsws
 trigger_hotkey_by_name_wrapper	src/events/obsws.py	/^def trigger_hotkey_by_name_wrapper(hotkey_name: str):$/;"	f
 trigger_send_message	src/events/irc_events.py	/^    def trigger_send_message(self, msg):$/;"	m	class:Irc
+trigger_send_message	src/events/twitch_irc_events.py	/^    def trigger_send_message(self, msg):$/;"	m	class:Irc
 trigger_send_message	src/handlers/twitchapi.py	/^def trigger_send_message(msg):$/;"	f
 trigger_sub_count	src/handlers/twitchapi.py	/^def trigger_sub_count():$/;"	f
 tts_wav_filepath	src/utils/run_command.py	/^tts_wav_filepath ="\/home\/sna\/5n4fu_stream\/media\/tts_wav\/run_command.wav"$/;"	v
 turn_off	src/utils/wled.py	/^    def turn_off(self):$/;"	m	class:WLEDController
 twapi_task_runner	src/handlers/twitchapi.py	/^    async def twapi_task_runner(self):$/;"	m	class:myTwitch
-twitch	src/events/icr_events.py	/^twitch = None$/;"	v
 twitch	src/events/twitch_events.py	/^    twitch: Optional[Twitch]                = None$/;"	v	class:TwitchEvents	typeref:typename:Optional[Twitch]
 twitch_event_dispatcher	README.md	/^# twitch_event_dispatcher$/;"	c
 twitch_handler	src/main.py	/^import handlers.twitch_event_handler as twitch_handler$/;"	I	nameref:module:handlers.twitch_event_handler
+twitch_handler	src/test_irc.py	/^import handlers.twitch_event_handler as twitch_handler$/;"	I	nameref:module:handlers.twitch_event_handler
 twitch_listen_live	src/main.py	/^async def twitch_listen_live():$/;"	f
+twitch_listen_live	src/test_irc.py	/^async def twitch_listen_live():$/;"	f
 twitchapi_handler	src/main.py	/^import handlers.twitchapi_handler as twitchapi_handler$/;"	I	nameref:module:handlers.twitchapi_handler
-unify_chat_command	src/events/icr_events.py	/^async def unify_chat_command(cmd: ChatCommand):$/;"	f
+twitchapi_handler	src/test_irc.py	/^import handlers.twitchapi_handler as twitchapi_handler$/;"	I	nameref:module:handlers.twitchapi_handler
 unify_chat_command	src/events/irc_events.py	/^    async def unify_chat_command(self, cmd: ChatCommand):$/;"	m	class:Irc
-unify_chat_event	src/events/icr_events.py	/^async def unify_chat_event(chatevent: ChatEvent):$/;"	f
 unify_chat_event	src/events/irc_events.py	/^    async def unify_chat_event(self, chatevent: ChatEvent):$/;"	m	class:Irc
 update	src/baitgame/bait.py	/^    def update(self, user, gramm):$/;"	m	class:FishHighscore
-update_fishing_list	src/baitgame/fish_game.py	/^    async def update_fishing_list(self, user_name, gramm):$/;"	m	class:Bait
 update_flash_counter	src/utils/file_io.py	/^def update_flash_counter(text=str):$/;"	f
-update_low_catch	src/baitgame/fish_game.py	/^    async def update_low_catch(self,user_name, gramm):$/;"	m	class:Bait
+update_redemption_status	src/handlers/twitchapi.py	/^    async def update_redemption_status(self):$/;"	m	class:myTwitch
 user	src/events/twitch_events.py	/^    user: Optional[TwitchUser]              = None$/;"	v	class:TwitchEvents	typeref:typename:Optional[TwitchUser]
+weight_mix	src/baitgame/bait.py	/^    def weight_mix(self, minweight: int, maxweight: int, nslots: int) -> list:$/;"	m	class:FishPopulation	typeref:typename:list
+width	src/scripte/xpysay.py	/^    width, height = im.size$/;"	v
+win	src/scripte/xpysay.py	/^    win = create_argb_window(disp, width, height)$/;"	v
 wled_listen	src/main.py	/^async def wled_listen():$/;"	f
+wled_listen	src/test_irc.py	/^async def wled_listen():$/;"	f
+wledo_meter	src/utils/wled.py	/^    def wledo_meter(self, percent):$/;"	m	class:WLEDController
+write_bait_counter	src/utils/file_io.py	/^def write_bait_counter(text=str):$/;"	f
+write_cli_params	src/handlers/db_handler.py	/^def write_cli_params(cli_ids):$/;"	f
 write_event_received	src/utils/file_io.py	/^def write_event_received(text=str):$/;"	f
 write_file	src/utils/file_io.py	/^def write_file(filepath=str, mode= str , text= str):$/;"	f
+write_screenkey_timer	src/utils/file_io.py	/^def write_screenkey_timer(text=str):$/;"	f
+write_snaalert_file	src/utils/file_io.py	/^def write_snaalert_file(text=str):$/;"	f
+write_snaman_file	src/utils/file_io.py	/^def write_snaman_file(text=str):$/;"	f
 write_stats_history	data/stream_stats_data.py	/^    def write_stats_history(self):$/;"	m	class:ChatStats
+write_stats_history_to_db	src/handlers/stream_stats.py	/^    def write_stats_history_to_db(self):$/;"	m	class:ChatStats
+write_top_baiter	src/utils/file_io.py	/^def write_top_baiter(text=str):$/;"	f
 ws	src/events/obs_events.py	/^ws = None$/;"	v
+x	tests.py	/^x = -emote_img.get_width()$/;"	v
+y	tests.py	/^y = 100$/;"	v

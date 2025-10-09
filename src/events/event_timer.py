@@ -26,7 +26,7 @@ class MultiTimerClass:
         event_name = data.get("event_name")
         duration = data.get("duration", 0)
         event_data = data.get("event_data", {})
-        done_event_name = data.get("timer_done_event", "timeraslkdfjaölskdfjlöasdfj_done_event")  # <<<< CUSTOM EVENT NAME
+        done_event_name = data.get("timer_done_event", "timer_done_event")  # <<<< CUSTOM EVENT NAME
         done_event_data = data.get("timer_done_event_data", "did u forget to add timer_done_event_data?")
         print(f"timeer_done_event_data: {done_event_data}")
         if not event_name:

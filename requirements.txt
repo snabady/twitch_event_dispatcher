@@ -1,3 +1,9 @@
+fastapi
+uvicorn
+dbus-next
+wget 
+flask-socketio
+sacn
 flask
 python-xlib
 pillow

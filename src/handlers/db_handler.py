@@ -1,5 +1,6 @@
 import mysql.connector
 import logging
+import datetime
 from utils import log
 from datetime import datetime
 from dispatcher.event_dispatcher import post_event
@@ -7,7 +8,7 @@ from dispatcher.event_dispatcher import post_event
 from handlers import twitchapi #import trigger_get_user_id
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
-logger.setLevel(logging.DEBUG)   
+logger.setLevel(logging.INFO)   
 
 
 """event_types = {
@@ -30,15 +31,43 @@ def get_db_conn():
 def execute_query(query: str, values: []) -> bool:
     conn = get_db_conn()
     cursor = conn.cursor()
-
+    try:
     # TODO check return...
-    ret = cursor.execute(query, values)
+        ret = cursor.execute(query, values)
+    except Exception as e:
+        logger.debug(e)
+    if query.strip().lower().startswith("select"):
+        ret = cursor.fetchall()
+    else:
+        conn.commit()
+        ret = cursor.rowcount
 
-    conn.commit()
     cursor.close()
     conn.close()
 
     return ret 
+
+def check_excisting_twitch_user(user_name):
+    query = """
+            SELECT user_id from twitch_users where user_name = %s
+    """
+
+    ret = execute_query(query, [user_name])
+    logger.debug(ret)
+    for x in ret:
+        logger.debug(x)
+def add_new_twitch_user(user_data):
+    
+    query = """
+                        INSERT IGNORE INTO twitch_users(user_id, 
+                                                        user_name, 
+                                                        user_displayname
+                                                        )
+                        VALUES ( %s, %s, %s)
+                        """
+
+    execute_query(query, user_data)
+
 
 
 def insert_new_follwer(follower:dict) -> str:
@@ -48,13 +77,12 @@ def insert_new_follwer(follower:dict) -> str:
     insert_user_query = """
                         INSERT IGNORE INTO twitch_users(user_id, 
                                                         user_name, 
-                                                        user_displayname, 
-                                                        followed_at)
-                        VALUES (%s, %s, %s, %s)
+                                                        user_displayname)
+                        VALUES (%s, %s, %s)
                         """
     cursor.execute(insert_user_query, (follower.get("user_id"), 
                                        follower.get("user_login"),
-                                       follower.get("user_name"),
+                                       #user_loginfollower.get("user_name"),
                                        follower.get("followed_at")))
     conn.commit()
     insert_query =  """
@@ -82,7 +110,7 @@ def handle_get_followage_by_user(user_name: str):
 
     
     # get user_id since user_name could have changed.... we need current user_id
-    #post_event("twapi_get_user_id", {"event_type": "twapi_get_user_id",
+   # post_event("twapi_get_user_id", {"event_type": "twapi_get_user_id",
     #                                 "event_data": { "user_name": user_name}})
 
 def handle_get_followage(user_id: int):
@@ -98,9 +126,10 @@ def handle_get_followage(user_id: int):
     if result:
         message = f" {result[0]} following since: {result[1]}"
         post_event("irc_send_message", message)
+        post_event("trigger_sendmessage", message)
     else: 
         post_event("irc_send_message", "moep, what about a follow first?")
-
+        post_event("trigger_sendmessage", message)
     cursor.close()
     conn.close()
 
@@ -125,6 +154,27 @@ def get_chat_commands():
     cursor.execute(query)
     
     return cursor.fetchall()
+
+def insert_bait_stats(db_values):
+    conn = get_db_conn()
+ 
+    for user in db_values:
+       logger.debug(f"{user}")
+       user.append(datetime.now())
+       cursor = conn.cursor()
+       query = f"""
+                    INSERT INTO bait_history ( user_name,
+                                               bait_counter,
+                                               jebaited,
+                                               total_weight, 
+                                               bait_date)
+                    VALUES (%s,%s,%s,%s,%s)
+                """
+       cursor.execute(query, user)
+       logger.debug(f"{cursor.statement}")
+       conn.commit()
+       cursor.close()
+    conn.close()
 
 
 def insert_stream_stats(db_values):
@@ -154,6 +204,41 @@ def insert_stream_stats(db_values):
     conn.commit() 
     cursor.close()
     conn.close()
+def update_current_mods(mods: list):
+    conn = get_db_conn()
+    cursor =conn.cursor()
+
+    for x in mods:
+        
+        query = """
+            INSERT INTO special_users (user_id, user_login, user_name,is_mod, is_vip, vip_since)
+            SELECT u.user_id, %s, %s, 1, 0, %s
+            FROM twitch_users u
+            WHERE u.user_id = %s
+        """
+        cursor.execute(query, [ x.user_login, x.user_name, datetime.now(), x.user_id])
+        print(f"{cursor.statement}")
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def update_current_vips(vips: list):
+    conn = get_db_conn()
+    cursor =conn.cursor()
+
+    for x in vips:
+        query = """
+            INSERT INTO special_users (user_id, user_login, user_name,is_mod, is_vip, vip_since) 
+            SELECT u.user_id, %s, %s, 0, 1, %s
+            FROM twitch_users u
+            WHERE u.user_id = %s
+        """
+        cursor.execute(query, [ x.user_login, x.user_name, x.user_id, datetime.now()])
+        print(f"{cursor.statement}")
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 
 def get_table_column_names(table: str, schema: str):
@@ -167,9 +252,6 @@ def get_table_column_names(table: str, schema: str):
     cursor.close()
     conn.close()
     return ret
-
-
-
 
 def get_stats_columns():
     conn = get_db_conn()
@@ -192,6 +274,60 @@ def get_active_channelpoint_rewards():
     cursor.close()
     conn.close()
     return ret
+
+def update_current_channelpoint_reward(rewards):
+    for reward in rewards:
+        key_val = [reward.title,# same as name
+                      reward.title, 
+                      reward.id,
+                      reward.is_enabled, # active in db
+                      reward.background_color, 
+                      reward.is_enabled, 
+                      reward.cost, 
+                      reward.prompt, 
+                      reward.is_user_input_required, 
+                      #reward.max_per_user_per_stream_setting, 
+                      #      reward.global_cooldown_setting, 
+                      reward.is_paused,
+                      reward.is_in_stock,
+                      #reward.default_image, 
+                      reward.should_redemptions_skip_request_queue,
+                      reward.redemptions_redeemed_current_stream, 
+                      reward.cooldown_expires_at]
+        query = f""" 
+                insert into custom_rewards (name, 
+                                            title, 
+                                            id,
+                                            active,
+                                            background_color, 
+                                            is_enabled, 
+                                            cost, 
+                                            prompt, 
+                                            is_user_input_required,
+                                            is_paused,
+                                            is_in_stock,
+                                            should_redemptions_skip_request_queue,
+                                            redemptions_redeemed_current_stream,
+                                            cooldown_expires_at)
+                values ({', '.join('%s' for _ in key_val)})
+                ON DUPLICATE KEY UPDATE
+                    name                                    = values(name),
+                    id                                      = values(id), 
+                    active                                  = values(active),
+                    title                                   = values(title),
+                    background_color                        = values(background_color),
+                    is_enabled                              = values(is_enabled),
+                    cost                                    = values(cost),
+                    prompt                                  = values(prompt),
+                    is_user_input_required                  = values(is_user_input_required),
+                    is_paused                               = values(is_paused),
+                    is_in_stock                             = values(is_in_stock),
+                    should_redemptions_skip_request_queue   = values(should_redemptions_skip_request_queue),
+                    redemptions_redeemed_current_stream     = values(redemptions_reedemed_current_stream),
+                    cooldown_expires_at                     = values(cooldown_expires_at)
+                """
+    #    print (query)
+        ret = execute_query(query, key_val) 
 
 def select_something(query: str) :
     conn = get_db_conn()

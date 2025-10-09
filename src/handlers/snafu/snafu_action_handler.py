@@ -1,3 +1,4 @@
+import requests
 import os
 import logging
 from dotenv import load_dotenv
@@ -44,7 +45,9 @@ def handle_channel_cheer(event: dict ):
     tasks.run_tasks()
     msg = f"received channel.cheer from {user_name}: {bits} bits\n"
     write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a",msg ) 
+    event_url="http://localhost:5000/trigger/" + str(bits)
     
+    requests.get(event_url) 
 def handle_channel_follow(event: dict):
     event_data = event.get("event_data")
     #logger.debug(f"EVENT_DATA: {event_data}")
@@ -68,7 +71,7 @@ def handle_channel_follow(event: dict):
     gather_tasks.add_task(lambda: run_mpv(path_follower_mp3, os.getenv("VOLUME"), no_video=True))
     #loop =  asyncio.get_event_loop()
     text = f'{user_name}\njust followed'
-    irc_text = f"thank you{user_name} for following  x5n4fuPaco"
+    irc_text = f"thank you {user_name} for following x5n4fuPaco"
     post_event("irc_send_message", irc_text)
     gather_tasks.add_task(lambda: create_toilet_file("/home/sna/5n4fu_stream/obs_files/follower/blub.txt", "pagga", text))
     #gather_tasks.add_task(lambda: obsws.set_source_visibility_wrapper("main_view", "test", True ))
@@ -88,8 +91,8 @@ def hanlde_channel_raid(event: dict):
     to_broadcaster_user_name = event_data.get("to_broadcaster_user_name")
 
     viewers = event_data.get("viewers")
-    stream_stats = stream_stats.ChatStats()
-    stream_stats.add_raids_received()
+    #stream_stats = stream_stats.ChatStats()
+    #stream_stats.add_raids_received()
     load_dotenv(dotenv_path=env_file_path)
     raid_text = os.getenv("RAID_TEXT")
     logger.debug(raid_text)
@@ -98,17 +101,15 @@ def hanlde_channel_raid(event: dict):
     #raid_text = "blub"
     tasks = GatherTasks()
     alert_image = os.getenv("ALERTS", "schimpf")+"img/raid.png"
-    #alert_sound = os.getenv("ALERTS") + "raidsound.webm"
     msg = f"received channel.raid from: {from_broadcaster_user_name} with {viewers}\n"    
     write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a",msg )
-    irc_msg= f"{from_broadcaster_user_name} fährt das Piratenschiff mit {viewers} in unseren Hafen x5n4fuPac"
+    irc_msg= f"{from_broadcaster_user_name} fährt das Piratenschiff mit {viewers} in unseren Hafen x5n4fuPaco"
     post_event("irc_send_message", irc_msg)
-    tasks.add_task(lambda: run_mpv(alert_sound, os.getenv("VOLUME"), True))
     #tasks.add_task(lambda: obsws.set_source_visibility_wrapper("main_view", "raid", True ))
     tasks.add_task(lambda: post_event("obs_set_source_visibility", {"event_type": "obs_set_source_visibility", "event_data": {"scene_name": "ALERTS", "source_name": "raid_overlay", "visible":True}}))  
     tasks.add_task(lambda: run_xcowsay(alert_image, raid_text, os.getenv("RAID_DISPLAY_TIME"), os.getenv("STREAM_MONITOR")) )
-    tasks.add_tasck(lambda: post_event("obs_set_input_mute", {"event_data":{"audiosource":"desktop_audio", "muted":True}}))
-    # TODO
+    tasks.add_task(lambda: post_event("obs_set_input_mute", {"event_data":{"audiosource":"desktop_audio", "muted":True}}))
+    # TODO raid alert fertig bzw. umbauen, raiders in db und huldigen
     # !alarm in chat triggern
     # automatischen shoutout
     # OBS!!!! kümmern

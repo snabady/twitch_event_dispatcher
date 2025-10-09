@@ -12,7 +12,9 @@ from handlers import obs_handler
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
-
+# TODO check bait, really 3 times source visibility=?
+# TODO re-login
+# TODO if offline.... check...!
 
 
 def set_source_visibility_wrapper(scene_name, source_name, visible):
@@ -145,14 +147,15 @@ class Obsws(metaclass=Singleton):
 
     async def get_scene_item_id(self, scene_name, source_name):
         ''' it is actually the source_id...'''
-        #self.logger.debug("get_scene_item_id")
+        self.logger.debug(f"get_scene_item_id {scene_name} .. {source_name}")
         request = simpleobsws.Request("GetSceneItemId", {
                             "sceneName": scene_name,
                             "sourceName": source_name
                         })
         response = await self.ws.call(request)
+        self.logger.debug(response)
         if response.ok():
-            #self.logger.debug(f'{scene_name}|{source_name}: got sceneItemId: {response.responseData["sceneItemId"]}')
+            self.logger.debug(f'{scene_name}|{source_name}: got sceneItemId: {response.responseData["sceneItemId"]}')
             return response.responseData["sceneItemId"]
         else:
             self.logger.debug("response not ok, from get_scene_item_id")
@@ -197,6 +200,10 @@ class Obsws(metaclass=Singleton):
     # well... this should do the handler?
     # 
     async def on_event(self, eventType, eventData):
+        if eventData == None:
+            self.logger.debug(f"eventType: {eventType}")
+            return
+        
         if eventData.get("inputName")!= "TimerText":
             self.logger.debug(eventData.get("inputName"))
         if not (eventType =="InputSettingsChanged" and eventData.get("inputName") == "TimerText"):

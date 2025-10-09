@@ -1,3 +1,4 @@
+import subprocess
 import threading
 from functools import partial
 from twitchAPI.twitch import Twitch, TwitchUser
@@ -16,7 +17,7 @@ from dotenv import load_dotenv
 import logging
 from utils import log
 from dispatcher.event_dispatcher import post_event, subscribe_event
-from handlers import db_handler
+from handlers import db_handler, stream_stats
 import time
 
 
@@ -32,10 +33,10 @@ USER_SCOPE = [
     AuthScope.USER_WRITE_CHAT
     ]
 
-# screenkey -f "Monaspace Krypton" --font-color cyan -s large -M --geometry 800x200+100+300  --window &
+
 logger = logging.getLogger(__name__)
 log.add_logger_handler(logger)
-logger.setLevel(logging.DEBUG)   
+logger.setLevel(logging.INFO)   
 
 class Singleton(type):
     _instances = {}
@@ -43,54 +44,83 @@ class Singleton(type):
         if cls not in cls._instances:
             cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
-loop = asyncio.new_event_loop()
-t = threading.Thread(target=loop.run_forever, daemon=True)
-t.start()
+
+
 class Irc(metaclass=Singleton):
 
     def __init__(self, dotenv_path):
-        self.dotenv_path = dotenv_path
-        self.logger = logging.getLogger(__name__)
+        self.dotenv_path        = dotenv_path
+        self.logger             = logging.getLogger(__name__)
         if not self.logger.hasHandlers():
             self.log.add_logger_handler(self.logger)
-        self.logger.setLevel(logging.DEBUG)   
-        self.twitch = None
-        self.chat_client = None
-        self.twitch = None
-        self.user_id = None
-        self.broadcaster_id = None
-        self.irc_queue = asyncio.Queue()
-        self.cmd_list = db_handler.get_chat_commands()
-        self.stream_online = False
-        subscribe_event("irc_send_message", self.trigger_send_message)
+        self.logger.setLevel(logging.INFO)   
+        self.twitch             = None
+        self.chat_client        = None
+        self.twitch             = None
+        self.user_id            = None
+        self.broadcaster_id     = None
+        self.irc_queue          = asyncio.Queue()
+        self.cmd_list           = db_handler.get_chat_commands()
+        self.stream_online      = False
         subscribe_event("set_stream_online", self.set_stream_online)
-        self.TARGET_CHANNEL =["5n4fu"]
+        subscribe_event("irc_send_message", self.trigger_sendmessage)
+        subscribe_event("trigger_send_message", self.trigger_sendmessage)
         self.auto_commands = self.create_auto_command_list()
-        
+        self.loop               = asyncio.new_event_loop()
+        threading.Thread(target=self.loop.run_forever, daemon=True).start() 
+        self.client_id          = None
+        self.client_secret      = None
+        self.client_name        = None
+        self.target_channel     = None
+        self.redirection_url    = None
+        self.oauth_port         = None 
+        self.oauth_host         = None
+        self.auth_storage_file  = None
+        self.load_dotenv_variables()
+        self.last_now_playing = ""
+        self.current_vips = None
+
+        self.stream_stats_data = stream_stats.ChatStats()
+
+
     def set_stream_online(self, event_data):
         self.logger.debug("set_stream_online data {event_data.get('event_data')}")
         value = event_data.get("event_data")
         self.stream_online = value
-         
+    
+    def load_dotenv_variables(self):
+        load_dotenv(self.dotenv_path, override=True)
+        self.client_name        = os.getenv("IRC_BOT_USERNAME", "could not get IRC_BOT_USERNAME os.getenv()")
+        self.client_id          = os.getenv("IRC_BOT_CLIENT_ID", "could not get IRC_BOT_client_id os.getenv()")
+        self.client_secret      = os.getenv("IRC_BOT_CLIENT_SECRET", "could not get client secret os.getenv()")
+        self.target_channel     = os.getenv("IRC_BOT_CHANNEL_JOIN", "could not get target_channel os.getenv()")
+        self.redirection_url    = os.getenv("IRC_BOT_OAUTH_REDIRECTION_URI", "could not get Iredirection uri os.getenv()")
+        self.oauth_port         = os.getenv("IRC_BOT_OAUTH_PORT", "could not get port os.getenv()")
+        self.oauth_host         = os.getenv("IRC_BOT_OAUTH_HOST", "could not get host os.getenv()")
+        self.auth_storage_file  = os.getenv("AUTH_STORAGE_FILE", "could not get auth_storage_file os.getenv()")
+
     def create_auto_command_list(self):
         auto_commands = {}
         for x in self.cmd_list :
             if x[2] == 1:
                 auto_commands[x[0]] = x[1]
         return auto_commands
+
+    """ synchron irc_send_message_trigger """
+    def trigger_sendmessage(self, msg):
+        
+        self.logger.debug("trigger_sendmessage")
+        async def runner():
+            self.logger.debug("hello from trigger_sendmessage runner ") 
+            await self.send_chat_message(msg)
+        asyncio.run_coroutine_threadsafe(runner(), self.loop)
+
     async def auth_token_generator(self,  twitch: Twitch, USER_SCOPE) -> (str, str):
-        redirection_url ="http://localhost:17563"
-        auth = UserAuthenticator(twitch, USER_SCOPE,url=redirection_url,  host='0.0.0.0', port=17563)
+        
+        auth = UserAuthenticator(twitch, USER_SCOPE,url=self.redirection_url,  host=self.oauth_host, port=self.oauth_port)
         token, refresh_token = await auth.authenticate()
 
         return token, refresh_token
-    
-    def trigger_send_message(self, msg):
-        
-        self.logger.debug("blub... trigger.. send_message") 
-
- 
-        asyncio.run_coroutine_threadsafe(self.send_chat_message( msg), loop)
 
     async def getUser(self, str):
         x = [str]
@@ -98,9 +128,7 @@ class Irc(metaclass=Singleton):
         return  user.id
 
     async def send_chat_message(self, msg):
-        user_id = await self.getUser("snatests")
-        broadcaster_id = await self.getUser("5n4fu")
-        await self.twitch.send_chat_message(broadcaster_id, user_id, msg)
+        await self.twitch.send_chat_message(self.broadcaster_id, self.user_id, msg)
        
     async def end_irc(self):
         self.chat.stop()
@@ -113,7 +141,7 @@ class Irc(metaclass=Singleton):
                 "event_data": event}
         
         if event_type == ChatEvent.JOINED:
-            user_id = await self.getUser("5n4fu")
+            user_id = await self.getUser(self.target_channel)
             await self.send_chat_message("o/")
             post_event("IRC_JOINED", eventt)
             
@@ -124,16 +152,29 @@ class Irc(metaclass=Singleton):
             post_event("IRC_JOIN", eventt)
         elif event_type == ChatEvent.MESSAGE:
             post_event("IRC_MESSAGE", eventt)
+        elif event_type == ChatEvent.LEFT:
+            post_event("IRC_LEFT", eventt)
 
+    async def now_playing(self):
+
+        try:
+            song = subprocess.check_output(["audtool", "current-song"], text=True).strip()
+            if song != self.last_now_playing:
+                msg=(f"now_playing: {song}")
+                self.last_now_playing = song
+                await self.send_chat_message(msg)
+        except subprocess.CalledProcessError:
+            pass
 
     async def run(self):
-
-        load_dotenv(dotenv_path=self.dotenv_path, verbose=True)
-        self.twitch = await Twitch(os.getenv("IRC_BOT_CLIENT_ID"), os.getenv("ICR_BOT_CLIENT_SECRET"))
-        helper = UserAuthenticationStorageHelper(self.twitch, USER_SCOPE, storage_path=os.getenv("AUTH_STORAGE_FILE"))
-        #helper = UserAuthenticationStorageHelper(self.twitch, USER_SCOPE, storage_path="/home/sna/src/twitch/auth_storage/snatests.json", auth_generator_func=self.auth_token_generator)
+        self.twitch = await Twitch(self.client_id, self.client_secret) 
+        helper = UserAuthenticationStorageHelper(self.twitch, USER_SCOPE, storage_path=self.auth_storage_file, auth_generator_func=self.auth_token_generator)
         await helper.bind()
-        self.chat = await Chat(self.twitch, initial_channel=self.TARGET_CHANNEL)
+        
+        self.user_id = await self.getUser(self.client_name)
+        self.broadcaster_id = await self.getUser(self.target_channel)
+
+        self.chat = await Chat(self.twitch, initial_channel=[self.target_channel])
 
         self.chat.register_event(ChatEvent.READY, partial(self.dispatch_event, ChatEvent.READY) )
         self.chat.register_event(ChatEvent.MESSAGE, partial(self.dispatch_event, ChatEvent.MESSAGE))
@@ -149,11 +190,11 @@ class Irc(metaclass=Singleton):
         for x in self.cmd_list:
             self.logger.debug(f"irc_command: {x[0]}, {x}")
             self.chat.register_command(x[0], partial(self.dispatch_event, "IRC_COMMAND"))
-        
+        self.current_vips = db_handler.execute_query("select user_name, user_id from special_users where is_vip = 1", None)
         self.chat.start()
-        
         try:
             while True:
+                await self.now_playing()
                 await asyncio.sleep(0.5)
         except asyncio.CancelledError:
             logger.debug("more graceful shit?")

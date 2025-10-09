@@ -244,6 +244,9 @@ class Irc(metaclass=Singleton):
         elif isinstance(event, NoticeEvent):
             self.logger.info(f"Notice in {event._name}: {event.message}")
 
+    async def end_irc(self):
+        self.chat.stop()
+        await self.twitch.close()
 
     async def irc_task_runner(self):
         try:
@@ -259,10 +262,16 @@ class Irc(metaclass=Singleton):
                     await task_coro_func# Execute the coroutine
                 except Exception as e:
                     self.logger.critical(f"IRC_RUNNER Exception: {e}", exc_info=True)      
+                except asyncio.CancelledError:
+                    print("blub blub blub")
+                    pass
                 finally:
                     self.irc_queue.task_done()   
                     self.logger.debug(f"IRC_QUEUE-size: {self.irc_queue.qsize()}")
                 await asyncio.sleep(0.1)
+        except asyncio.CancelledError:
+            logger.debug("graceful end... not ")
+#            await self.end_irc()
         except Exception as e:
             self.logger.critical(f"IRC_TASK_RUNNER Exception: {e}", exc_info=True)
 
@@ -306,6 +315,9 @@ class Irc(metaclass=Singleton):
             while True:
                 await asyncio.sleep(0.5)
             #on_test()
+        except asyncio.CancelledError:
+            logger.debug("more graceful shit?")
+            
         except Exception as e:
             self.logger.debug(e)
             self.logger.critical("RIP")

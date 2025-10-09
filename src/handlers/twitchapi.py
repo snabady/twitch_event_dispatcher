@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict 
 import logging
 import asyncio
 from dotenv import load_dotenv, find_dotenv
@@ -11,12 +12,12 @@ from twitchAPI.oauth import UserAuthenticator, UserAuthenticationStorageHelper
 from utils import log
 from handlers import db_handler
 from twitchAPI.type import CustomRewardRedemptionStatus
-from dispatcher.event_dispatcher import post_event
+from dispatcher.event_dispatcher import post_event, subscribe_event
 
 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 def trigger_follower_count():
     logger.debug("trigger_follower_count")
@@ -49,6 +50,12 @@ def trigger_create_clip(user_name: str):
         await twapi.create_clip()
     myTwitch().enqueue(runner())
 
+def trigger_get_user_profile_imgs(user_names:list):
+    async def runner():
+        twapi=myTwitch()
+        ret = await twapi.get_user_profile_imgs(user_names)
+        #post_event("finish_vip_chart_with_profile_pics", ret)
+    myTwitch().enqueue(runner())
 
 class Singleton(type):
     _instances = {}
@@ -62,15 +69,22 @@ class Singleton(type):
 
 class myTwitch(metaclass=Singleton):
 
-    def __init__(self):
+    def __init__(self, dotenv_path="/home/sna/src/twitch/src/handlers/.env_twitchapi"):
+        self.dotenv_path = dotenv_path
+
+        self.dotenv_path = "/home/sna/src/twitch/src/handlers/.env_twitchapi"
         self.twapi_queue = asyncio.Queue()
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("twitch_REQUESTS  -->>")
         if not self.logger.hasHandlers():
             log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)
         self.scopes = TARGET_SCOPES
         #self.use_cli = use_cli
         #asyncio.create_task(self.twapi_task_runner())
+        subscribe_event("trigger_get_user_profile_imgs", trigger_get_user_profile_imgs)
+        self.broadcaster_id = None
+        self.current_vips = None
+
 
     async def __aenter__(self):
         self.logger.debug("aenter")
@@ -78,16 +92,55 @@ class myTwitch(metaclass=Singleton):
         #asyncio.create_task(self.twapi_task_runner())
         
         return self
+
     async def init_sna(self):
         self.logger.debug("aenter")
         self.twitch, self.user = await self.get_twitch_api_conn()
-        
+        self.broadcaster_id = self.get_user_id("5n4fu")
+
     async def get_user_id(self, user_name: str):
         self.logger.debug(f"get_user_id: {user_name.get("user_name")}" )
         x  = await first(self.twitch.get_users(logins=[user_name.get("user_name")]))
         
         post_event("twapi_user_id_result", x.id)
-        pass
+        return x.id
+
+    async def get_user_profile_imgs (self, user_names: list, callback=None) :
+        self.logger.debug(f"**************  get_users: {user_names}")
+        user_imgs = defaultdict(str)
+
+        async for user in self.twitch.get_users(logins=user_names):
+            self.logger.debug(f"userdata: {user}")             
+            user_imgs[user.display_name] = user.profile_image_url            
+        
+        post_event("finish_vip_chart_with_profile_pics", user_imgs)    
+        return user_imgs    
+
+    async def get_moderators(self):
+        b_id = await first(self.twitch.get_users(logins=["5n4fu"]))
+        mods = []
+        async for mod in self.twitch.get_moderators(b_id.id):
+            if not db_handler.check_excisting_twitch_user(mod.user_id):
+                user_data = await first(self.twitch.get_users(logins=[mod.user_name]))
+                db_handler.add_new_twitch_user([user_data.id, user_data.login, user_data.display_name])
+
+            self.logger.debug(f"moderartor: {mod}")
+            mods.append(mod)
+        db_handler.update_current_mods(mods)
+        
+    async def get_vipsis(self):
+        self.logger.debug(f"b_id: {self.broadcaster_id}")
+        b_id = await first(self.twitch.get_users(logins=["5n4fu"]))
+        vips =[]
+        async for vip in self.twitch.get_vips(b_id.id):
+            self.logger.debug(f"vip: {vip.user_id}")
+            vips.append(vip)
+        db_handler.update_current_vips(vips)
+        vips = db_handler.execute_query("select user_name, user_id from special_users where is_vip=1", None)
+        self.logger.debug(vips)
+        self.current_vips = vips
+        
+# TODO RECONNECT OBS EINBAUEN!!!!!!!!!!!!1
     async def twapi_task_runner(self):
         try:
             self.logger.debug("twapi task_worker")
@@ -114,19 +167,17 @@ class myTwitch(metaclass=Singleton):
             self.logger.critical(f"TWAPI_TASK_RUNNER Exception: {e}", exc_info=True)
 
     def enqueue(self, coro):
-        #self.logger.debug(self)
         self.logger.debug(f"~~~~~~~enqueued:{coro} {coro.__name__}")
         self.twapi_queue.put_nowait(coro)
         self.logger.debug(f"after put: twapi queue size: {self.twapi_queue.qsize()}")
 
     async def dispatch_twitch_event(self, event ):
-        self.logger.debug("in dispatch_twitch_event")
         event_source = "twitch_event"
         ts = datetime.datetime.now()
         data = ""
         self.logger.debug(f'x: {type(x)}') #s
         if self.event_map[type(x)] != None:
-            self.logger.debug(f"**** event_type:-----------------> >>> {x.subscription.type} <<<")
+            self.logger.debug(f"dispatching **** event_type:-----------------> >>> {x.subscription.type} <<<")
             data = {
                 "timestamp_received": ts, 
                 "event_source": event_source,
@@ -139,7 +190,6 @@ class myTwitch(metaclass=Singleton):
             post_event(self.event_map[type(x)], data)
     
     async def send_chat_message(self, message):
-        self.logger.debug("send_chat_message?????")
         await self.twitch.send_chat_message(self.user.id, self.user.id, message)
 
     async def __aexit__(self, exc_type,exc_val, exc_tb):
@@ -149,27 +199,29 @@ class myTwitch(metaclass=Singleton):
         redirection_url ="http://localhost:17561"
         auth = UserAuthenticator(twitch, self.scopes,url=redirection_url,  host='0.0.0.0', port=17561)
         token, refresh_token = await auth.authenticate()
-
+        self.logger.debug(f"{token}")
         return token, refresh_token
 
     async def get_twitch_api_conn(self) -> Tuple[ Twitch, TwitchUser]:
-        #if self.use_cli:
-        #load_dotenv("/home/sna/src/twitch/src/handlers/.env_twitchapi")
-        load_dotenv("/home/sna/src/twitch/src/handlers/.env_twitchapi")
-        await asyncio.sleep(1)
-        client_id = os.getenv("CLIENT_ID", "ERROR_CLIENT_ID")
-        #self.logger.debug(f"client_id: {client_id}")
+        self.logger.debug(f"dotenv_path: {self.dotenv_path}")
+        load_dotenv("/home/sna/src/twitch/src/handlers/.env_twitchapi", override=True)
+        await asyncio.sleep(3)
+        client_id = os.getenv("TWAPI_CLIENT_ID", "ERROR_CLIENT_ID")
+#        self.logger.debug(f"client_id: {client_id}")
         client_s = os.getenv("CLIENT_SECRET", "ERROR_CLIENT_SECRET")
-        client_id = "0oyr3pfdb6p825pypylc4j5ymvpjzv"
+ #       self.logger.debug(f"..... client_s: {client_s}")
         #self.logger.debug(f"client_secret: {client_s}")
         auth_base_url = os.getenv("AUTH_BASE_URL", "ERROR_AUTH_BASE_URL")
-        twitch = await Twitch(client_id,client_s )
+        twitch = await Twitch(os.getenv("TWAPI_CLIENT_ID"), os.getenv("CLIENT_SECRET"))
+
         #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json")#/home/sna/src/twitch/auth_storage
-        helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)
+        #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)
         #helper = UserAuthenticationStorageHelper(twitch, self.scopes, url=auth_base_url, host="localhost", port=17561)
+
+        helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)#/home/sna/src/twitch/auth_storage
         await helper.bind()
         user = await first(twitch.get_users())
-        self.logger.debug('{user.dict()}')
+        self.logger.debug(f'{user}')
 
         return twitch, user
 
@@ -209,21 +261,14 @@ class myTwitch(metaclass=Singleton):
         clip_id =clip.id 
         clip_edit_url = clip.edit_url
         self.logger.debug(f"CLIP: {clip_edit_url} id: {clip_id}")
+    
     async def get_current_subscribers(self):
         subscribers = await self.twitch.get_broadcaster_subscriptions(self.user.id)
         self.logger.info (f"subcount:  {subscribers.total}")
         async for x in subscribers:
             self.logger.debug(f"subs: {x.user_name}")
 
-        """
-        await self.twitch.add_channel_vip(broadcaster_id=self.user.id, user_id=1287837934)
-        await self.twitch.remove_channel_vip(broadcaster_id=self.user.id, user_id=1287837934)
-        await self.twitch.add_channel_vip(broadcaster_id=self.user.id, user_id=1287837934)
-        await self.twitch.remove_channel_vip(broadcaster_id=self.user.id, user_id=1287837934)
-        await self.twitch.add_channel_vip(broadcaster_id=self.user.id, user_id=1287837934)
-        await self.twitch.remove_channel_vip(broadcaster_id=self.user.id, user_id=1287837934)
-        """
-        #await self.twitch.create_custom_reward(broadcaster_id=self.user.id, title="testing twitchAPI create custom reward", cost=100, is_enabled=True,prompt="snablahblub", is_user_input_required=True,is_max_per_user_per_stream_enabled=True, global_cooldown_seconds=500, max_per_user_per_stream=1)
+                #await self.twitch.create_custom_reward(broadcaster_id=self.user.id, title="testing twitchAPI create custom reward", cost=100, is_enabled=True,prompt="snablahblub", is_user_input_required=True,is_max_per_user_per_stream_enabled=True, global_cooldown_seconds=500, max_per_user_per_stream=1)
         #await self.twitch.create_stream_marker()
         
         res =  self.twitch.get_user_block_list(self.user.id)
@@ -260,13 +305,16 @@ class myTwitch(metaclass=Singleton):
 
         #res = await update_redemption_status(broadcaster_id=self.user.id, reward_id="", redemption_ids, status)
         await self.twitch.create_custom_reward(broadcaster_id=self.user.id, 
-                                               title="snaAlarm", 
-                                               cost=300, 
+                                               title="your offline flash", 
+                                               background_color="#ffffff",
+                                               cost=1001, 
                                                is_enabled=True,
-                                               prompt="what is your alarm for?", 
-                                               is_user_input_required=True,
-                                               is_max_per_user_per_stream_enabled=False,
-                                               is_global_cooldown_enabled=False)
+                                               prompt="why?", 
+                                               is_user_input_required=False,
+                                               #is_max_per_user_per_stream_enabled=True,
+                                               #max_per_user_per_stream=1,
+                                               is_global_cooldown_enabled=False, 
+                                               should_redemptions_skip_request_queue=True)
         
     async def create_stream_marker(self):
         await self.twitch.create_stream_marker()
@@ -320,5 +368,6 @@ TARGET_SCOPES = [
                  AuthScope.CHANNEL_READ_GOALS,
                  AuthScope.USER_READ_BLOCKED_USERS,
                  AuthScope.USER_WRITE_CHAT,
-                 AuthScope.CHANNEL_READ_REDEMPTIONS
+                 AuthScope.CHANNEL_READ_REDEMPTIONS,
+                 AuthScope.CHANNEL_READ_VIPS
                  ]

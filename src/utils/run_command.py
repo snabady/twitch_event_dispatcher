@@ -1,3 +1,5 @@
+import urllib
+import requests
 import asyncio
 import subprocess
 import queue
@@ -119,7 +121,33 @@ def create_toilet_file(filepath: str, font: str, text: str):
     text=True)
     with open (filepath, 'w', encoding='utf-8') as f:
         f.write(result.stdout)
+
+
+def trigger_ascii_rain(count):
+    url = "http://localhost:5000/trigger/" + str(count)
+    requests.get(url)
+
+def download_twitch_emote(emote_id):
+    #emote_id = "emotesv2_142bd42fa7dc402b80faae898d355692"
+    # https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_142bd42fa7dc402b80faae898d355692/default/dark/3.0
+    url = f"https://static-cdn.jtvnw.net/emoticons/v2/{emote_id}/default/dark/3.0"
+    destination = f"/home/sna/5n4fu_stream/event_board/sounds/webm/{emote_id}.gif"
     
+
+    urllib.request.urlretrieve(url, destination)
+
+    #return destination
+
+def trigger_event_board(filename):
+    # TODO add post requests
+    logger.debug("trigger event board reached!")
+    url = "http://localhost:8000/play?sound="
+    if filename.endswith("mp3"):
+        url += "mp3/"
+    else:
+        url += "webm/"
+    url += filename
+    requests.get(url)
 #run_xcowsay("/home/sna/5n4fu_stream/media/img/sna.png", "blub" , 20, 1)
 #run_mpv(True, 120, "/home/sna/5n4fu_stream/media/alerts/new_follower.mp3" )
 #run_mpv( "/home/sna/5n4fu_stream/media/alerts/new_follower.mp3" , 120, True)

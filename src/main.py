@@ -60,7 +60,7 @@ def my_event_subscriptions():
     #subscribe_event("followage_command", sna_irc_handler.handle_followage_command)
     subscribe_event("db_get_followage_by_user", db_handler.handle_get_followage_by_user) 
     subscribe_event("twapi_user_id_result",     db_handler.handle_get_followage)
-    subscribe_event("snafu_flash_event",        sna_irc_handler.handle_snafu_flash_event)
+#    subscribe_event("snafu_flash_event",        sna_irc_handler.handle_snafu_flash_event)
 
     #subscribe_event("irc_bait_event", bait_game.handle_bait)
     #subscribe_event("twitch_stream_info_event", stream_stats.handle_twitch_streaminfo_event)
@@ -126,6 +126,7 @@ async def cli_twitch_listen():
             cli_ids = append_ids(cli_ids, test_ids)
             db_handler.write_cli_params(cli_ids)
             for x in xxx:
+                return
                 await trigger_cli_event(x, xxx[x]) 
                 return 
         except Exception as e:
@@ -146,7 +147,6 @@ async def twitch_listen_live():
             test_ids = await tevents.listen_channel_goal_events()
             test_ids = await tevents.listen_channel_points()
             test_ids = await tevents.listen_channel_polls()
-            test_ids = await tevents.listen_channel_predictions()           # 
             test_ids = await tevents.listen_hype_train()
             test_ids = await tevents.listen_shoutout_events()         # 
             #test_ids = await tevents.listen_charity_events()
@@ -171,13 +171,13 @@ async def obs_listen():
     logger.debug(obs)
 
 async def irc_listen():
+    sna = irc_events.Irc()
+    task1 = asyncio.create_task( sna.run())
+    task2 = asyncio.create_task(sna.irc_task_runner())
     try:
-        sna = irc_events.Irc()
-        asyncio.create_task( sna.run())
-        asyncio.create_task(sna.irc_task_runner())
+        asyncio.gather(task1,task2)
     except asyncio.CancelledError:
         logger.debug("irc_listen graceful end")
-        raise 
 
 async def tapi_listen():
     async with twitchapi.myTwitch() as twitch_instance:
@@ -198,7 +198,10 @@ async def emote_loop():
     start_emote_display()
 
 def run_flask():
-    http_event.run(port=5001,use_reloader=False)
+    try:
+        http_event.run(port=5001,use_reloader=False)
+    except asyncio.CancelledError:
+        print("run_flask what about a graceful end?")
 
 
 def handle_exit(*args):
@@ -237,26 +240,9 @@ async def main():
                 await task
             except asyncio.CancelledError:
                 print("main cancled")
+                pass
+        fishis.end_bait()
 
-
-async def main1():
-    my_event_subscriptions()
-    fishis = FishGame()
-    flask_thread = threading.Thread(target=run_flask, daemon=True)
-    flask_thread.start()
-    event_timer.MultiTimerClass()
-    #await asyncio.gather(wled_listen() , obs_listen(),twitch_listen(),  tapi_listen(),irc_listen())
-    #wled = WLEDController("192.168.0.60")
-    #await asyncio.gather( obs_listen(),twitch_listen(),  tapi_listen(),irc_listen())
-    await asyncio.gather(  wled_listen(),
-                            cli_twitch_listen(), 
-                            tapi_listen(), 
-                            irc_listen(), 
-                            obs_listen(),  
-                            twitch_listen_live(), 
-#                            emote_loop())
-                         )
-    #await asyncio.gather()
 if __name__ == "__main__":
     try:
         asyncio.run(main())

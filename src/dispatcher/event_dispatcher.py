@@ -3,7 +3,7 @@ import logging
 from utils import log 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
-logger.setLevel(logging.DEBUG)   
+logger.setLevel(logging.INFO)   
 
 subscribers = defaultdict(list)
 
@@ -20,6 +20,9 @@ def post_event(event_type, data) :
     if not event_type in subscribers:
         logger.debug(f"no subscribers registered for event_type {event_type}")
         return
+    results = []
     for fn in subscribers[event_type]:
         logger.debug(f"dispatcher calling {fn.__name__}")
-        fn(data)
+        result = fn(data)
+        results.append(result)
+    return result

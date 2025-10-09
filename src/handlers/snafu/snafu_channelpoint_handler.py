@@ -69,7 +69,9 @@ def handle_reward_update (event: dict):
 
     event_data = event.get("event_data")
     logger.debug(f"handle_reward_update: EVENT_DATA:{ event_data}")
-    
+"""
+someone requested channelpoint-reward
+"""
 def handle_reward_redemption_add (event: dict):
     event_data = event.get("event_data")
     logger.debug(f"handle_reward_redemption_add EVENT_DATA:{ event_data}")
@@ -105,7 +107,7 @@ def handle_reward_redemption_add (event: dict):
         f=[]
         fpath = reward[2]
         logger.debug(f"slap_path: {fpath}")
-        #files = [x for x in os.listdir(fpath) if os.path.isfile(os.path.isfile(os.path.join(fpath,x)))]
+        files = [x for x in os.listdir(fpath) if os.path.isfile(os.path.isfile(os.path.join(fpath,x)))]
         for x in os.listdir(fpath):
             if os.path.isfile(os.path.join(fpath, x)):
                 f.append(x)
@@ -127,24 +129,28 @@ def handle_reward_redemption_add (event: dict):
 
     elif val2 == "snaAlarm":
 
-            write_snaalert_file(event_data.get("user_input"))
-            data = { "event_type":"obs_set_source_visibility", "event_data": {"source_name":"snalarm",
-                                                                              "scene_name":"ALERTS",
-                                                                              "visible": True}}
-            post_event("obs_set_source_visibility", data)
-            post_event("timer_start_event", {"event_name":"screenkey_timer", 
-                                             "duration":15, 
-                                             "timer_done_event":"obs_set_source_visibility", 
-                                             "timer_done_event_data": {"scene_name": "ALERTS", 
-                                                                       "source_name": "snalarm", 
-                                                                       "visible":False
-                                                                       }
-                                             })
+        write_snaalert_file(event_data.get("user_input"))
+        data = { "event_type":"obs_set_source_visibility", "event_data": {"source_name":"snalarm",
+                                                                          "scene_name":"ALERTS",
+                                                                          "visible": True}}
+        post_event("obs_set_source_visibility", data)
+        post_event("timer_start_event", {"event_name":"screenkey_timer", 
+                                         "duration":15, 
+                                         "timer_done_event":"obs_set_source_visibility", 
+                                         "timer_done_event_data": {"scene_name": "ALERTS", 
+                                                                   "source_name": "snalarm", 
+                                                                   "visible":False
+                                                                   }
+                                         })
 
 
-            logger.debug(f"CUSTOM REWARD REDEMPTION: snaAlarm")
+        logger.debug(f"CUSTOM REWARD REDEMPTION: snaAlarm")
+    elif val2 in ["your daily flash", "your offline flash"]:
+        post_event("snafu_flash_event", {"sna"})
+        msg = f"{event_data.get("user_name")} flashed ChillGirl lanternfish1 "
+        post_event("irc_send_message", msg)
     else:
-        logger.debug(f"sorry REWARD {val} is not active right now")
+        logger.debug(f"sorry REWARD {val2} is not active right now")
                                                                                      
 
 def handle_redemption_update(event: dict):
@@ -152,5 +158,26 @@ def handle_redemption_update(event: dict):
     logger.debug(f"handle_redepmtion_udpate EVENT_DATA:{ event_data}")
 
 # v1 // v2
+# Requires CHANNEL_READ_REDEMPTIONS or CHANNEL_MANAGE_REDEMPTIONS scope.
+"""handlers.snafu.snafu_channelpoint_handler - automatic_reward_redemption_add {'timestamp_received': datetime.datetime(2025, 9, 27, 21, 58, 48, 246361), 'timestamp_created': datetime.datetime(2025, 9, 27, 19, 58, 38, 64961, tzinfo=tzutc()), 'event_source': 'twitch_event', 'event_id': 'b5157008-7897-492d-a77b-2c634994d884', 'event_type': 'channel.channel_points_automatic_reward_redemption.add', 'type': 'twitch_channelpoint_event', 'event_data': {'broadcaster_user_id': '176550490', 'broadcaster_user_login': '5n4fu', 'broadcaster_user_name': '5n4fu', 'user_id': '176550490', 'user_login': '5n4fu', 'user_name': '5n4fu', 'id': '186be168-c7e0-4fb0-8e9d-40baae35a606', 'reward': {'type': 'gigantify_an_emote', 'cost': 0}, 'message': {'text': 'ChillGirl', 'emotes': [{'begin': 0, 'end': 8, 'id': 'emotesv2_7fa0ba50748c418d956afa59c2e94883'}]}, 'redeemed_at': '2025-09-27T19:58:47.783060+00:00'}}
+Exception in thread Thread-1 (dequeue):
+
+    emotesv2_142bd42fa7dc402b80faae898d355692
+"""
 def handle_automatic_reward_redemption_add(event: dict):
     logger.debug(f"automatic_reward_redemption_add {event}")
+    event_data = event.get("event_data")
+    reward_type = event_data.get("reward").get("type")
+    
+    if reward_type == "gigantify_an_emote":
+        emote = event_data.get("message").get("emotes") 
+        logger.debug(f"gigantify_an_emote: emotes: {emote}")
+        post_event("trigger_ascii_rain", 23)
+        post_event("download_twitch_emote",emote[0].get("id")) 
+        dest = f"{emote[0].get("id")}.gif"
+        post_event("trigger_event_board", dest)
+    
+    if reward_type == "message_effect":
+        logger.debug("got message effect for bitties")
+
+        post_event("trigger_ascii_rain", 69)

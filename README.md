@@ -8,7 +8,7 @@ echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/$foo/.bas
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 sudo pacman -S base-devel
 brew install twitchdev/twitch/twitch-cli 
-twitch configure
+twitch configure # u need a dev.twitch.tv dev-account with auth-port 3000
 twitch token
 twitch mock-api generate
 ```

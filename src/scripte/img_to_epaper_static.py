@@ -1,8 +1,8 @@
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
-mac = "6A343C634C603D42"   # destination mac address
-mac = "6C353C6758649341"
+mac = "6838316E71D8B841"   # destination mac address
+#mac = "6C353C6758649341"
 dither = 0   # set dither to 1 is you're sending photos etc
 apip = "192.168.0.12"   # ip address of your access point
 
@@ -23,8 +23,8 @@ image.putpalette(palette)
 draw = ImageDraw.Draw(image)
 
 # Define the text lines
-line1 = 'Top !bait'
-line2 = 'Ebenenschieber'
+line1 = 'current VIP'
+line2 = 'ZermalmerDoc'
 
 # Define the fonts and sizes
 font_line1 = ImageFont.truetype('/home/sna/Downloads/kryptonb.ttf', size=46)  # Change the font file and size as per your preference

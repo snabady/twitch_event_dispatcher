@@ -59,6 +59,7 @@ def handle_stream_offline(event: dict):
     logger.debug("WE DID IT ")
     write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.offline event\n")
     post_event("stream_offline_event", event_data)    
+    post_event("stream_online_event", False)
     msg = "5n4fu is now offline. so long and thanks for all the fish.."
     post_event("irc_send_message", msg)
 def handle_channel_update_v2(event: dict):

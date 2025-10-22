@@ -60,7 +60,7 @@ class ChannelPointManager:
                                                background_color="#ffffff",
                                                cost=1001, 
                                                is_enabled=True,
-                                               prompt="why?", 
+                                               prompt=prompt, 
                                                is_user_input_required=False,
                                                #is_max_per_user_per_stream_enabled=True,
                                                #max_per_user_per_stream=1,
@@ -92,7 +92,7 @@ class ChannelPointManager:
             self.loop)
 
     async def deactivate_reward_category(self, reward_category_id, enable=False ):
-        self.logger.debug("deactivate_reward_category")
+        self.logger.debug("DEACTIVATE_REWARD_CATEGORY")
         for reward in db_handler.execute_query(f"select id,name from custom_rewards where reward_type = {reward_category_id}", None):
 
             await self.twitch.twitch.update_custom_reward(self.twitch.user.id, reward[0], is_enabled=enable)

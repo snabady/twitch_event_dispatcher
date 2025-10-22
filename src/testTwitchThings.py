@@ -1,5 +1,5 @@
 import asyncio
-from handlers import twitchapi
+from handlers import twitchapi, db_handler
 from dispatcher.event_dispatcher import subscribe_event, post_event
 from handlers.twitchapi import trigger_get_user_profile_imgs
 from handlers.custom_rewards_manager import ChannelPointManager
@@ -26,11 +26,21 @@ async def main():
         channel_points_manager = ChannelPointManager(twitch_instance)
         #await channel_points_manager.create_custom_rewardx()
         #await channel_points_manager.delete_custom_reward("edac1750-0c5e-43de-a723-482d5c8a946b")
-        await channel_points_manager.deactivate_reward_category(1)
-        await channel_points_manager.deactivate_reward_category(5, True)
+#        await channel_points_manager.deactivate_reward_category(1)
+#        await channel_points_manager.deactivate_reward_category(5, True)
+
         print ("NICE..........................")
 
-        await channel_points_manager.get_custom_reward()
+        #await channel_points_manager.get_custom_reward()
+        await channel_points_manager.deactivate_reward_category(5, True)
+        await channel_points_manager.deactivate_reward_category(1, False)
+        #db_handler.handle_get_followage([1235361075])
+        print("blub")
+        # unfollow-tests
+        #await twitch_instance.check_unfollows()
+        #result = db_handler.execute_query("selct * from unfollow_events where user_id=1234", None)
+        #print (result)
+        #print (len(result))
         while True:
             await asyncio.sleep(1)
         print (result)

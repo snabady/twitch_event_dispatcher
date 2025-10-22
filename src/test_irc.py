@@ -200,8 +200,16 @@ async def tapi_listen():
         print(f"Angemeldeter Nutzer: {twitch_instance.user.display_name}")
         #rewards_manager = ChannelPointsManager(twitch_instance)
         #await twitch_instance.twapi_task_runner()
-        
+        x=0
         while True:
+            if twitch_instance.is_stream_online:
+                """ UNFOLLOW -TIMER - CALL """
+                if x<= 300: # 15min
+                    x+=1
+                else:
+                    await twitch_instance.check_unfollows()
+                    x=0
+
             await asyncio.sleep(1)
 
 async def wled_listen():
@@ -242,7 +250,7 @@ async def main():
     flask_thread = threading.Thread(target=run_flask, daemon=True)
     flask_thread.start()
     event_timer.MultiTimerClass()
-#    bait_o_meter() 
+    #bait_o_meter() 
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, handle_exit)
@@ -256,6 +264,7 @@ async def main():
                 asyncio.create_task( twitch_listen_live() )
                 ]
         post_event("set_stream_online", {"event_data": False})
+        
         await shutdown_event.wait()
 
         for task in tasks: 

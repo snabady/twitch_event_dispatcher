@@ -142,7 +142,7 @@ class Irc(metaclass=Singleton):
         
         if event_type == ChatEvent.JOINED:
             user_id = await self.getUser(self.target_channel)
-            await self.send_chat_message("o/")
+#            await self.send_chat_message("o/")
             post_event("IRC_JOINED", eventt)
             
         elif event_type == "IRC_COMMAND":
@@ -162,7 +162,8 @@ class Irc(metaclass=Singleton):
             if song != self.last_now_playing:
                 msg=(f"now_playing: {song}")
                 self.last_now_playing = song
-                await self.send_chat_message(msg)
+                # TODO schalter einbaun
+                #await self.send_chat_message(msg)
         except subprocess.CalledProcessError:
             pass
 

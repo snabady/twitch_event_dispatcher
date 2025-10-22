@@ -30,7 +30,7 @@ class WLEDController(metaclass=Singleton):
         self.logger.debug("subscribing to snafu_flash_event")
         subscribe_event("wledo_meter", self.wledo_meter)
         subscribe_event("snafu_flash_event", self.add_chatstrobo)
-
+        subscribe_event("trigger_wled_preset", self.set_preset)
     def set_effect(self, effect_id, color=(255, 255, 255), brightness=128, segment_id=0, on=True):
         payload = {
             "on": on,
@@ -52,7 +52,7 @@ class WLEDController(metaclass=Singleton):
     def wledo_meter(self, percent):
         """Send a vertical percent bar to WLED via sACN/DMX (left-to-right columns, percent: 0-100)."""
 
-        WLED_IP = "192.168.0.6"      # <-- your WLED IP here
+        WLED_IP = "192.168.0.134"      # <-- your WLED IP here
         UNIVERSE = 1                 # WLED default universe
         WIDTH = 96
         HEIGHT = 8

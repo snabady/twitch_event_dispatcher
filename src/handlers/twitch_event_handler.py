@@ -165,7 +165,7 @@ def handle_twitch_shoutout_event(event):
         "channel.shoutout.receive": snafu_shoutout_handler.handle_shoutout_receive
     }
     event_type = event.get("event_type")
-    fn = streaminfo_events.get(event_type)
+    fn = shoutout_events.get(event_type)
     alerts.enqueue(lambda: fn(event))
 
     write_event_received(f"event_type: {event_type}")

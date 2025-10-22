@@ -700,7 +700,7 @@ class FishStats:
             x = f"{self.total_baits}"
             write_bait_counter(x)
             # TODO write bait counter??... check.
-
+# TODO top bait file finden
             self.user_total_baits[user]+=1
             if gramm > 0:
                 self.user_catch_count[user] += 1

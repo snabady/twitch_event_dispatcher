@@ -17,7 +17,7 @@ from dispatcher.event_dispatcher import post_event, subscribe_event
 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 def trigger_follower_count():
     logger.debug("trigger_follower_count")
@@ -39,6 +39,7 @@ def trigger_send_message(msg):
     myTwitch().enqueue(runner())
 
 def trigger_get_user_id(user_name: str): 
+    logger.debug(f"trigger_get_user_id {user_name} type: {type(user_name)}")
     async def runner():
         twapi = myTwitch()
         await twapi.get_user_id(user_name)
@@ -84,33 +85,39 @@ class myTwitch(metaclass=Singleton):
         subscribe_event("trigger_get_user_profile_imgs", trigger_get_user_profile_imgs)
         self.broadcaster_id = None
         self.current_vips = None
-
+        self.session_unfollowed_user_ids = defaultdict(int)
+        subscribe_event("stream_online_event", self.set_stream_online)
+        self.is_stream_online = False
 
     async def __aenter__(self):
-        self.logger.debug("aenter")
         self.twitch, self.user = await self.get_twitch_api_conn()
         #asyncio.create_task(self.twapi_task_runner())
-        
         return self
-
+    
+    def set_stream_online(self, event_data):
+        self.logger.debug(f"setting stream online: {event_data}")
+        self.is_stream_online=event_data
+    
     async def init_sna(self):
         self.logger.debug("aenter")
         self.twitch, self.user = await self.get_twitch_api_conn()
         self.broadcaster_id = self.get_user_id("5n4fu")
 
-    async def get_user_id(self, user_name: str):
-        self.logger.debug(f"get_user_id: {user_name.get("user_name")}" )
-        x  = await first(self.twitch.get_users(logins=[user_name.get("user_name")]))
+    async def get_user_id(self, user_name):
+
+        x  = await first(self.twitch.get_users(logins=[user_name]))
         
         post_event("twapi_user_id_result", x.id)
         return x.id
-
+    async def get_user_id_str(self, user_name):
+        x = await first(self.twitch.get_users(logins=[user_name]))
+        return x.id
     async def get_user_profile_imgs (self, user_names: list, callback=None) :
         self.logger.debug(f"**************  get_users: {user_names}")
         user_imgs = defaultdict(str)
 
         async for user in self.twitch.get_users(logins=user_names):
-            self.logger.debug(f"userdata: {user}")             
+            #self.logger.debug(f"userdata: {user}")             
             user_imgs[user.display_name] = user.profile_image_url            
         
         post_event("finish_vip_chart_with_profile_pics", user_imgs)    
@@ -129,7 +136,6 @@ class myTwitch(metaclass=Singleton):
         db_handler.update_current_mods(mods)
         
     async def get_vipsis(self):
-        self.logger.debug(f"b_id: {self.broadcaster_id}")
         b_id = await first(self.twitch.get_users(logins=["5n4fu"]))
         vips =[]
         async for vip in self.twitch.get_vips(b_id.id):
@@ -140,13 +146,10 @@ class myTwitch(metaclass=Singleton):
         self.logger.debug(vips)
         self.current_vips = vips
         
-# TODO RECONNECT OBS EINBAUEN!!!!!!!!!!!!1
+    # TODO RECONNECT OBS EINBAUEN!!!!!!!!!!!!1
     async def twapi_task_runner(self):
         try:
-            self.logger.debug("twapi task_worker")
-            #self.logger.debug(self)
             while True:
-                self.logger.debug("TWAPI QUEUE")
                 #if self.obs_task_queue.qsize() > 0:
                 task_coro_func = await self.twapi_queue.get()
                                
@@ -156,7 +159,6 @@ class myTwitch(metaclass=Singleton):
                 
                 except Exception as e:
                     self.logger.critical(f"TWAPI_TASK_RUNNER Exception: {e}", exc_info=True)      
-
                     
                 finally:
                     self.twapi_queue.task_done()   
@@ -169,13 +171,13 @@ class myTwitch(metaclass=Singleton):
     def enqueue(self, coro):
         self.logger.debug(f"~~~~~~~enqueued:{coro} {coro.__name__}")
         self.twapi_queue.put_nowait(coro)
-        self.logger.debug(f"after put: twapi queue size: {self.twapi_queue.qsize()}")
+        #self.logger.debug(f"after put: twapi queue size: {self.twapi_queue.qsize()}")
 
     async def dispatch_twitch_event(self, event ):
         event_source = "twitch_event"
         ts = datetime.datetime.now()
         data = ""
-        self.logger.debug(f'x: {type(x)}') #s
+        #self.logger.debug(f'x: {type(x)}') #s
         if self.event_map[type(x)] != None:
             self.logger.debug(f"dispatching **** event_type:-----------------> >>> {x.subscription.type} <<<")
             data = {
@@ -199,7 +201,7 @@ class myTwitch(metaclass=Singleton):
         redirection_url ="http://localhost:17561"
         auth = UserAuthenticator(twitch, self.scopes,url=redirection_url,  host='0.0.0.0', port=17561)
         token, refresh_token = await auth.authenticate()
-        self.logger.debug(f"{token}")
+        #self.logger.debug(f"{token}")
         return token, refresh_token
 
     async def get_twitch_api_conn(self) -> Tuple[ Twitch, TwitchUser]:
@@ -221,31 +223,61 @@ class myTwitch(metaclass=Singleton):
         helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)#/home/sna/src/twitch/auth_storage
         await helper.bind()
         user = await first(twitch.get_users())
-        self.logger.debug(f'{user}')
+        #self.logger.debug(f'{user}')
 
         return twitch, user
 
+
+    async def create_timeout(self, user_id: int, reason: str, duration: int):
+        # 1235361075 snabotski
+        self.broadcaster_id = await self.get_user_id_str("5n4fu")
+   #     self.logger.debug(f"{self.broadcaster_id}, bc_id: ")
+
+        await self.twitch.ban_user(str(self.broadcaster_id), str(self.broadcaster_id), user_id, reason, duration)
+    
+    async def check_unfollows(self):
+        await self.get_followers()
+        query="SELECT f.user_id, u.user_name FROM followerlist f left join twitch_users u on f.user_id=u.user_id LEFT JOIN current_followers c ON f.user_id = c.user_id where c.user_id is null"
+        #result = db_handler.execute_query("SELECT f.user_id, f.user_name FROM followerlist f LEFT JOIN current_followers c ON f.user_id = c.user_id WHERE c.user_id IS NULL", None) 
+        result = db_handler.execute_query(query, None)
+        #result = db_handler.execute_query("select  u.user_id , u.user_name from twitch_users u right join unfollowed_users c on u.user_name=c.user_name", None) # debug query
+        self.logger.debug(f"unfollows: {result}")
+        #result = [[102784092, "teekay84"]] # debug for one
+        for user in result:
+            unfollow_user_id = user[0]
+            unfollow_user_name = user[1]
+            if unfollow_user_id in self.session_unfollowed_user_ids:
+                if self.session_unfollowed_user_ids[unfollow_user_id] >= 666:
+                    multiplicator = self.session_unfollowed_user_ids[unfollow_user_id] - 666 + 1
+                    timeout_duration = multiplicator*multiplicator * 300
+                    msg =f"well... timeout for: {unfollow_user_name} for -abusing unfollow event- for {timeout_duration}seconds"
+                    await self.create_timeout(unfollow_user_id, "abusing unfollow event", timeout_duration)
+                    self.session_unfollowed_user_ids[unfollow_user_id] += 1
+                else:
+                    msg = f"{unfollow_user_name} one unfollow per day is enough, right? do it again and u will get a timeout"
+                    self.session_unfollowed_user_ids[unfollow_user_id] = 666
+                    db_handler.remove_from_followerlist(unfollow_user_id)
+            else:
+                # trigger event fishifood-event with some sound ohno.. ohno... ohnonononono
+                self.session_unfollowed_user_ids[unfollow_user_id] = 1
+                db_handler.add_unfollow(unfollow_user_id)
+                msg = f"thank you {unfollow_user_name} for your unfollow. you have gotten into fresh fishi-food"
+                post_event("trigger_ascii_rain", 42)
+                post_event("trigger_event_board", "ohno.mp3")
+            print(msg)
+            post_event("irc_send_message",msg)
             
-        
     async def get_followers(self):
         # MODERATOR_READ_FOLLOWERS
-        logger.info("get followers????")
+        self.logger.info("get followers????")
         result = await self.twitch.get_channel_followers(self.user.id)
         self.logger.info(f"total_followers: {result.total}")
-        follower = []
+        follower_ids =[]
+        
         async for x in result:
-            #self.logger.debug(x.to_dict())
-            data =  {
-                "followed_at"   : x.followed_at,
-                "user_id"       : x.user_id,
-                "user_name"     : x.user_name,
-                "user_login"    : x.user_login
-            }
-            #self.logger.debug(data)
-            db_handler.insert_new_follwer(data)
-            follower.append(data)
-            #self.logger.debug(follower)
-        return follower
+            follower_ids.append(x.user_id) 
+            
+        db_handler.update_current_follower(follower_ids)
     
     async def get_follower_count(self):
         result = await self.twitch.get_channel_followers(self.user.id)

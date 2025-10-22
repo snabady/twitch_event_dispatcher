@@ -86,7 +86,7 @@ class TwitchEvents:
         """
         load_dotenv(dotenv_path=self.dotenv_path)
         #dotenv_path = find_dotenv()
-        self.logger.debug ( f"samma eye das kanns doch nicht sein {self.dotenv_path}" )
+#        self.logger.debug ( f"samma eye das kanns doch nicht sein {self.dotenv_path}" )
         if self.use_cli_conn:
             self.TWITCH_CLI_MOCK_API_URL    = os.getenv("TWITCH_CLI_MOCK_API_URL", "BASE_URL not found") 
             self.AUTH_BASE_URL              = os.getenv("AUTH_BASE_URL", "BASE_URL not found")
@@ -477,15 +477,15 @@ class TwitchEvents:
         channel.raid 
         """
         try:
-            self.logger.debug("channel_action_events")
+            #self.logger.debug("channel_action_events")
             raid_id = await self.eventsub.listen_channel_raid(self.dispatch_twitch_event, self.user.id, None)
-            self.logger.debug(f"raid_id {raid_id}")
+            #self.logger.debug(f"raid_id {raid_id}")
             follow_id = await self.eventsub.listen_channel_follow_v2(self.user.id, self.user.id, self.dispatch_twitch_event)
 
-            self.logger.debug(f"follow_id {follow_id}")
+            #self.logger.debug(f"follow_id {follow_id}")
             channel_cheer_id = await self.eventsub.listen_channel_cheer(self.user.id, self.dispatch_twitch_event)
             
-            self.logger.debug(f"cheer_id {channel_cheer_id}")
+            #self.logger.debug(f"cheer_id {channel_cheer_id}")
         except Exception as e:
             self.logger.debug(e)
         self.logger.info("successfully subscribed to channel_action_events")

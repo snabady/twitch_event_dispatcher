@@ -6,9 +6,9 @@ from datetime import datetime
 from dispatcher.event_dispatcher import post_event
 
 from handlers import twitchapi #import trigger_get_user_id
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("DB_LOG")
 logger = log.add_logger_handler(logger)
-logger.setLevel(logging.INFO)   
+logger.setLevel(logging.DEBUG)   
 
 
 """event_types = {
@@ -20,9 +20,9 @@ logger.setLevel(logging.INFO)
 
 def get_db_conn():
     conn =  mysql.connector.connect(
-        host="localhost",      
+        host="192.168.0.177",      
         user="root",  
-        password="example",
+        password="snablah",
         database="twitch"
     )
     return conn
@@ -68,7 +68,21 @@ def add_new_twitch_user(user_data):
 
     execute_query(query, user_data)
 
+def remove_from_followerlist(user_id):
+    query =f"delete from followerlist where user_id = {user_id}"
+    execute_query(query,None)
 
+def update_current_follower(user_ids):
+    logger.debug("in update current follower, deleting followerlist and inserting fresh, received")
+    query = "DELETE FROM current_followers"
+    execute_query(query,None)
+    values  =",".join([f"({user_id})" for user_id in user_ids])
+    query = f"""    INSERT INTO current_followers (user_id) values {values} """
+    execute_query(query,None)
+
+def insert_new_follower(userdata):
+    query = f"insert into followerlist  (user_id, followed_at) values (%s,%s)"
+    execute_query(query, userdata)
 
 def insert_new_follwer(follower:dict) -> str:
     conn = get_db_conn()
@@ -99,14 +113,17 @@ def insert_new_follwer(follower:dict) -> str:
 def handle_stwitch_streaminfo_event(event: dict):
     pass    
 
+def add_unfollow(user_id: int):
+    query ="INSERT INTO unfollow_events (user_id, unfollowed_at) VALUES (%s, %s)"
+    execute_query(query, [user_id, datetime.now()])
 
-def handle_get_followage_by_user(user_name: str):
+def handle_get_followage_by_user(user_name: dict):
     logger.debug("handle_get_followage by user")
-    logger.debug(f"user_name: {user_name}")
+    logger.debug(f"user_name: {user_name}, type: {type(user_name)}")
     conn = get_db_conn()
     cursor = conn.cursor()
-    #user_name = user_name.get("user_name")
-    twitchapi.trigger_get_user_id(user_name)
+    user_name = user_name.get("user_name")
+    twitchapi.trigger_get_user_id(str(user_name))
 
     
     # get user_id since user_name could have changed.... we need current user_id
@@ -116,20 +133,19 @@ def handle_get_followage_by_user(user_name: str):
 def handle_get_followage(user_id: int):
     logger.debug("handle_get_followage ")
     logger.debug(f"user_name: {user_id}")
+    print("blub blub blub.............")
     conn = get_db_conn()
     cursor = conn.cursor()
     #user_id = user_id.get("user_id")
-    query = "SELECT user_name, followed_at FROM twitch_users WHERE user_id = %s"
-    cursor.execute(query,( user_id, ))
-
-    result = cursor.fetchone()
+    query = f"SELECT user_name, followed_at FROM twitch_users WHERE user_id = {user_id}"
+    cursor.execute(query, None)
+    result =cursor.fetchone()
+    logger.debug(result)
     if result:
         message = f" {result[0]} following since: {result[1]}"
         post_event("irc_send_message", message)
-        post_event("trigger_sendmessage", message)
     else: 
         post_event("irc_send_message", "moep, what about a follow first?")
-        post_event("trigger_sendmessage", message)
     cursor.close()
     conn.close()
 

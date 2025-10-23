@@ -50,10 +50,10 @@ class Irc(metaclass=Singleton):
 
     def __init__(self, dotenv_path):
         self.dotenv_path        = dotenv_path
-        self.logger             = logging.getLogger(__name__)
+        self.logger             = logging.getLogger("IRC_BOT")
         if not self.logger.hasHandlers():
-            self.log.add_logger_handler(self.logger)
-        self.logger.setLevel(logging.INFO)   
+            log.add_logger_handler(self.logger)
+        self.logger.setLevel(logging.DEBUG)   
         self.twitch             = None
         self.chat_client        = None
         self.twitch             = None
@@ -79,7 +79,7 @@ class Irc(metaclass=Singleton):
         self.load_dotenv_variables()
         self.last_now_playing = ""
         self.current_vips = None
-
+        self.logger.debug(f"dotenvpath initialized: {self.dotenv_path}")
         self.stream_stats_data = stream_stats.ChatStats()
 
 
@@ -97,8 +97,8 @@ class Irc(metaclass=Singleton):
         self.redirection_url    = os.getenv("IRC_BOT_OAUTH_REDIRECTION_URI", "could not get Iredirection uri os.getenv()")
         self.oauth_port         = os.getenv("IRC_BOT_OAUTH_PORT", "could not get port os.getenv()")
         self.oauth_host         = os.getenv("IRC_BOT_OAUTH_HOST", "could not get host os.getenv()")
-        self.auth_storage_file  = os.getenv("AUTH_STORAGE_FILE", "could not get auth_storage_file os.getenv()")
-
+        self.auth_storage_file  = os.getenv("IRC_BOT_AUTH_STORAGE_FILE", "could not get auth_storage_file os.getenv()")
+        self.logger.debug(f"IRC_BOT_USERNAME: {self.client_name}")
     def create_auto_command_list(self):
         auto_commands = {}
         for x in self.cmd_list :
@@ -117,7 +117,11 @@ class Irc(metaclass=Singleton):
 
     async def auth_token_generator(self,  twitch: Twitch, USER_SCOPE) -> (str, str):
         
-        auth = UserAuthenticator(twitch, USER_SCOPE,url=self.redirection_url,  host=self.oauth_host, port=self.oauth_port)
+        auth = UserAuthenticator(twitch, 
+                                 USER_SCOPE,
+                                 url=self.redirection_url,  
+                                 host=self.oauth_host, 
+                                 port=self.oauth_port)
         token, refresh_token = await auth.authenticate()
 
         return token, refresh_token
@@ -152,7 +156,7 @@ class Irc(metaclass=Singleton):
             post_event("IRC_JOIN", eventt)
         elif event_type == ChatEvent.MESSAGE:
             post_event("IRC_MESSAGE", eventt)
-        elif event_type == ChatEvent.LEFT:
+        elif event_type == ChatEvent.USER_LEFT:
             post_event("IRC_LEFT", eventt)
 
     async def now_playing(self):

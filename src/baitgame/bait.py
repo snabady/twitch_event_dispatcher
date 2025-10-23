@@ -1,3 +1,4 @@
+import os
 import math
 import random
 import logging
@@ -11,7 +12,7 @@ from utils import file_io
 from utils.file_io import write_bait_counter, bait_quotes_array
 from events.obsws import set_source_visibility_wrapper
 from handlers import db_handler 
-
+from dotenv import load_dotenv
 
 MAX_SLOTS           = 18
 USER_MAX_SLOTS      = 3
@@ -442,10 +443,10 @@ class FishGame:
         self.bait_slot_manager = RandomBaitSlotManager()
         self.highscore = FishHighscore()
         self.fishstats = FishStats()
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("BAIT_GAME")
         self.logger = log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)   
-
+        load_dotenv("../../.env")
         self.stream_online = False
         
         # Registriere Event-Handler
@@ -500,6 +501,9 @@ class FishGame:
             # TODO OBS EVENT_BASED...... refactor in refactor
             #set_source_visibility_wrapper("fishers", slot_text, True)
             post_event("obs_set_source_visibility", {"event_type": "obs_set_source_visibility", "event_data":{"scene_name": "fishers", "source_name": slot_text, "visible": True}})
+            # TODO REMOVE
+            fishing_slots_obs_path = os.getenv("FISHING_SLOTS_OBS_PATH", "error in os.getenv FISHING_SLOTS_OBS_PATH") 
+            filename = fishing_slots_obs_path + slot_text + ".txt"
             filename = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{slot_text}.txt"
             file_io.write_file(filename, "w", user)
         else:
@@ -565,10 +569,19 @@ class FishGame:
 
             #set_source_visibility_wrapper("fishers", task.slot_text, False)
             post_event("obs_set_source_visibility", {"event_type": "obs_set_source_visibility", "event_data":{"scene_name": "fishers", "source_name": task.slot_text, "visible": False}})
-            f = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{task.slot_text}.txt"
+            # TODO REMOVE
+            fishing_slot_obs_display_name_path = os.getenv("FISHING_SLOT_OBS_DISPLAY_NAME_PATH", "error in os.getenv FISHING_SLOT_OBS_DISPLAY_NAME_PATH")
+            f = fishing_slot_obs_display_name_path + task.slot_text + ".txt"
+            #f = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{task.slot_text}.txt"
+            self.logger.debug(f"fishing_slot_namepath: {fishing_slot_obs_display_name_path}")
+            file_io.write_file(f, "w", "")#??
+            
             self.bait_slot_manager.release_slot(task.slot_text)
-            file_io.write_file(f, "w", "")
-            file_io.write_file("/home/sna/5n4fu_stream/obs_files/fishis/bait_history.txt", "a", msg_obs)
+            bait_history_file = os.getenv("BAIT_HISTORY_FILE", "error in os.getenv BAIT_HISTORY_FILE")
+            self.logger.debug(f"bait_hist_file: {bait_history_file} msg_obs: {msg_obs}")
+            #file_io.write_file("/home/sna/5n4fu_stream/obs_files/fishis/bait_history.txt", "a", msg_obs)
+            file_io.write_file(bait_history_file, "a", msg_obs)
+        
         self.logger.debug(f"before send msg: stream_online: {self.stream_online}")
         self.logger.debug(f"fishi: {fish}")
         if not self.stream_online:
@@ -580,7 +593,6 @@ class FishGame:
         self.fishstats.record_catch(user, gramm, fish)
         post_event("create_vip_points_chart", "")
         if is_top and not gramm == -1:
-
             file_io.write_top_baiter(user)
         
         if fish == "a 🥠":
@@ -608,7 +620,6 @@ class FishGame:
             slot_text = self.bait_slot_manager.assign_slot()
             if not slot_text:
                 self.logger.error("No free bait slots available!")
-                
                 return
             next_task.slot_text = slot_text
             delay = random.uniform(10,66)
@@ -616,7 +627,10 @@ class FishGame:
 
             # TODO OBS EVENT_BASED...... refactor in refactor
             set_source_visibility_wrapper("fishers", slot_text, True)
-            f = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{next_task.slot_text}.txt"
+            # TODO REMOVE
+            filepath = os.getenv("FISHING_SLOTS_OBS_PATH", "error in os.getenv FISHING SLOTS OBS_PATH")
+            f = filepath + next_task.slot_text + ".txt"
+            #f = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{next_task.slot_text}.txt"
             file_io.write_file(f, "w", next_user)
             #post_event("irc_send_message", msg)
             timer = threading.Timer(delay, self.process_task, args=(next_user, next_task))
@@ -627,10 +641,8 @@ class FishGame:
         event_data = event.get("event_data")
         weighted_user = event_data.get("user")
         # TODO choose fish/player who looses a fish
-        raise NotImplementedError
 
     def on_dynamite(self, user):
-        #fishresult {'user': 'roll0r', 'message': 'roll0r jeBaited u got 🧦.'}
         results = []
         for _ in range(3):
             gramm, fish = self.population.catch_fish()
@@ -646,9 +658,9 @@ class FishGame:
             if is_first:
                 msg_irc += "First catch of the day! "
             elif is_top:
-                msg_irc += "!highscore "
+                msg_irc += "MAX weight fishi today: "
             elif is_low:
-                msg_irc += "!bonk "
+                msg_irc += " "
             msg_irc += x
             msg_obs = f"{user}: {gramm}g {fish}\n"
 
@@ -699,8 +711,7 @@ class FishStats:
 
             x = f"{self.total_baits}"
             write_bait_counter(x)
-            # TODO write bait counter??... check.
-# TODO top bait file finden
+            # TODO top bait file finden
             self.user_total_baits[user]+=1
             if gramm > 0:
                 self.user_catch_count[user] += 1
@@ -715,7 +726,6 @@ class FishStats:
                 self.user_jebaited[user] += 1
 
             if gramm in [42,23,66, 69, 96,420,1001,1337]:
-                # TODO make it visible in obs / chat.
                 self.user_event_bait[user]+=1
                 msg = f"{user}, u caught an eventfish with {gramm} gramm! +1 event point!"
                 post_event("trigger_send_message", msg)

@@ -33,7 +33,7 @@ class TwitchEvents:
         load_dotenv(dotenv_path=dotenv_path)
         
         if not use_cli:
-            self.logger = logging.getLogger("** 5n4fu_TV_events**")
+            self.logger = logging.getLogger("** TWITCH EVENT_SUB **")
         else:
             self.logger = logging.getLogger("** TWITCH CLI trigger **")
         self.log = add_logger_handler(self.logger)
@@ -85,9 +85,11 @@ class TwitchEvents:
         adjust variables in .env File 
         """
         load_dotenv(dotenv_path=self.dotenv_path)
+        
         #dotenv_path = find_dotenv()
-#        self.logger.debug ( f"samma eye das kanns doch nicht sein {self.dotenv_path}" )
+        self.logger.debug ( f"samma eye das kanns doch nicht sein {self.dotenv_path}" )
         if self.use_cli_conn:
+            #load_dotenv("/home/sna/src/twitch/src/events/.env_twitch_events", override=True)
             self.TWITCH_CLI_MOCK_API_URL    = os.getenv("TWITCH_CLI_MOCK_API_URL", "BASE_URL not found") 
             self.AUTH_BASE_URL              = os.getenv("AUTH_BASE_URL", "BASE_URL not found")
             self.TWITCH_CLI_CONNECTION_URL  = os.getenv("TWITCH_CLI_CONNECTION_URL", "BASE_URL not found")
@@ -97,11 +99,10 @@ class TwitchEvents:
             self.CLI_CLIENTID               = os.getenv("CLI_CLIENTID", "CLI_ID not found")
             
         else:
-            load_dotenv("/home/sna/src/twitch/src/events/.env_twitch_events", override=True)
-            self.CLIENT_ID          = os.getenv("CLIENT_ID", "CLIENT_ID not found")
-            self.CLIENT_S           = os.getenv("CLIENT_S", "CLIENT_S not found")
-            #self.CLIENT_ID = "337ngraz2f1kn32dz0k539uuykg5ev"
-            #self.logger.debug(f"............... cid ------> {self.CLIENT_ID}")
+            load_dotenv("../../.env")
+            #load_dotenv("/home/sna/src/twitch/src/events/.env_twitch_events", override=True)
+            self.CLIENT_ID          = os.getenv("LIVE_CLIENT_ID", "LIVE_CLIENT_ID not found")
+            self.CLIENT_S           = os.getenv("LIVE_CLIENT_SECRET", "LIVE_CLIENT_SECRET not found")
 
        
     async def prodConn(self) -> Tuple[EventSubWebsocket, Twitch, TwitchUser]:
@@ -149,9 +150,9 @@ class TwitchEvents:
         token = await auth.mock_authenticate(self.CLI_USER_ID)
         await twitch.set_user_authentication(token,
                                              self.cli_auth_scopes)
-        #self.logger.debug(f"scopes: {self.cli_auth_scopes}" )
+        self.logger.debug(f"scopes: {self.cli_auth_scopes}" )
         user = await first(twitch.get_users())
-        #self.logger.debug(f"auth: {user}")
+        self.logger.debug(f"auth: {user}")
         eventsub = EventSubWebsocket(twitch,
                                     connection_url=self.TWITCH_CLI_CONNECTION_URL,
                                     subscription_url=self.TWITCH_SUBSCRIPTION_URL)

@@ -55,10 +55,11 @@ class Singleton(type):
 
 class Obsws(metaclass=Singleton):
 
-    def __init__(self):
+    def __init__(self, dotenv_path):
+        self.dotenv_path = dotenv_path
         self.obs_task_queue = asyncio.Queue()
         self.ws = None
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("OBSWS")
         if not self.logger.hasHandlers():
             log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)
@@ -83,7 +84,7 @@ class Obsws(metaclass=Singleton):
         loads the .env variables
         adjust variables in .env File 
         """
-        load_dotenv(dotenv_path=".env_obsws")
+        load_dotenv(self.dotenv_path)
         self.host       = os.getenv("HOST", "could not receive HOST .env") 
         self.port       = os.getenv("PORT", "could not receive PORT .env")
         self.password   = os.getenv("PASSWORD", "nope password, .env")

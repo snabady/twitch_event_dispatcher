@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)  
-dotenv_path = "/home/sna/src/twitch/src/handlers/.env_obsfiles"
-
-
+#dotenv_path = "/home/sna/src/twitch/src/handlers/.env_obsfiles"
+dotenv_path = "/home/sna/src/twitch/.env"
 def handle_follower_count(event: dict):
     load_dotenv(dotenv_path=dotenv_path)
     follower_text = os.getenv("FOLLOW_CNT_TEXT", "failed to load dotenv FOLLOW_CNT_TEXT")

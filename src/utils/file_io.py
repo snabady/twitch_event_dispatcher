@@ -1,7 +1,9 @@
+import os
 import time 
 import json
 from dispatcher.event_dispatcher import post_event
 import asyncio
+from dotenv import load_dotenv
 
 def write_file(filepath=str, mode= str , text= str):
     with open(filepath, mode) as f:
@@ -18,7 +20,9 @@ def update_flash_counter(text=str):
     write_file("/home/sna/5n4fu_stream/data/sna_flash_counter.txt", "w", text)
 
 def write_bait_counter(text=str):
-    write_file("/home/sna/5n4fu_stream/data/baitgame/bait_counter.txt", "w", text)
+    load_dotenv("../../.env")
+    filename = os.getenv("BAIT_COUNTER_FILE", "BAIT_HISTORX_FILE")
+    write_file(filename,"w", text)
 
 def write_snaman_file(text=str):
     write_file("/home/sna/5n4fu_stream/obs_files/snaman.txt", "w", text)
@@ -30,17 +34,13 @@ def bait_quotes_array():
         #print(x)
         
     f.close()
-    print (type(x))
-    print(len(x))
     return x
 
 def write_screenkey_timer(text=str):
    write_file("/home/sna/5n4fu_stream/data/timer/screenkey.txt", "w", text)
 
-
 def write_snaalert_file(text=str):
     write_file ("/home/sna/5n4fu_stream/data/snaalarm.txt","w", text)
-
 
 def write_top_baiter(text=str):
     write_file("/home/sna/5nafu_stream/data/bait/topbaiter.txt", "w", text)

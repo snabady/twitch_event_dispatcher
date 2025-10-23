@@ -1,3 +1,4 @@
+import os
 import urllib
 import requests
 import asyncio
@@ -9,11 +10,15 @@ from threading import Thread
 import threading
 from utils import log
 from num2words import num2words
-
+from dotenv import load_dotenv 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
-tts_wav_filepath ="/home/sna/5n4fu_stream/media/tts_wav/run_command.wav"
+
+load_dotenv("../../.env")
+tts_wav_filepath=os.getenv("TTS_WAV_FILEPATH", "os.getenv error getting TTS_WAV_FILEPATH") 
+# TODO REMOVE
+tts_wav_filepath= "/home/sna/5n4fu_stream/media/tts_wav/run_command.wav"
 
 class EventQueue:
 
@@ -131,7 +136,11 @@ def download_twitch_emote(emote_id):
     #emote_id = "emotesv2_142bd42fa7dc402b80faae898d355692"
     # https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_142bd42fa7dc402b80faae898d355692/default/dark/3.0
     url = f"https://static-cdn.jtvnw.net/emoticons/v2/{emote_id}/default/dark/3.0"
-    destination = f"/home/sna/5n4fu_stream/event_board/sounds/webm/{emote_id}.gif"
+    dest_path = os.getenv("LOCAL_TWITCH_EMOTES")
+    destination = dest_path + emote_id + ".gif"
+    # TODO REMOVE
+    dest_path="/home/sna/5n4fu_stream/event_board/sounds/webm/"
+    destination = f"{dest_path}{emote_id}.gif"
     
 
     urllib.request.urlretrieve(url, destination)
@@ -151,4 +160,3 @@ def trigger_event_board(filename):
 #run_xcowsay("/home/sna/5n4fu_stream/media/img/sna.png", "blub" , 20, 1)
 #run_mpv(True, 120, "/home/sna/5n4fu_stream/media/alerts/new_follower.mp3" )
 #run_mpv( "/home/sna/5n4fu_stream/media/alerts/new_follower.mp3" , 120, True)
-

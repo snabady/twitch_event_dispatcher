@@ -70,10 +70,10 @@ class Singleton(type):
 
 class myTwitch(metaclass=Singleton):
 
-    def __init__(self, dotenv_path="/home/sna/src/twitch/src/handlers/.env_twitchapi"):
+    def __init__(self, dotenv_path="/home/sna/src/twitch/.env"):
         self.dotenv_path = dotenv_path
-
-        self.dotenv_path = "/home/sna/src/twitch/src/handlers/.env_twitchapi"
+        print(f"dotenvpath: {self.dotenv_path}")
+        #self.dotenv_path = "/home/sna/src/twitch/src/handlers/.env_twitchapi"
         self.twapi_queue = asyncio.Queue()
         self.logger = logging.getLogger("twitch_REQUESTS  -->>")
         if not self.logger.hasHandlers():
@@ -206,33 +206,20 @@ class myTwitch(metaclass=Singleton):
 
     async def get_twitch_api_conn(self) -> Tuple[ Twitch, TwitchUser]:
         self.logger.debug(f"dotenv_path: {self.dotenv_path}")
-        load_dotenv("/home/sna/src/twitch/src/handlers/.env_twitchapi", override=True)
-        await asyncio.sleep(3)
-        client_id = os.getenv("TWAPI_CLIENT_ID", "ERROR_CLIENT_ID")
-#        self.logger.debug(f"client_id: {client_id}")
-        client_s = os.getenv("CLIENT_SECRET", "ERROR_CLIENT_SECRET")
- #       self.logger.debug(f"..... client_s: {client_s}")
-        #self.logger.debug(f"client_secret: {client_s}")
-        auth_base_url = os.getenv("AUTH_BASE_URL", "ERROR_AUTH_BASE_URL")
-        twitch = await Twitch(os.getenv("TWAPI_CLIENT_ID"), os.getenv("CLIENT_SECRET"))
+        auth_base_url = os.getenv("TWAPI_AUTH_BASE_URL", "ERROR_AUTH_BASE_URL")
+        twitch = await Twitch(os.getenv("TWAPI_CLIENT_ID"), os.getenv("TWAPI_CLIENT_SECRET"))
 
-        #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json")#/home/sna/src/twitch/auth_storage
-        #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)
-        #helper = UserAuthenticationStorageHelper(twitch, self.scopes, url=auth_base_url, host="localhost", port=17561)
 
-        helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)#/home/sna/src/twitch/auth_storage
+        #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)#/home/sna/src/twitch/auth_storage
+        helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path=os.getenv("TWAPI_AUTH_STORAGE_PATH"), auth_generator_func=self.auth_token_generator)
         await helper.bind()
         user = await first(twitch.get_users())
-        #self.logger.debug(f'{user}')
 
         return twitch, user
 
 
     async def create_timeout(self, user_id: int, reason: str, duration: int):
-        # 1235361075 snabotski
         self.broadcaster_id = await self.get_user_id_str("5n4fu")
-   #     self.logger.debug(f"{self.broadcaster_id}, bc_id: ")
-
         await self.twitch.ban_user(str(self.broadcaster_id), str(self.broadcaster_id), user_id, reason, duration)
     
     async def check_unfollows(self):

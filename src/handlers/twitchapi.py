@@ -72,13 +72,13 @@ class myTwitch(metaclass=Singleton):
 
     def __init__(self, dotenv_path="/home/sna/src/twitch/.env"):
         self.dotenv_path = dotenv_path
-        print(f"dotenvpath: {self.dotenv_path}")
         #self.dotenv_path = "/home/sna/src/twitch/src/handlers/.env_twitchapi"
         self.twapi_queue = asyncio.Queue()
         self.logger = logging.getLogger("twitch_REQUESTS  -->>")
         if not self.logger.hasHandlers():
             log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)
+        self.logger.debug(f"dotenvpath: {self.dotenv_path}")
         self.scopes = TARGET_SCOPES
         #self.use_cli = use_cli
         #asyncio.create_task(self.twapi_task_runner())
@@ -211,7 +211,7 @@ class myTwitch(metaclass=Singleton):
 
 
         #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)#/home/sna/src/twitch/auth_storage
-        helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path=os.getenv("TWAPI_AUTH_STORAGE_PATH"), auth_generator_func=self.auth_token_generator)
+        helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path=os.getenv("TWAPI_AUTH_STORAGE_FILE"), auth_generator_func=self.auth_token_generator)
         await helper.bind()
         user = await first(twitch.get_users())
 

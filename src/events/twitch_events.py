@@ -136,13 +136,12 @@ class TwitchEvents:
         token = await auth.mock_authenticate(self.CLI_USER_ID)
         await twitch.set_user_authentication(token,
                                              self.cli_auth_scopes)
-        self.logger.debug(f"scopes: {self.cli_auth_scopes}" )
+        #self.logger.debug(f"scopes: {self.cli_auth_scopes}" )
         user = await first(twitch.get_users())
         self.logger.debug(f"auth: {user}")
         eventsub = EventSubWebsocket(twitch,
                                     connection_url=self.TWITCH_CLI_CONNECTION_URL,
                                     subscription_url=self.TWITCH_SUBSCRIPTION_URL)
-        self.logger.debug(f"eventsub|twitch|user {type(eventsub)|type(twitch)|type(user)}")
         return eventsub, twitch, user
     
 

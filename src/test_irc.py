@@ -256,12 +256,13 @@ shutdown_event = asyncio.Event()
 async def main():
     
     load_dotenv(DOTENV_PATH)
+    logger.debug("dotenv loaded")
     my_event_subscriptions()
-    fishis = FishGame()
     flask_thread = threading.Thread(target=run_flask, daemon=True)
     flask_thread.start()
     event_timer.MultiTimerClass()
     #bait_o_meter() 
+    fishis = FishGame()
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, handle_exit)

@@ -1,4 +1,5 @@
 import os
+import json
 import math
 import random
 import logging
@@ -13,12 +14,12 @@ from utils.file_io import write_bait_counter, bait_quotes_array
 from events.obsws import set_source_visibility_wrapper
 from handlers import db_handler 
 
-MAX_SLOTS           = 18
-USER_MAX_SLOTS      = 3
+MAX_SLOTS           = os.getenv("BAIT_MAX_SLOTS", "BAIT_MAX_SLOTS")
+USER_MAX_SLOTS      = os.getenv("BAIT_USER_MAX_SLOTS","BAIT_USER_MAX_SLOTS")
 
 class RandomBaitSlotManager:
-    def __init__(self, max_slots=18):
-        self.max_slots = max_slots
+    def __init__(self, max_slots=MAX_SLOTS):
+        self.max_slots = int(os.getenv("BAIT_MAX_SLOTS", "BAIT_MAX_SLOTS"))
         self.occupied = set()
 
     def get_free_slots(self):
@@ -42,18 +43,22 @@ class RandomBaitSlotManager:
 
 
 class FishSlotManager:
+    
     def __init__(self, max_slots=MAX_SLOTS, user_max_slots=USER_MAX_SLOTS):
-        self.max_slots = max_slots
-        self.user_max_slots = user_max_slots
+        self.max_slots = int(os.getenv("BAIT_MAX_SLOTS", "BAIT_MAX_SLOTS"))
+        self.user_max_slots = int(os.getenv("BAIT_USER_MAX_SLOTS", "BAIT_USER_MAX_SLOTS"))
         self.active_slots = defaultdict(list)  # user -> [FishTask, ...]
         self.queue = Queue()
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("BAIT_SLOT_MANAGER")
+        self.logger = log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)
-        self.logger.debug("hello from FishSlotManager")
-
+        self.logger.debug(f"INIT: max_slots: {self.max_slots}, {MAX_SLOTS}")
+    
     def has_free_slot(self, user):
-        # Prüfen, ob insgesamt noch ein Slot frei UND der User < user_max_slots hat
+
+        self.logger.debug(f"has_free_slot: max_slots: {self.max_slots}, {MAX_SLOTS}")
         active_count = sum(len(tasks) for tasks in self.active_slots.values())
+        self.logger.debug(f"{type(self.max_slots)}")
         return (
             active_count < self.max_slots
             and len(self.active_slots[user]) < self.user_max_slots
@@ -81,8 +86,6 @@ class FishSlotManager:
             # Clean up wenn keine Tasks mehr für den User
             if not self.active_slots[user]:
                 del self.active_slots[user]
-        # Nächsten aus der Queue holen, falls vorhanden und möglich
-        # Wir iterieren über die Queue und nehmen den ersten, der reinpasst
         promoted = None
         for _ in range(self.queue.qsize()):
             queued_user, queued_task = self.queue.get()
@@ -113,7 +116,7 @@ class FishSlotManager:
 class FishSlotManager_:
 
     def __init__(self, max_slots=MAX_SLOTS):
-        self.max_slots = max_slots
+        self.max_slots = int(os.getenv("BAIT_MAX_SLOTS", "BAIT_MAX_SLOTS"))
         self.active_slots = {}  # user -> FishTask
         self.queue = Queue()
 
@@ -167,20 +170,15 @@ class FishSlotManager_:
 
 class FishPopulation:
 
-    #FISHIS = ["🐟", "🐠", "🐡", "🍥", "🦞", "🦐"]
-    FISHIS = ["<><", "><°>", ">3)°>", "<°(--<", ">-->>^>", "><((((º>", ">--((((‘>", "<º)))}-=><"]
-    #ZONKS = ["⚓", "🚲", "🥠", "🧦", "✂"]
-    ZONKS = ["nada niente", "nix", "nuescht", "nichts", "a 🥠","gar nix", "ueberhaupt nix", "a 🥠", "nada","⚓", "jeeebaiiiteeed","nothing", "fish poop", "empty hands", "nix", "nothing", "blub",  "🚲", "a 🥠", "🧦", "✂", "goar nix"]
-    #ZONKS = ["a 🥠","a 🥠"]
     def __init__(self, max_fish=69, max_weight=1337, min_weight=23):
-        self.max_fish = max_fish
-        self.max_weight = max_weight 
-        self.min_weight = min_weight
-        #self.population = self.create_population_with_weights(max_fish, self.min_weight, self.max_weight)
-        #self.population = self.weight_mix(self.min_weight, self.max_weight, self.max_fish)
+        self.max_fish = int(os.getenv("BAIT_TOTAL_FISHIS","BAIT_TOTAL_FISHIS"))
+        self.max_weight = int(os.getenv("BAIT_MAX_WEIGHT","BAIT_MAX_WEIGHT"))
+        self.min_weight = int(os.getenv("BAIT_MIN_WEIGHT","BAIT_MIN_WEIGHT"))
         self.population = self.distributed_random_weights(self.min_weight, self.max_weight, self.max_fish)
         random.shuffle(self.population)
         self.sorted_population = sorted(set(self.population))
+        self.ZONKS = json.loads(os.getenv("BAIT_ZONKS", "BAIT_ZONKS"))
+        self.FISHIS = json.loads(os.getenv("BAIT_FISHIS","BAIT_FISHIS"))
 
     def distributed_random_weightsix(self, min_weight: int, max_weight: int, n_slots: int) -> list:
         percentages = [0.40, 0.30, 0.15, 0.10, 0.05]
@@ -206,9 +204,8 @@ class FishPopulation:
                 weights += random.choices(available, k=count)
             else:
                 weights += random.sample(available, k=count)
-            print(sorted(set(weights)))
+            print(f"fishipool: {sorted(set(weights))})")
 
-            print(len(weights))
         weights = sorted(set(weights))
         weights[0] = min_weight
         weights[-1] = max_weight
@@ -233,24 +230,7 @@ class FishPopulation:
         weights = [69, min_weight, max_weight, 42, 1001]
 
         remaining_slots = n_slots - len(weights)
-        """
-        for i, count in enumerate(slot_counts):
-            print(f"{n_slots} weightslen: {len(weights)}")
-            if remaining_slots >= 0:
-                start = borders[i]
-                end = borders[i+1] - 1
-                if end < start:
-                    available = [start]
-                else:
-                    available = list(range(start, end + 1))
-                if count > len(available):
-                    weights += random.choices(available, k=count)
-                    remaining_slots -= 1
-                else:
-                    weights += random.sample(available, k=count)
-                    remaining_slots -= 1
-                print(sorted(set(weights)))
-        """
+
         for i, count in enumerate(slot_counts):
             if remaining_slots <= 0:
                 break
@@ -461,9 +441,7 @@ class FishGame:
         subscribe_event("obs_hangry_cat", self.on_obs_hangry_cat)
         subscribe_event("fishis_left", self.on_fishis_left)
 
-        self.logger.debug("---------------------->init success")
         self.init_bait_quotes()
-        self.logger.debug(f"---------------------->init success {type(self.bait_quotes)}")
 
     def end_bait(self):
         # -> stats in DB schreiben
@@ -476,11 +454,9 @@ class FishGame:
     def set_stream_online(self, event_data):
         value = event_data.get("event_data")
         self.stream_online = value
-        self.logger.debug(f"set_strea_online: event_data:{event_data}")
-        self.logger.debug(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa set_stream_online: {self.stream_online}")
+        self.logger.debug(f"set_stream_online: event_data:{event_data}")
 
     def on_bait(self, user):
-        self.logger.debug(f"######################################################type(user){type(user)} ; {user}")
         task = FishTask(user)
         got_slot = self.slots.add_task(user, task)
         if got_slot:
@@ -495,10 +471,7 @@ class FishGame:
             self.logger.info(f"{user} wait {delay:.1f}")
             timer = threading.Timer(delay, self.process_task, args=(user, task))
             timer.start()
-            # TODO OBS EVENT_BASED...... refactor in refactor
-            #set_source_visibility_wrapper("fishers", slot_text, True)
             post_event("obs_set_source_visibility", {"event_type": "obs_set_source_visibility", "event_data":{"scene_name": "fishers", "source_name": slot_text, "visible": True}})
-            # TODO REMOVE
             fishing_slots_obs_path = os.getenv("FISHING_SLOTS_OBS_PATH", "error in os.getenv FISHING_SLOTS_OBS_PATH") 
             filename = fishing_slots_obs_path + slot_text + ".txt"
             file_io.write_file(filename, "w", user)
@@ -565,7 +538,6 @@ class FishGame:
 
             #set_source_visibility_wrapper("fishers", task.slot_text, False)
             post_event("obs_set_source_visibility", {"event_type": "obs_set_source_visibility", "event_data":{"scene_name": "fishers", "source_name": task.slot_text, "visible": False}})
-            # TODO REMOVE
             fishing_slot_obs_display_name_path = os.getenv("FISHING_SLOT_OBS_DISPLAY_NAME_PATH", "error in os.getenv FISHING_SLOT_OBS_DISPLAY_NAME_PATH")
             f = fishing_slot_obs_display_name_path + task.slot_text + ".txt"
             self.logger.debug(f"fishing_slot_namepath: {fishing_slot_obs_display_name_path}")
@@ -576,7 +548,6 @@ class FishGame:
             self.logger.debug(f"bait_hist_file: {bait_history_file} msg_obs: {msg_obs}")
             file_io.write_file(bait_history_file, "a", msg_obs)
         
-        self.logger.debug(f"before send msg: stream_online: {self.stream_online}")
         self.logger.debug(f"fishi: {fish}")
         if not self.stream_online:
             if fish == "a 🥠":
@@ -619,9 +590,7 @@ class FishGame:
             delay = random.uniform(10,66)
             self.logger.info(f"{user} wait {delay:.1f}")
 
-            # TODO OBS EVENT_BASED...... refactor in refactor
             set_source_visibility_wrapper("fishers", slot_text, True)
-            # TODO REMOVE
             filepath = os.getenv("FISHING_SLOTS_OBS_PATH", "error in os.getenv FISHING SLOTS OBS_PATH")
             f = filepath + next_task.slot_text + ".txt"
             #f = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{next_task.slot_text}.txt"
@@ -705,7 +674,6 @@ class FishStats:
 
             x = f"{self.total_baits}"
             write_bait_counter(x)
-            # TODO top bait file finden
             self.user_total_baits[user]+=1
             if gramm > 0:
                 self.user_catch_count[user] += 1
@@ -963,7 +931,6 @@ class FishStats:
             # top weight catches
             top3 = self.top_catches_sorted_by_gramm(3)
             top_weight_str = "{ " + ", ".join(f'"{user}": {gramm}' for user, gramm in top3) + " }"
-            # TODO reverse    
             # top bottom weights
             bottom3 = self.top_catches_sorted_by_gramm(3, False)
             bottom_weight_str = "{ " + ", ".join(f'"{user}": {gramm}' for user, gramm in reversed(bottom3)) + " }"

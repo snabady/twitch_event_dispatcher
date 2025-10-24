@@ -6,7 +6,6 @@ from twitchAPI.helper import first
 from twitchAPI.type import TwitchBackendException
 from typing import Tuple, Optional
 import os
-from dotenv import load_dotenv, find_dotenv
 from typing import Union, cast
 from utils import log
 from dispatcher.event_dispatcher import post_event
@@ -28,17 +27,14 @@ class TwitchEvents:
     eventsub: Optional[EventSubWebsocket]   = None
     user: Optional[TwitchUser]              = None
 
-    def __init__(self, dotenv_path: str, use_cli: bool):
+    def __init__(self, use_cli: bool):
         self.use_cli_conn = use_cli
-        load_dotenv(dotenv_path=dotenv_path)
-        
         if not use_cli:
-            self.logger = logging.getLogger("** TWITCH EVENT_SUB **")
+            self.logger = logging.getLogger("TWITCH EVENT_SUB")
         else:
-            self.logger = logging.getLogger("** TWITCH CLI trigger **")
+            self.logger = logging.getLogger("TWITCH CLI")
         self.log = add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)      
-        self.logger.info(f"dotenv-file initialized: {dotenv_path}")
         self.logger.debug(f"use_cli: {use_cli}")
         self.use_cli_conn = use_cli
         self.event_mapping = self.get_eventmap()
@@ -46,9 +42,7 @@ class TwitchEvents:
         self.live_auth_scope = TARGET_SCOPES
         self.cli_auth_scopes = CLI_SCOPES
         
-        self.dotenv_path = dotenv_path
         self.event_map = self.get_eventmap()
-        #load_dotenv(dotenv_path=self.dotenv_path)
 
         self.channelpoint_rewards = self.init_active_channelpoint_rewards()
         self.live_auth_scope = TARGET_SCOPES
@@ -67,7 +61,6 @@ class TwitchEvents:
             self.eventsub, self.twitch, self.user = await self.climockingConn()
         else:
             self.logger.debug("__aenter__ live - setting up eventsub")
-            load_dotenv(dotenv_path=self.dotenv_path)
             self.eventsub, self.twitch, self.user = await self.prodConn()
         self.eventsub.start()
         return self
@@ -84,12 +77,7 @@ class TwitchEvents:
         loads the .env variables
         adjust variables in .env File 
         """
-        load_dotenv(dotenv_path=self.dotenv_path)
-        
-        #dotenv_path = find_dotenv()
-        self.logger.debug ( f"samma eye das kanns doch nicht sein {self.dotenv_path}" )
         if self.use_cli_conn:
-            #load_dotenv("/home/sna/src/twitch/src/events/.env_twitch_events", override=True)
             self.TWITCH_CLI_MOCK_API_URL    = os.getenv("TWITCH_CLI_MOCK_API_URL", "BASE_URL not found") 
             self.AUTH_BASE_URL              = os.getenv("AUTH_BASE_URL", "BASE_URL not found")
             self.TWITCH_CLI_CONNECTION_URL  = os.getenv("TWITCH_CLI_CONNECTION_URL", "BASE_URL not found")
@@ -99,8 +87,6 @@ class TwitchEvents:
             self.CLI_CLIENTID               = os.getenv("CLI_CLIENTID", "CLI_ID not found")
             
         else:
-            load_dotenv("../../.env")
-            #load_dotenv("/home/sna/src/twitch/src/events/.env_twitch_events", override=True)
             self.CLIENT_ID          = os.getenv("LIVE_CLIENT_ID", "LIVE_CLIENT_ID not found")
             self.CLIENT_S           = os.getenv("LIVE_CLIENT_SECRET", "LIVE_CLIENT_SECRET not found")
 

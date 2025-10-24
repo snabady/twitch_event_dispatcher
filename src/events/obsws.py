@@ -3,7 +3,6 @@ import os
 import asyncio
 import json
 import simpleobsws
-from dotenv import load_dotenv
 from utils import log
 from dispatcher.event_dispatcher import post_event, subscribe_event
 from simpleobsws import enum as enums
@@ -21,7 +20,6 @@ def set_source_visibility_wrapper(scene_name, source_name, visible):
     
 #    logger.debug(f'scene_name: {scene_name}\tsource_name: {source_name}\tvisible: {visible}')
     async def runner():
-        #logger.debug ("############# ----------> OBS set_source_visibility_wrapper")
         obs = Obsws()
         scene_item_id = await obs.get_scene_item_id(scene_name, source_name)        
         await obs.set_source_visibility(scene_name, scene_item_id, not visible)
@@ -31,14 +29,12 @@ def set_source_visibility_wrapper(scene_name, source_name, visible):
     Obsws().enqueue(runner())#.put_nowait(runner())
 
 def switch_scene_wrapper(scene_name: str):
-    #logger.debug ("############# ----------> OBS switch_scene_wrapper")
     async def runner():
         obs = Obsws()
         await obs.switch_scene(scene_name)
     Obsws().enqueue(runner())
 
 def trigger_hotkey_by_name_wrapper(hotkey_name: str):
-    #logger.debug ("############# ----------> OBS trigger_hotkey_by_name_wrapper")
     async def runner():
         obs=Obsws()
         await obs.trigger_hotkey_by_name(hotkey_name)
@@ -55,8 +51,7 @@ class Singleton(type):
 
 class Obsws(metaclass=Singleton):
 
-    def __init__(self, dotenv_path):
-        self.dotenv_path = dotenv_path
+    def __init__(self):
         self.obs_task_queue = asyncio.Queue()
         self.ws = None
         self.logger = logging.getLogger("OBSWS")
@@ -64,6 +59,7 @@ class Obsws(metaclass=Singleton):
             log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)
         asyncio.create_task(self.obs_task_worker())
+        self.logger.debug("Hello from obsws")
         #asyncio.create_task(self.subscribe_events())
         self.stream_online = False
         subscribe_event("obs_set_source_visibility", self.obs_set_source_visibility)
@@ -84,24 +80,17 @@ class Obsws(metaclass=Singleton):
         loads the .env variables
         adjust variables in .env File 
         """
-        load_dotenv(self.dotenv_path)
-        self.host       = os.getenv("HOST", "could not receive HOST .env") 
-        self.port       = os.getenv("PORT", "could not receive PORT .env")
-        self.password   = os.getenv("PASSWORD", "nope password, .env")
-        self.obsurl     = os.getenv("OBSURL", "nope obs-url .env")
-        self.obs_url = "ws://" + str(self.host) + ":" + str(self.port)
-        self.obs_url = "ws://127.0.0.1:4455"
+        self.obs_url     = os.getenv("OBSWS_URL", "nope obs-url .env")
+        #self.obs_url = "ws://" + str(self.host) + ":" + str(self.port)
+        #self.obs_url = "ws://127.0.0.1:4455"
         
-        self.password = "UNVuZ2EwaXjvTzcQ"
-        self.logger.debug(self.obs_url)
+        self.password = os.getenv("OBSWS_PASSWORD", "OBSWS_PASSWORD")
 
     async def obs_task_worker(self):
         while True:
-#            self.logger.debug("taskworker working :D")
-            #if self.obs_task_queue.qsize() > 0:
             task_coro_func = await self.obs_task_queue.get()
             try:
-                await task_coro_func# Execute the coroutine
+                await task_coro_func
             except Exception as e:
                 print(f"OBS_TASK_WORKER {e}")
             finally:
@@ -214,7 +203,6 @@ class Obsws(metaclass=Singleton):
             await self.set_source_visibility("ALERTS","raid_overlay", False)
 
     async def sna():    
-        load_dotenv(override=True)
         setEnv()
         self.ws = await init_obswebsocket_ws()
         await asyncio.Future()

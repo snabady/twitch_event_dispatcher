@@ -12,11 +12,9 @@ from utils import file_io
 from utils.file_io import write_bait_counter, bait_quotes_array
 from events.obsws import set_source_visibility_wrapper
 from handlers import db_handler 
-from dotenv import load_dotenv
 
 MAX_SLOTS           = 18
 USER_MAX_SLOTS      = 3
-
 
 class RandomBaitSlotManager:
     def __init__(self, max_slots=18):
@@ -446,7 +444,6 @@ class FishGame:
         self.logger = logging.getLogger("BAIT_GAME")
         self.logger = log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)   
-        load_dotenv("../../.env")
         self.stream_online = False
         
         # Registriere Event-Handler
@@ -504,7 +501,6 @@ class FishGame:
             # TODO REMOVE
             fishing_slots_obs_path = os.getenv("FISHING_SLOTS_OBS_PATH", "error in os.getenv FISHING_SLOTS_OBS_PATH") 
             filename = fishing_slots_obs_path + slot_text + ".txt"
-            filename = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{slot_text}.txt"
             file_io.write_file(filename, "w", user)
         else:
             pos = self.slots.get_queue_position(user)
@@ -572,14 +568,12 @@ class FishGame:
             # TODO REMOVE
             fishing_slot_obs_display_name_path = os.getenv("FISHING_SLOT_OBS_DISPLAY_NAME_PATH", "error in os.getenv FISHING_SLOT_OBS_DISPLAY_NAME_PATH")
             f = fishing_slot_obs_display_name_path + task.slot_text + ".txt"
-            #f = f"/home/sna/src/twitch-irc/obs_websocket/fishers/{task.slot_text}.txt"
             self.logger.debug(f"fishing_slot_namepath: {fishing_slot_obs_display_name_path}")
             file_io.write_file(f, "w", "")#??
             
             self.bait_slot_manager.release_slot(task.slot_text)
             bait_history_file = os.getenv("BAIT_HISTORY_FILE", "error in os.getenv BAIT_HISTORY_FILE")
             self.logger.debug(f"bait_hist_file: {bait_history_file} msg_obs: {msg_obs}")
-            #file_io.write_file("/home/sna/5n4fu_stream/obs_files/fishis/bait_history.txt", "a", msg_obs)
             file_io.write_file(bait_history_file, "a", msg_obs)
         
         self.logger.debug(f"before send msg: stream_online: {self.stream_online}")

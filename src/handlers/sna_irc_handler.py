@@ -1,3 +1,4 @@
+import os
 import random
 import requests
 import logging
@@ -80,7 +81,7 @@ def handle_chat_command(e_data):
         post_event("irc_send_message", c_vips)
     
     elif event_data.name == "sna":
-        run_xcowsay("/home/sna/5n4fu_stream/media/img/sna.png", event_data.text.replace("!sna","",1), 15, 0, False)
+        run_xcowsay(os.getenv("XCOWSAY_SNA"), event_data.text.replace("!sna","",1), 15, 0, False)
     elif event_data.name == "refresh":
         post_event("get_score_chart_values", "blub")
     elif event_data.name == "tts":
@@ -136,11 +137,9 @@ def handle_flash_event(event_data, irc_instance):
     update_flash_counter(1)
 
 def handle_bobr_event(event_data, irc_instance):
-    #run_mpv("/home/sna/5n4fu_stream/media/vids/bobr_marley.webm", 50)
-
     requests.get("http://localhost:8000/play?sound=webm/bobr.webm") 
+
 def handle_lightning_event(event_data, irc_instance):
-    #asyncio.run_coroutine_threadsafe(write_chat_msg("KEKW lego", irc_instance), loop)
     post_event("irc_send_message", "KEKW")
 
 def handle_hungry_event(event_data, irc_instance):

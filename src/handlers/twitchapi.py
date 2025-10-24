@@ -2,7 +2,6 @@ import os
 from collections import defaultdict 
 import logging
 import asyncio
-from dotenv import load_dotenv, find_dotenv
 from typing import Tuple, Optional,List
 from twitchAPI.helper import first
 from twitchAPI.type import AuthScope
@@ -70,25 +69,20 @@ class Singleton(type):
 
 class myTwitch(metaclass=Singleton):
 
-    def __init__(self, dotenv_path="/home/sna/src/twitch/.env"):
-        self.dotenv_path = dotenv_path
-        #self.dotenv_path = "/home/sna/src/twitch/src/handlers/.env_twitchapi"
+    def __init__(self):
         self.twapi_queue = asyncio.Queue()
-        self.logger = logging.getLogger("twitch_REQUESTS  -->>")
+        self.logger = logging.getLogger("TWAPI_REQUESTS  -->>")
         if not self.logger.hasHandlers():
             log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)
-        self.logger.debug(f"dotenvpath: {self.dotenv_path}")
         self.scopes = TARGET_SCOPES
-        #self.use_cli = use_cli
-        #asyncio.create_task(self.twapi_task_runner())
-        subscribe_event("trigger_get_user_profile_imgs", trigger_get_user_profile_imgs)
         self.broadcaster_id = None
         self.current_vips = None
         self.session_unfollowed_user_ids = defaultdict(int)
-        subscribe_event("stream_online_event", self.set_stream_online)
         self.is_stream_online = False
 
+        subscribe_event("stream_online_event", self.set_stream_online)
+        subscribe_event("trigger_get_user_profile_imgs", trigger_get_user_profile_imgs)
     async def __aenter__(self):
         self.twitch, self.user = await self.get_twitch_api_conn()
         #asyncio.create_task(self.twapi_task_runner())
@@ -205,12 +199,8 @@ class myTwitch(metaclass=Singleton):
         return token, refresh_token
 
     async def get_twitch_api_conn(self) -> Tuple[ Twitch, TwitchUser]:
-        self.logger.debug(f"dotenv_path: {self.dotenv_path}")
         auth_base_url = os.getenv("TWAPI_AUTH_BASE_URL", "ERROR_AUTH_BASE_URL")
         twitch = await Twitch(os.getenv("TWAPI_CLIENT_ID"), os.getenv("TWAPI_CLIENT_SECRET"))
-
-
-        #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path="/home/sna/src/twitch-irc/auth_storage/snarequests.json", auth_generator_func=self.auth_token_generator)#/home/sna/src/twitch/auth_storage
         helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path=os.getenv("TWAPI_AUTH_STORAGE_FILE"), auth_generator_func=self.auth_token_generator)
         await helper.bind()
         user = await first(twitch.get_users())
@@ -225,11 +215,8 @@ class myTwitch(metaclass=Singleton):
     async def check_unfollows(self):
         await self.get_followers()
         query="SELECT f.user_id, u.user_name FROM followerlist f left join twitch_users u on f.user_id=u.user_id LEFT JOIN current_followers c ON f.user_id = c.user_id where c.user_id is null"
-        #result = db_handler.execute_query("SELECT f.user_id, f.user_name FROM followerlist f LEFT JOIN current_followers c ON f.user_id = c.user_id WHERE c.user_id IS NULL", None) 
         result = db_handler.execute_query(query, None)
-        #result = db_handler.execute_query("select  u.user_id , u.user_name from twitch_users u right join unfollowed_users c on u.user_name=c.user_name", None) # debug query
         self.logger.debug(f"unfollows: {result}")
-        #result = [[102784092, "teekay84"]] # debug for one
         for user in result:
             unfollow_user_id = user[0]
             unfollow_user_name = user[1]

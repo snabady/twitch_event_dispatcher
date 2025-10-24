@@ -117,9 +117,7 @@ def append_ids(cli_ids, test_ids):
     return cli_ids
 
 async def cli_twitch_listen():
-    # TODO REMOVE
-    async with twitch_events.TwitchEvents(dotenv_path= DOTENV_PATH, use_cli=True) as tevents:
-    #async with twitch_events.TwitchEvents(dotenv_path= "/home/sna/src/twitch/src/events/.env_twitch_events", use_cli=True) as tevents:
+    async with twitch_events.TwitchEvents( use_cli=True) as tevents:
         try:
             cli_ids = {}
             test_ids = await tevents.listen_subscribe_events()
@@ -161,10 +159,7 @@ async def cli_twitch_listen():
             logger.debug("cu later...")
 
 async def twitch_listen_live():
-    # TODO REMOVE
-    async with twitch_events.TwitchEvents(dotenv_path=DOTENV_PATH, use_cli=False) as tevents:
-        #async with twitch_events.TwitchEvents(dotenv_path= "/home/sna/src/twitch/src/events/.env_twitch_events", use_cli=False) as tevents:
-        logger.debug (f"dotenv_path: ")
+    async with twitch_events.TwitchEvents(use_cli=False) as tevents:
         try:
             print (type(tevents))
             test_ids = await tevents.listen_subscribe_events()
@@ -194,12 +189,12 @@ async def twitch_listen_live():
 
 async def obs_listen():
 
-    obs = obsws.Obsws(DOTENV_PATH)
+    obs = obsws.Obsws()
     await obs.init_obswebsocket_ws()
     logger.debug(obs)
 
 async def irc_listen():
-    sna = twitch_irc_events.Irc("../.env")
+    sna = twitch_irc_events.Irc()
     task1 = asyncio.create_task( sna.run())
     try:
             asyncio.gather(task1)
@@ -207,7 +202,7 @@ async def irc_listen():
         logger.debug("irc_listen graceful end")
 
 async def tapi_listen():
-    async with twitchapi.myTwitch(DOTENV_PATH) as twitch_instance:
+    async with twitchapi.myTwitch() as twitch_instance:
 
         asyncio.create_task(twitch_instance.twapi_task_runner())
         global_rewards_manager = custom_rewards_manager.ChannelPointManager(twitch_instance) 
@@ -259,6 +254,8 @@ def handle_exit(*args):
 shutdown_event = asyncio.Event()
 
 async def main():
+    
+    load_dotenv(DOTENV_PATH)
     my_event_subscriptions()
     fishis = FishGame()
     flask_thread = threading.Thread(target=run_flask, daemon=True)

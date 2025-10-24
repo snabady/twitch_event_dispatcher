@@ -7,11 +7,6 @@ logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
 import os
-from dotenv import load_dotenv 
-env_file_path = "/home/sna/src/twitch/src/handlers/snafu/.env_snafu_handlers"
-
-load_dotenv(env_file_path)
-    
 
 def handle_channel_subscribe(event):
     logger.debug ("handle_channel_subscribe")
@@ -27,8 +22,6 @@ def handle_channel_subscribe(event):
     tier = event_data["tier"]
     is_gift = event_data["is_gift"]
     gather_task = GatherTasks()
-    
-    write_file("/home/sna/5n4fu_stream/data/sna_event.txt", "a", "handle_channel subscribe")
     logger.debug(f"is_gift: {is_gift}")
     if is_gift:
         msg = f"{user_name} hat nen sub geschenkt bekommen! welcome!"
@@ -70,7 +63,6 @@ def channel_subscription_grift(event):
     total = event_data["total"]
     gather_task = GatherTasks()
     msg = f"{user_name} "
-    write_file("/home/sna/5n4fu_stream/data/sna_event.txt", "a", msg)
     gather_task.add_task(lambda: run_tts(msg))
     msg = f'{user_name} hat gerade {total} sub(s) verschenkt!'
     gather_task.add_task(lambda: run_xcowsay(os.getenv("SNAAA"), msg, 20, 0, False))     
@@ -94,7 +86,6 @@ def channel_subscription_message(event):
     #{'text': 'Hello from the Twitch CLI! twitchdevLeek', 'emotes': [{'begin': 26, 'end': 39, 'id': '304456816'}]}
     gather_task = GatherTasks()
     msg = f'{user_name} hat gesubbt ! Danke!'
-    write_file("/home/sna/5n4fu_stream/data/sna_event.txt", "a", msg)
     gather_task.add_task(lambda: run_xcowsay(os.getenv("SNAAA") ,msg, 20, 0, False))     
     msg = f"{user_name} danke fuer deinen sub"
     gather_task.add_task(lambda: run_tts(msg))

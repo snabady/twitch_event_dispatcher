@@ -123,7 +123,7 @@ def handle_reward_redemption_add (event: dict):
         gather_task = run_command.GatherTasks()
 
         gather_task.add_task(lambda: run_mpv(fpath+mpv_file, "100",True ))
-        gather_task.add_task(lambda: write_file("/home/sna/5n4fu_stream/data/slap_command.txt", "w", slap_txt))
+        gather_task.add_task(lambda: write_file(os.getenv("SLAP_COMMAND_TXT"), "w", slap_txt))
         gather_task.add_task(lambda: post_event("obs_set_source_visibility",slap_data))
         gather_task.run_tasks()
 

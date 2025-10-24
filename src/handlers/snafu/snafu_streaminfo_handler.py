@@ -35,7 +35,6 @@ def handle_stream_online(event: dict):
     obsws.trigger_hotkey_by_name_wrapper("timer_start_hotkey")
     post_event("set_stream_online", {"event_type": "set_stream_online", "event_data": True})
     obsws.stream_online = True
-    write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.online event\n")
     post_event("stream_online_event", event_data)
     msg = f"5n4fu is now live!  {datetime.datetime.now()} "
     post_event("irc_send_message", msg)
@@ -57,7 +56,6 @@ def handle_stream_offline(event: dict):
     # stats schreiben
     post_event("set_stream_online", {"event_type": "set_stream_online", "event_data": False})
     logger.debug("WE DID IT ")
-    write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.offline event\n")
     post_event("stream_offline_event", event_data)    
     post_event("stream_online_event", False)
     msg = "5n4fu is now offline. so long and thanks for all the fish.."
@@ -92,7 +90,6 @@ def handle_channel_update_v2(event: dict):
 
     msg =f"streamtitle is now: {event_data.get("title")}"
     post_event("irc_send_message", msg)
-    write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.update event\n")
     logger.debug("WE DID IT ")
     
 def hanlde_channel_update(event: dict):
@@ -111,6 +108,4 @@ def hanlde_channel_update(event: dict):
     
     msg =f"streamtitle changed to: {event_data.get("title")}"
     post_event("irc_send_message", msg)
-    write_file("/home/sna/5n4fu_stream/data/sna_events.txt", "a","received channel.update event\n")
-    logger.debug("WE DID IT ")
     

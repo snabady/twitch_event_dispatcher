@@ -13,7 +13,6 @@ import sys
 import os
 import logging
 import asyncio
-from dotenv import load_dotenv
 import logging
 from utils import log
 from dispatcher.event_dispatcher import post_event, subscribe_event
@@ -48,8 +47,7 @@ class Singleton(type):
 
 class Irc(metaclass=Singleton):
 
-    def __init__(self, dotenv_path):
-        self.dotenv_path        = dotenv_path
+    def __init__(self):
         self.logger             = logging.getLogger("IRC_BOT")
         if not self.logger.hasHandlers():
             log.add_logger_handler(self.logger)
@@ -79,7 +77,6 @@ class Irc(metaclass=Singleton):
         self.load_dotenv_variables()
         self.last_now_playing = ""
         self.current_vips = None
-        self.logger.debug(f"dotenvpath initialized: {self.dotenv_path}")
         self.stream_stats_data = stream_stats.ChatStats()
 
 
@@ -89,7 +86,6 @@ class Irc(metaclass=Singleton):
         self.stream_online = value
     
     def load_dotenv_variables(self):
-        load_dotenv(self.dotenv_path, override=True)
         self.client_name        = os.getenv("IRC_BOT_USERNAME", "could not get IRC_BOT_USERNAME os.getenv()")
         self.client_id          = os.getenv("IRC_BOT_CLIENT_ID", "could not get IRC_BOT_client_id os.getenv()")
         self.client_secret      = os.getenv("IRC_BOT_CLIENT_SECRET", "could not get client secret os.getenv()")

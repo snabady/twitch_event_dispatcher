@@ -191,7 +191,10 @@ class Irc(metaclass=Singleton):
         for x in self.cmd_list:
             self.logger.debug(f"irc_command: {x[0]}, {x}")
             self.chat.register_command(x[0], partial(self.dispatch_event, "IRC_COMMAND"))
-        self.current_vips = db_handler.execute_query("select user_name, user_id from special_users where is_vip = 1", None)
+        query = "select t.user_name, s.user_id from special_users as s  left join twitch_users as t on s.user_id = t.user_id where s.is_vip=1"
+        #self.current_vips = db_handler.execute_query("select user_id from special_users where is_vip = 1", None)
+        self.current_vips =db_handler.execute_query(query, None)
+        self.logger.debug(self.current_vips)
         self.chat.start()
         try:
             while True:

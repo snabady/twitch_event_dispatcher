@@ -1,3 +1,4 @@
+import os
 import mysql.connector
 import logging
 import datetime
@@ -19,11 +20,17 @@ logger.setLevel(logging.DEBUG)
         }"""
 
 def get_db_conn():
+
+    host_=os.getenv("DB_HOST")
+    user_=os.getenv("DB_USER")
+    passw_=os.getenv("DB_PASS")
+    database_=os.getenv("DB_DATABASE")
+    print (host_,user_,passw_,database_)
     conn =  mysql.connector.connect(
-        host="192.168.0.177",      
-        user="root",  
-        password="snablah",
-        database="twitch"
+        host=host_,      
+        user=user_,  
+        password=passw_,
+        database=database_
     )
     return conn
 
@@ -250,7 +257,7 @@ def update_current_vips(vips: list):
             FROM twitch_users u
             WHERE u.user_id = %s
         """
-        cursor.execute(query, [ x.user_login, x.user_name, x.user_id, datetime.now()])
+        cursor.execute(query, [ x.user_login, x.user_name,  datetime.now(),x.user_id])
         print(f"{cursor.statement}")
     conn.commit()
     cursor.close()

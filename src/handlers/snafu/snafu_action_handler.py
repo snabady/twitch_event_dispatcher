@@ -61,7 +61,7 @@ def handle_channel_follow(event: dict):
 
     query=f"select * from unfollow_events where user_id = {user_id}"
     result = db_handler.execute_query(query, None)
-    if result != -1: # refollow!
+    if len(result)>0: # refollow!
         irc_text = f"creepy a refollow from {user_name}"
         alert_image = os.getenv("ALERTS", "schimpf")+"img/raid.png"
         gather_tasks.add_task(lambda: run_xcowsay(alert_image, f"{user_name} refollowed..",20, os.getenv("STREAM_MONITOR")) ) 

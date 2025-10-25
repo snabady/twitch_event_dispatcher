@@ -1,9 +1,12 @@
+DOTENV_PATH="/home/sna/src/twitch/.env"
+from dotenv import load_dotenv
+load_dotenv(DOTENV_PATH)
+
 import threading
 import os
 import asyncio
 import logging
 import time
-from dotenv import load_dotenv
 import signal
 from events import twitch_events,obsws, event_timer
 from dispatcher.event_dispatcher import subscribe_event, post_event
@@ -12,7 +15,6 @@ import  handlers.obsws_handler as obsws_handler
 import handlers.stream_stats as stream_stats
 import handlers.twitchapi_handler as twitchapi_handler
 import handlers.sna_irc_handler as sna_irc_handler
-from  handlers import db_handler
 from handlers import asciiquarium
 from handlers import twitchapi
 from utils.run_command import run_subprocess, trigger_event_board, download_twitch_emote, trigger_ascii_rain
@@ -26,14 +28,16 @@ from scripte.bait_o_meter import ThresholdAccumulatorSync
 from events import twitch_irc_events
 from handlers import custom_rewards_manager 
 
+from  handlers import db_handler
 logger = logging.getLogger("MAINLOOP")
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.INFO)   
 
-DOTENV_PATH="/home/sna/src/twitch/.env"
+
 
 def my_event_subscriptions():
-    
+        
+    load_dotenv(DOTENV_PATH)
     # section IRC_BOT
     subscribe_event("IRC_COMMAND",              sna_irc_handler.handle_chat_command )
     subscribe_event("IRC_JOINED",               sna_irc_handler.handle_irc_joined )
@@ -207,6 +211,7 @@ async def tapi_listen():
         asyncio.create_task(twitch_instance.twapi_task_runner())
         global_rewards_manager = custom_rewards_manager.ChannelPointManager(twitch_instance) 
         print(f"Angemeldeter Nutzer: {twitch_instance.user.display_name}")
+        await twitch_instance.get_vipsis()
         #rewards_manager = ChannelPointsManager(twitch_instance)
         #await twitch_instance.twapi_task_runner()
         x=0
@@ -255,8 +260,6 @@ shutdown_event = asyncio.Event()
 
 async def main():
     
-    load_dotenv(DOTENV_PATH)
-    logger.debug("dotenv loaded")
     my_event_subscriptions()
     flask_thread = threading.Thread(target=run_flask, daemon=True)
     flask_thread.start()
@@ -290,5 +293,6 @@ async def main():
 #        flask_thread.stop()
         fishis.end_bait()
 if __name__ == "__main__":
+    logger.debug(f"dotenv loaded: {DOTENV_PATH}")
     asyncio.run(main())
 

@@ -20,8 +20,6 @@
 !_TAG_KIND_DESCRIPTION!HTML	i,heading2	/H2 headings/
 !_TAG_KIND_DESCRIPTION!HTML	j,heading3	/H3 headings/
 !_TAG_KIND_DESCRIPTION!HTML	t,title	/titles/
-!_TAG_KIND_DESCRIPTION!Iniconf	k,key	/keys/
-!_TAG_KIND_DESCRIPTION!Iniconf	s,section	/sections/
 !_TAG_KIND_DESCRIPTION!JSON	a,array	/arrays/
 !_TAG_KIND_DESCRIPTION!JSON	b,boolean	/booleans/
 !_TAG_KIND_DESCRIPTION!JSON	n,number	/numbers/
@@ -62,7 +60,6 @@
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
 !_TAG_OUTPUT_VERSION	1.1	/current.age/
 !_TAG_PARSER_VERSION!HTML	0.0	/current.age/
-!_TAG_PARSER_VERSION!Iniconf	0.0	/current.age/
 !_TAG_PARSER_VERSION!JSON	0.0	/current.age/
 !_TAG_PARSER_VERSION!JavaScript	1.1	/current.age/
 !_TAG_PARSER_VERSION!Markdown	1.1	/current.age/
@@ -87,7 +84,7 @@
 !_TAG_ROLE_DESCRIPTION!Python!unknown	indirectlyImported	/classes\/variables\/functions\/modules imported in alternative name/
 !_TAG_ROLE_DESCRIPTION!Sh!heredoc	endmarker	/end marker/
 !_TAG_ROLE_DESCRIPTION!Sh!script	loaded	/loaded/
-0	test/siegerehrung/podiumData.json	/^{ "name": "ZermalmerDoc", "points": 26, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	o
+0	test/siegerehrung/podiumData.json	/^{ "name": "Legomen68", "points": 28, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\//;"	o
 0	utils/preset_wled.json	/^        "seg": [{$/;"	o	array:ps.14.win.seg
 0	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 0	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	n	array:seg.0.i.0
@@ -884,7 +881,7 @@
 0	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	n	array:seg.0.i.8
 0	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	n	array:seg.0.i.9
 0	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	o	array:seg
-1	test/siegerehrung/podiumData.json	/^{ "name": "Propz_tv", "points": 8, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/b9/;"	o
+1	test/siegerehrung/podiumData.json	/^{ "name": "5n4fu", "points": 34, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/412c/;"	o
 1	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 1	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	n	array:seg.0.i.0
 1	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	n	array:seg.0.i.1
@@ -1799,7 +1796,7 @@
 197	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 198	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 199	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
-2	test/siegerehrung/podiumData.json	/^{ "name": "stuttvoll", "points": 17, "img": "https:\/\/static-cdn.jtvnw.net\/user-default-pictur/;"	o
+2	test/siegerehrung/podiumData.json	/^{ "name": "snabady", "points": 22, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/71/;"	o
 2	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 2	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	n	array:seg.0.i.0
 2	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	n	array:seg.0.i.1
@@ -2706,7 +2703,6 @@
 297	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 298	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 299	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
-3	test/siegerehrung/podiumData.json	/^{ "name": "WANDELSTUDIOS", "points": 2, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	o
 3	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 3	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	a	array:seg.0.i
 30	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
@@ -2819,7 +2815,6 @@
 397	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 398	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 399	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
-4	test/siegerehrung/podiumData.json	/^{ "name": "my_kill_buzz", "points": 20, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	o
 4	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 4	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	a	array:seg.0.i
 40	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
@@ -2932,7 +2927,6 @@
 497	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 498	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 499	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
-5	test/siegerehrung/podiumData.json	/^{ "name": "Legomen68", "points": 5, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/c/;"	o
 5	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 5	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	a	array:seg.0.i
 50	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
@@ -3045,7 +3039,6 @@
 597	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 598	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 599	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
-6	test/siegerehrung/podiumData.json	/^{ "name": "Fluffiy_", "points": 6, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/1f/;"	o
 6	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 6	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	a	array:seg.0.i
 60	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
@@ -3158,7 +3151,6 @@
 697	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 698	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 699	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
-7	test/siegerehrung/podiumData.json	/^{ "name": "KahznMakesGames", "points": 6, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictu/;"	o
 7	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
 7	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	a	array:seg.0.i
 70	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	array:seg.0.i
@@ -3289,7 +3281,6 @@ CURSOR_UP_ONE	scripte/ddptools/ddpsend.py	/^CURSOR_UP_ONE = '\\x1b[1A'   # Go to
 ChannelPointManager	custom_rewards/custom_rewards_admin.py	/^class ChannelPointManager:$/;"	c
 ChannelPointManager	handlers/custom_rewards_manager.py	/^class ChannelPointManager:$/;"	c
 ChatStats	handlers/stream_stats.py	/^class ChatStats(metaclass=Singleton):$/;"	c
-ChatStats	old/data/stream_stats_data.py	/^class ChatStats(metaclass=Singleton):$/;"	c
 DDP_DATATYPE	scripte/ddptools/ddp/ddpdevice.py	/^    DDP_DATATYPE = ((DDP_RGBTYPE << 3) & 0xff) | DDP_PIXEL24$/;"	v	class:DDPdevice
 DDP_IP	scripte/ddp_wled.py	/^DDP_IP = "192.168.0.6"$/;"	v
 DDP_IP	scripte/ddp_wled2.py	/^DDP_IP = "127.0.0.1"$/;"	v
@@ -3322,7 +3313,6 @@ FG_COLOR	scripte/ddp_wled.py	/^FG_COLOR = (255, 0, 255)  # pink \/ magenta$/;"	v
 FG_COLOR	scripte/ddp_wled2.py	/^FG_COLOR = (255, 0, 255)  # pink \/ magenta$/;"	v
 FG_COLOR	scripte/ddp_wled_3.py	/^FG_COLOR = (255, 0, 255)  # pink$/;"	v
 FG_COLOR	scripte/htttp_wled.py	/^FG_COLOR = (255, 0, 255)   # pink \/ magenta$/;"	v
-FISHIS	baitgame/bait.py	/^    FISHIS = ["<><", "><°>", ">3)°>", "<°(--<", ">-->>^>", "><((((º>", ">--((((‘>", "<º))/;"	v	class:FishPopulation
 FONT_PATH	test/sacn5.py	/^FONT_PATH = "\/home\/sna\/Downloads\/kryptonb.ttf"$/;"	v
 FONT_SIZE	test/sacn5.py	/^FONT_SIZE = 12$/;"	v
 FadeAnimation	emotes/emote_anim.py	/^class FadeAnimation(EmoteAnimation):$/;"	c
@@ -3347,14 +3337,12 @@ HEIGHT	utils/dmx_wled2.py	/^HEIGHT = 8$/;"	v
 INDICATOR	scripte/ddptools/ddprelay.py	/^INDICATOR = '\/-\\|'                      # spining indicator chars$/;"	v
 INDICATOR	scripte/ddptools/ddpsend.py	/^INDICATOR = '\/-\\|'                      # spining indicator chars$/;"	v
 Irc	events/twitch_irc_events.py	/^class Irc(metaclass=Singleton):$/;"	c
-Irc	old/irc_events.py	/^class Irc(metaclass=Singleton):$/;"	c
 LED_COUNT	utils/ddp_wled.py	/^LED_COUNT = 768$/;"	v
 Letter Rain Overlay	scripte/letterrain/templates/letterrain.html	/^    <title>Letter Rain Overlay<\/title>$/;"	j
 MATRIX_HEIGHT	test/sacn5.py	/^MATRIX_HEIGHT = 8$/;"	v
 MATRIX_WIDTH	test/sacn5.py	/^MATRIX_WIDTH = 96$/;"	v
-MAX_SLOTS	baitgame/bait.py	/^MAX_SLOTS           = 18$/;"	v
+MAX_SLOTS	baitgame/bait.py	/^MAX_SLOTS           = os.getenv("BAIT_MAX_SLOTS", "BAIT_MAX_SLOTS")$/;"	v
 MultiTimerClass	events/event_timer.py	/^class MultiTimerClass:$/;"	c
-MultiTimerClass	old/event_timer.py	/^class MultiTimerClass:$/;"	c
 NUM_LEDS	utils/dmx_wled.py	/^NUM_LEDS = WIDTH * HEIGHT    # 768$/;"	v
 NUM_LEDS	utils/dmx_wled2.py	/^NUM_LEDS = WIDTH * HEIGHT    # 768$/;"	v
 OUTPUT_PATH	scripte/utils/templateMgr.py	/^    OUTPUT_PATH = "\/home\/snafu\/src\/twitch-irc\/curses\/test.txt"$/;"	v	class:TemplateManager
@@ -3380,8 +3368,6 @@ Singleton	events/obsws.py	/^class Singleton(type):$/;"	c
 Singleton	events/twitch_irc_events.py	/^class Singleton(type):$/;"	c
 Singleton	handlers/stream_stats.py	/^class Singleton(type):$/;"	c
 Singleton	handlers/twitchapi.py	/^class Singleton(type):$/;"	c
-Singleton	old/data/stream_stats_data.py	/^class Singleton(type):$/;"	c
-Singleton	old/irc_events.py	/^class Singleton(type):$/;"	c
 Singleton	utils/wled.py	/^class Singleton(type):$/;"	c
 TARGET_IP	test/sacn5.py	/^TARGET_IP = "192.168.0.6"$/;"	v
 TARGET_SCOPES	events/twitch_auth_scopes.py	/^TARGET_SCOPES = [$/;"	v
@@ -3393,9 +3379,8 @@ ThresholdAccumulatorSync	scripte/bait_o_meter.py	/^class ThresholdAccumulatorSyn
 TwitchEvents	events/twitch_events.py	/^class TwitchEvents:$/;"	c
 UNIVERSE	utils/dmx_wled.py	/^UNIVERSE = 1                 # WLED default universe$/;"	v
 UNIVERSE	utils/dmx_wled2.py	/^UNIVERSE = 1                 # WLED default universe$/;"	v
-USER_MAX_SLOTS	baitgame/bait.py	/^USER_MAX_SLOTS      = 3$/;"	v
+USER_MAX_SLOTS	baitgame/bait.py	/^USER_MAX_SLOTS      = os.getenv("BAIT_USER_MAX_SLOTS","BAIT_USER_MAX_SLOTS")$/;"	v
 USER_SCOPE	events/twitch_irc_events.py	/^USER_SCOPE = [$/;"	v
-USER_SCOPE	old/irc_events.py	/^USER_SCOPE = [$/;"	v
 USER_SCOPE	twitch_auth_generator.py	/^USER_SCOPE = [AuthScope.CHAT_READ, AuthScope.CHAT_EDIT]$/;"	v
 WIDTH	scripte/ddp_wled.py	/^WIDTH = 72$/;"	v
 WIDTH	scripte/ddp_wled2.py	/^WIDTH = 72$/;"	v
@@ -3410,7 +3395,6 @@ WLED_IP	utils/ddp_wled.py	/^WLED_IP = "192.168.0.6"  # <-- Replace with your WLE
 WLED_IP	utils/dmx_wled.py	/^WLED_IP = "192.168.0.6"      # <-- your WLED IP here$/;"	v
 WLED_IP	utils/dmx_wled2.py	/^WLED_IP = "192.168.0.6"      # <-- your WLED IP here$/;"	v
 XTERM256RGB	scripte/ddptools/xterm256/rgbconvert.py	/^    XTERM256RGB = [ # xterm256 color look-up table (xterm256 index to RGB24)$/;"	v	class:RGBconvert
-ZONKS	baitgame/bait.py	/^    ZONKS = ["nada niente", "nix", "nuescht", "nichts", "a 🥠","gar nix", "ueberhaupt nix", "a/;"	v	class:FishPopulation
 __aenter__	events/obsws.py	/^    async def __aenter__(self):$/;"	m	class:Obsws
 __aenter__	events/twitch_events.py	/^    async def __aenter__(self):$/;"	m	class:TwitchEvents
 __aenter__	handlers/custom_rewards_manager.py	/^    async def __aenter__(self):$/;"	m	class:ChannelPointManager
@@ -3422,15 +3406,13 @@ __call__	events/obsws.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:S
 __call__	events/twitch_irc_events.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __call__	handlers/stream_stats.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __call__	handlers/twitchapi.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
-__call__	old/data/stream_stats_data.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
-__call__	old/irc_events.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __call__	utils/wled.py	/^    def __call__(cls, *args, **kwargs):$/;"	m	class:Singleton
 __init__	baitgame/bait.py	/^    def __init__(self):$/;"	m	class:FishHighscore
 __init__	baitgame/bait.py	/^    def __init__(self):$/;"	m	class:FishStats
 __init__	baitgame/bait.py	/^    def __init__(self, logger=None):$/;"	m	class:FishGame
 __init__	baitgame/bait.py	/^    def __init__(self, max_fish=69, max_weight=1337, min_weight=23):$/;"	m	class:FishPopulation
-__init__	baitgame/bait.py	/^    def __init__(self, max_slots=18):$/;"	m	class:RandomBaitSlotManager
 __init__	baitgame/bait.py	/^    def __init__(self, max_slots=MAX_SLOTS):$/;"	m	class:FishSlotManager_
+__init__	baitgame/bait.py	/^    def __init__(self, max_slots=MAX_SLOTS):$/;"	m	class:RandomBaitSlotManager
 __init__	baitgame/bait.py	/^    def __init__(self, max_slots=MAX_SLOTS, user_max_slots=USER_MAX_SLOTS):$/;"	m	class:FishSlotManager
 __init__	baitgame/bait.py	/^    def __init__(self, user):$/;"	m	class:FishTask
 __init__	custom_rewards/custom_rewards_admin.py	/^    def __init__(self, twitch_api: myTwitch):$/;"	m	class:ChannelPointManager
@@ -3438,15 +3420,12 @@ __init__	emotes/emote_anim.py	/^    def __init__(self, frames, start_pos):$/;"	m
 __init__	emotes/emote_anim.py	/^    def __init__(self, frames, start_pos):$/;"	m	class:EmoteAnimation
 __init__	emotes/emote_anim.py	/^    def __init__(self, frames, start_pos):$/;"	m	class:FadeAnimation
 __init__	events/event_timer.py	/^    def __init__(self):$/;"	m	class:MultiTimerClass
-__init__	events/obsws.py	/^    def __init__(self, dotenv_path):$/;"	m	class:Obsws
-__init__	events/twitch_events.py	/^    def __init__(self, dotenv_path: str, use_cli: bool):$/;"	m	class:TwitchEvents
-__init__	events/twitch_irc_events.py	/^    def __init__(self, dotenv_path):$/;"	m	class:Irc
+__init__	events/obsws.py	/^    def __init__(self):$/;"	m	class:Obsws
+__init__	events/twitch_events.py	/^    def __init__(self, use_cli: bool):$/;"	m	class:TwitchEvents
+__init__	events/twitch_irc_events.py	/^    def __init__(self):$/;"	m	class:Irc
 __init__	handlers/custom_rewards_manager.py	/^    def __init__(self, twitch_api: myTwitch):$/;"	m	class:ChannelPointManager
 __init__	handlers/stream_stats.py	/^    def __init__(self):$/;"	m	class:ChatStats
-__init__	handlers/twitchapi.py	/^    def __init__(self, dotenv_path="\/home\/sna\/src\/twitch\/.env"):$/;"	m	class:myTwitch
-__init__	old/data/stream_stats_data.py	/^    def __init__(self):$/;"	m	class:ChatStats
-__init__	old/event_timer.py	/^    def __init__(self):$/;"	m	class:MultiTimerClass
-__init__	old/irc_events.py	/^    def __init__(self, dotenvpath):$/;"	m	class:Irc
+__init__	handlers/twitchapi.py	/^    def __init__(self):$/;"	m	class:myTwitch
 __init__	scripte/bait_o_meter.py	/^    def __init__($/;"	m	class:ThresholdAccumulatorSync
 __init__	scripte/ddptools/ddp/ddpdevice.py	/^        def __init__(self, address, port):$/;"	m	class:DDPdevice.destination
 __init__	scripte/ddptools/ddp/ddpdevice.py	/^    def __init__(self, width=16, height=16, address='127.0.0.1', port=4048, repeat=0, autosend=T/;"	m	class:DDPdevice
@@ -3461,7 +3440,6 @@ __init__	utils/run_command.py	/^    def __init__(self):$/;"	m	class:EventQueue
 __init__	utils/run_command.py	/^    def __init__(self, interval, callback, *args, **kwargs):$/;"	m	class:EventTimer
 __init__	utils/wled.py	/^    def __init__(self, ip_address):$/;"	m	class:WLEDController
 __new__	events/event_timer.py	/^    def __new__(cls, *args, **kwargs):$/;"	m	class:MultiTimerClass
-__new__	old/event_timer.py	/^    def __new__(cls, *args, **kwargs):$/;"	m	class:MultiTimerClass
 __str__	scripte/ddptools/ddp/ddpdevice.py	/^        def __str__(self):$/;"	m	class:DDPdevice.destination
 __str__	scripte/ddptools/ddp/ddpdevice.py	/^    def __str__(self):$/;"	m	class:DDPdevice
 _assemble_with_webpmux	scripte/7tv_to_webp.py	/^def _assemble_with_webpmux(webp_frames: List[str], durations_ms: List[int], out_webp: str) -> No/;"	f	typeref:typename:None
@@ -3475,20 +3453,16 @@ _extract_frames_ffmpeg	scripte/7tv_to_webp.py	/^def _extract_frames_ffmpeg(avif_
 _extract_frames_ffmpeg	scripte/avif_to_WEBP.py	/^def _extract_frames_ffmpeg(avif_path: str, out_dir: str) -> int:$/;"	f	typeref:typename:int
 _ffprobe_frame_count	scripte/avif_to_WEBP.py	/^def _ffprobe_frame_count(path: str) -> Optional[int]:$/;"	f	typeref:typename:Optional[int]
 _instance	events/event_timer.py	/^    _instance = None$/;"	v	class:MultiTimerClass
-_instance	old/event_timer.py	/^    _instance = None$/;"	v	class:MultiTimerClass
 _instances	events/obsws.py	/^    _instances = {}$/;"	v	class:Singleton
 _instances	events/twitch_irc_events.py	/^    _instances = {}$/;"	v	class:Singleton
 _instances	handlers/stream_stats.py	/^    _instances = {}$/;"	v	class:Singleton
 _instances	handlers/twitchapi.py	/^    _instances = {}$/;"	v	class:Singleton
-_instances	old/data/stream_stats_data.py	/^    _instances = {}$/;"	v	class:Singleton
-_instances	old/irc_events.py	/^    _instances = {}$/;"	v	class:Singleton
 _instances	utils/wled.py	/^    _instances = {}$/;"	v	class:Singleton
 _make_webp_from_frames	scripte/avif_to_WEBP.py	/^def _make_webp_from_frames(frames_dir: str, out_path: str, fps: int = 30, q: int = 75) -> None:$/;"	f	typeref:typename:None
 _probe_frame_durations	scripte/7tv_to_webp.py	/^def _probe_frame_durations(avif_path: str) -> Optional[List[float]]:$/;"	f	typeref:typename:Optional[List[float]]
 _run	scripte/7tv_to_webp.py	/^def _run(cmd: List[str], capture: bool = True) -> subprocess.CompletedProcess:$/;"	f	typeref:typename:subprocess.CompletedProcess
 _run	scripte/avif_to_WEBP.py	/^def _run(cmd: List[str], capture: bool = True) -> subprocess.CompletedProcess:$/;"	f	typeref:typename:subprocess.CompletedProcess
 _run_timer	events/event_timer.py	/^    def _run_timer(self, event_name):$/;"	m	class:MultiTimerClass
-_run_timer	old/event_timer.py	/^    def _run_timer(self, event_name):$/;"	m	class:MultiTimerClass
 _schedule_decay	scripte/bait_o_meter.py	/^    def _schedule_decay(self):$/;"	m	class:ThresholdAccumulatorSync
 _set_preset_async	scripte/wled.py	/^    async def _set_preset_async(self, value):$/;"	m	class:WLEDController
 _start_loop	handlers/custom_rewards_manager.py	/^    def _start_loop(self):$/;"	m	class:ChannelPointManager
@@ -3497,7 +3471,6 @@ _which	scripte/avif_to_WEBP.py	/^def _which(name: str) -> Optional[str]:$/;"	f	t
 acc	scripte/bait_o_meter.py	/^    acc = ThresholdAccumulatorSync($/;"	v
 add	scripte/bait_o_meter.py	/^    def add(self, event_data) -> int:$/;"	m	class:ThresholdAccumulatorSync	typeref:typename:int
 add_channel_join	handlers/stream_stats.py	/^    def add_channel_join(self, user_name: str):$/;"	m	class:ChatStats
-add_channel_join	old/data/stream_stats_data.py	/^    def add_channel_join(self, user_name: str):$/;"	m	class:ChatStats
 add_chatstrobo	scripte/wled.py	/^    async def add_chatstrobo(self):$/;"	m	class:WLEDController
 add_chatstrobo	utils/wled.py	/^    def add_chatstrobo(self, event):$/;"	m	class:WLEDController
 add_logger_handler	utils/log.py	/^def add_logger_handler(logger):$/;"	f
@@ -3539,12 +3512,10 @@ app	overlays/overlay_server.py	/^app = FastAPI()$/;"	v
 app	scripte/htttp_wled.py	/^app = Flask(__name__)$/;"	v
 app	scripte/letterrain/app.py	/^app = Flask(__name__)$/;"	v
 app	scripte/letterrain/tests/letterrain.py	/^app = Flask(__name__)$/;"	v
-append_ids	old/main.py	/^def append_ids(cli_ids, test_ids):$/;"	f
 append_ids	test_irc.py	/^def append_ids(cli_ids, test_ids):$/;"	f
 append_logfile	scripte/utils/async_file_io.py	/^    async def append_logfile(self, filename, filename_var_value, text ):$/;"	m	class:AsyncFileIO
 apply_gamma	scripte/img_to_wled.py	/^def apply_gamma(c, gamma):$/;"	f
 apply_gamma	scripte/img_to_wled_deb.py	/^def apply_gamma(c, gamma):$/;"	f
-as_file_io	old/data/stream_stats_data.py	/^import scripte.async_file_io as as_file_io$/;"	I	nameref:module:scripte.async_file_io
 asciiquarium_end	handlers/asciiquarium.py	/^def asciiquarium_end(event_data):$/;"	f
 asciiquarium_start	handlers/asciiquarium.py	/^def asciiquarium_start(event_data):$/;"	f
 asciiquarium_streamend	handlers/asciiquarium.py	/^def asciiquarium_streamend(event_data):$/;"	f
@@ -3555,7 +3526,6 @@ assign_slot	baitgame/bait.py	/^    def assign_slot(self):$/;"	m	class:RandomBait
 async_wrapper	utils/async_wrapper.py	/^def async_wrapper(async_fn):$/;"	f
 auth_token_generator	events/twitch_irc_events.py	/^    async def auth_token_generator(self,  twitch: Twitch, USER_SCOPE) -> (str, str):$/;"	m	class:Irc	typeref:typename:(str,str)
 auth_token_generator	handlers/twitchapi.py	/^    async def auth_token_generator(self, twitch: Twitch, USER_SCOPE) -> (str, str):$/;"	m	class:myTwitch	typeref:typename:(str,str)
-auth_token_generator	old/irc_events.py	/^    async def auth_token_generator(self,  twitch: Twitch, USER_SCOPE) -> (str, str):$/;"	m	class:Irc	typeref:typename:(str,str)
 auth_token_generator	twitch_auth_generator.py	/^async def auth_token_generator(self, twitch: Twitch, USER_SCOPE) -> (str, str):$/;"	f	typeref:typename:(str,str)
 avif_7tv_to_webp	scripte/7tv_to_webp.py	/^def avif_7tv_to_webp(url: str, output_path: str, fps: int = 30, quality: int = 75,$/;"	f	typeref:typename:str
 avif_7tv_to_webp	scripte/avif_to_webp.py	/^def avif_7tv_to_webp(url: str, output_path: str, fps: int = 30, quality: int = 75,$/;"	f	typeref:typename:str
@@ -3568,7 +3538,6 @@ bitmap_to_rgb_bytes	scripte/ddp_wled_3.py	/^def bitmap_to_rgb_bytes(img, segment
 bitmap_to_rgb_bytes	scripte/htttp_wled.py	/^def bitmap_to_rgb_bytes(img, fg_color=FG_COLOR, bg_color=BG_COLOR):$/;"	f
 blackframe	scripte/ddptools/ddp/ddpdevice.py	/^    def blackframe(width=16, height=16):$/;"	m	class:DDPdevice
 blub	handlers/obs_handler.py	/^def blub():$/;"	f
-bot_cmd_list	old/irc_events.py	/^    def bot_cmd_list(self):$/;"	m	class:Irc
 btn	scripte/letterrain/tests/letterrain2.html	/^    <button id="btn">RAIN!<\/button>$/;"	I
 build_buffer_from_image	scripte/img_to_wled.py	/^def build_buffer_from_image(path, width, height, serpentine=False, start_corner="TL", color_orde/;"	f
 build_buffer_from_image	scripte/img_to_wled_deb.py	/^def build_buffer_from_image(path, width, height, serpentine=False, start_corner="TL", color_orde/;"	f
@@ -3592,12 +3561,9 @@ check_strobo	utils/wled.py	/^    async def check_strobo(self):$/;"	m	class:WLEDC
 check_unfollows	handlers/twitchapi.py	/^    async def check_unfollows(self):$/;"	m	class:myTwitch
 chunk	utils/dmx_wled.py	/^    chunk = data[i : i + 510]$/;"	v
 chunk	utils/dmx_wled2.py	/^    chunk = data[i : i + 510]$/;"	v
-cli_twitch_listen	old/main.py	/^async def cli_twitch_listen():$/;"	f
 cli_twitch_listen	test_irc.py	/^async def cli_twitch_listen():$/;"	f
 climockingConn	events/twitch_events.py	/^    async def climockingConn(self) -> Tuple[EventSubWebsocket, Twitch, TwitchUser]:$/;"	m	class:TwitchEvents	typeref:typename:Tuple[EventSubWebsocket,Twitch,TwitchUser]
-cmd_list	old/data/stream_stats_data.py	/^    cmd_list = ["!bait",$/;"	v	class:ChatStats
 cnt_cmd	handlers/stream_stats.py	/^    def cnt_cmd(self, msg: ChatMessage):$/;"	m	class:ChatStats
-cnt_cmd	old/data/stream_stats_data.py	/^    def cnt_cmd(self, msg: ChatMessage):$/;"	m	class:ChatStats
 col_color	utils/dmx_wled.py	/^    col_color = COLOR_ON if x < filled_cols else COLOR_OFF$/;"	v
 collection_of_events_not_supported_with_cli	events/twitch_events.py	/^    async def collection_of_events_not_supported_with_cli(self):$/;"	m	class:TwitchEvents
 color	scripte/letterrain/static/letterrain.js	/^            color: color,$/;"	p	variable:anonymousObject4c34a3930205
@@ -3637,8 +3603,6 @@ ddprelay.py	scripte/ddptools/README.md	/^## ddprelay.py$/;"	s	chapter:ddptools
 ddpsend.py	scripte/ddptools/README.md	/^## ddpsend.py $/;"	s	chapter:ddptools
 ddptools	scripte/ddptools/README.md	/^# ddptools$/;"	c
 deactivate_reward_category	handlers/custom_rewards_manager.py	/^    async def deactivate_reward_category(self, reward_category_id, enable=False ):$/;"	m	class:ChannelPointManager
-decorated_handler	old/test_decorator_subscribe.py	/^def decorated_handler(data):$/;"	f
-decorator	old/test_decorator_subscribe.py	/^    def decorator(fn):$/;"	f	function:on	file:
 delete_custom_reward	custom_rewards/custom_rewards_admin.py	/^    async def delete_custom_reward():$/;"	m	class:ChannelPointManager
 delete_custom_reward	handlers/custom_rewards_manager.py	/^    async def delete_custom_reward(self, reward_id: str):$/;"	m	class:ChannelPointManager
 dequeue	utils/run_command.py	/^    def dequeue( self ):$/;"	m	class:EventQueue
@@ -3659,7 +3623,6 @@ distributed_random_weights3	test/fishpopu.py	/^def distributed_random_weights3(m
 distributed_random_weightsix	baitgame/bait.py	/^    def distributed_random_weightsix(self, min_weight: int, max_weight: int, n_slots: int) -> li/;"	m	class:FishPopulation	typeref:typename:list
 dither	scripte/img_to_epaper_static.py	/^dither = 0   # set dither to 1 is you're sending photos etc$/;"	v
 dmx_segments	test/sacn5.py	/^    dmx_segments = [matrix_to_dmx_rgb(seg) for seg in segments]$/;"	v
-dotenv_path	handlers/twitchapi_handler.py	/^dotenv_path = "\/home\/sna\/src\/twitch\/.env"$/;"	v
 download	scripte/avif_to_webp.py	/^def download(url: str, dst: str) -> None:$/;"	f	typeref:typename:None
 download_twitch_emote	utils/run_command.py	/^def download_twitch_emote(emote_id):$/;"	f
 draw	emotes/emote_anim.py	/^    def draw(self, screen):$/;"	m	class:EmoteAnimation
@@ -3671,19 +3634,14 @@ editing raw images with GIMP 2.10	scripte/ddptools/README.md	/^### editing raw i
 emote_display_loop	emotes/display.py	/^def emote_display_loop():$/;"	f
 emote_display_loop	test/pygameemotes.py	/^def emote_display_loop():$/;"	f
 emote_display_loop	test/pygamenumb.py	/^def emote_display_loop():$/;"	f
-emote_loop	old/main.py	/^async def emote_loop():$/;"	f
 emote_loop	test_irc.py	/^async def emote_loop():$/;"	f
 encode_frames_with_cwebp	scripte/avif_to_webp.py	/^def encode_frames_with_cwebp(frames: List[str], quality: int, lossless: bool, tmpdir: str) -> Li/;"	f	typeref:typename:List[str]
 end_bait	baitgame/bait.py	/^    def end_bait(self):$/;"	m	class:FishGame
 end_irc	events/twitch_irc_events.py	/^    async def end_irc(self):$/;"	m	class:Irc
-end_irc	old/irc_events.py	/^    async def end_irc(self):$/;"	m	class:Irc
 enqueue	events/obsws.py	/^    def enqueue(self, coro):$/;"	m	class:Obsws
 enqueue	handlers/twitchapi.py	/^    def enqueue(self, coro):$/;"	m	class:myTwitch
-enqueue	old/irc_events.py	/^    def enqueue(self, coro):$/;"	m	class:Irc
 enqueue	utils/run_command.py	/^    def enqueue(self, event):$/;"	m	class:EventQueue
 enums	events/obsws.py	/^from simpleobsws import enum as enums$/;"	Y	nameref:unknown:enum
-env_file_path	handlers/snafu/snafu_action_handler.py	/^env_file_path = "\/home\/sna\/src\/twitch\/src\/handlers\/snafu\/.env_snafu_handlers"$/;"	v
-env_file_path	handlers/snafu/snafu_subscribe_handler.py	/^env_file_path = "\/home\/sna\/src\/twitch\/src\/handlers\/snafu\/.env_snafu_handlers"$/;"	v
 event_types	handlers/obsws_handler.py	/^event_types = {$/;"	v
 eventsub	events/twitch_events.py	/^    eventsub: Optional[EventSubWebsocket]   = None$/;"	v	class:TwitchEvents	typeref:typename:Optional[EventSubWebsocket]
 example	scripte/ddptools/README.md	/^### example$/;"	S	section:ddptools""ddpsend.py
@@ -3742,7 +3700,6 @@ getDatetime	scripte/utils/div_help.py	/^def getDatetime():$/;"	f
 getDatetime_short	scripte/utils/div_help.py	/^def getDatetime_short():$/;"	f
 getTimeNow	scripte/utils/div_help.py	/^def getTimeNow():$/;"	f
 getUser	events/twitch_irc_events.py	/^    async def getUser(self, str):$/;"	m	class:Irc
-getUser	old/irc_events.py	/^    async def getUser(self, str):$/;"	m	class:Irc
 get_active_7tv_emote_urls	utils/tv7_scrape.py	/^def get_active_7tv_emote_urls(emoteset_id):$/;"	f
 get_active_channelpoint_rewards	handlers/db_handler.py	/^def get_active_channelpoint_rewards():$/;"	f
 get_active_slots_for_user	baitgame/bait.py	/^    def get_active_slots_for_user(self, user):$/;"	m	class:FishSlotManager
@@ -3751,7 +3708,6 @@ get_active_users	baitgame/bait.py	/^    def get_active_users(self):$/;"	m	class:
 get_all_user_bait_stats	baitgame/bait.py	/^    def get_all_user_bait_stats(self):$/;"	m	class:FishStats
 get_chat_commands	handlers/db_handler.py	/^def get_chat_commands():$/;"	f
 get_cmd_cnt	handlers/stream_stats.py	/^    def get_cmd_cnt(self, cmd):$/;"	m	class:ChatStats
-get_cmd_cnt	old/data/stream_stats_data.py	/^    def get_cmd_cnt(self, cmd):$/;"	m	class:ChatStats
 get_current_song	scripte/now_playing/blub.py	/^async def get_current_song(bus):$/;"	f
 get_current_song	scripte/now_playing/blubb.py	/^async def get_current_song(bus):$/;"	f
 get_current_subscribers	handlers/twitchapi.py	/^    async def get_current_subscribers(self):$/;"	m	class:myTwitch
@@ -3778,11 +3734,9 @@ get_queue_position	baitgame/bait.py	/^    def get_queue_position(self, user):$/;
 get_queue_position	baitgame/bait.py	/^    def get_queue_position(self, user):$/;"	m	class:FishSlotManager_
 get_queue_positions	baitgame/bait.py	/^    def get_queue_positions(self, user):$/;"	m	class:FishGame
 get_scene_item_id	events/obsws.py	/^    async def get_scene_item_id(self, scene_name, source_name):$/;"	m	class:Obsws
-get_scene_item_id	old/obs_events.py	/^def get_scene_item_id(scene_name, source_name):$/;"	f
 get_score_chart_values	baitgame/bait.py	/^    def get_score_chart_values(self, event_data):$/;"	m	class:FishStats
 get_stats_columns	handlers/db_handler.py	/^def get_stats_columns():$/;"	f
 get_stats_str	handlers/stream_stats.py	/^    def get_stats_str(self):$/;"	m	class:ChatStats
-get_stats_str	old/data/stream_stats_data.py	/^    def get_stats_str(self):$/;"	m	class:ChatStats
 get_sub_count	handlers/twitchapi.py	/^    async def get_sub_count(self):$/;"	m	class:myTwitch
 get_table_column_names	handlers/db_handler.py	/^def get_table_column_names(table: str, schema: str):$/;"	f
 get_top_cookie_baits	baitgame/bait.py	/^    def get_top_cookie_baits(self, top=3):$/;"	m	class:FishStats
@@ -3793,9 +3747,7 @@ get_user_id	handlers/twitchapi.py	/^    async def get_user_id(self, user_name):$
 get_user_id_str	handlers/twitchapi.py	/^    async def get_user_id_str(self, user_name):$/;"	m	class:myTwitch
 get_user_profile_imgs	handlers/twitchapi.py	/^    async def get_user_profile_imgs (self, user_names: list, callback=None) :$/;"	m	class:myTwitch
 get_user_stats	handlers/stream_stats.py	/^    def get_user_stats(self, user):$/;"	m	class:ChatStats
-get_user_stats	old/data/stream_stats_data.py	/^    def get_user_stats(self, user):$/;"	m	class:ChatStats
 get_view_count	handlers/stream_stats.py	/^    def get_view_count(self):$/;"	m	class:ChatStats
-get_view_count	old/data/stream_stats_data.py	/^    def get_view_count(self):$/;"	m	class:ChatStats
 get_vipsis	handlers/twitchapi.py	/^    async def get_vipsis(self):$/;"	m	class:myTwitch
 gewichte_verteilen	test/fishpopu.py	/^def gewichte_verteilen(minweight: int, maxweight: int, nplaetze: int) -> list:$/;"	f	typeref:typename:list
 gif_path	scripte/xpysay.py	/^    gif_path = sys.argv[1]$/;"	v
@@ -3815,7 +3767,6 @@ handle_channel_update_v2	handlers/stream_stats.py	/^def handle_channel_update_v2
 handle_chat_command	handlers/sna_irc_handler.py	/^def handle_chat_command(e_data):$/;"	f
 handle_chat_event	handlers/sna_irc_handler.py	/^def handle_chat_event(event_data):$/;"	f
 handle_custom_reward_add	handlers/snafu/snafu_channelpoint_handler.py	/^def handle_custom_reward_add (event: dict):$/;"	f
-handle_exit	old/main.py	/^def handle_exit(*args):$/;"	f
 handle_exit	test_irc.py	/^def handle_exit(*args):$/;"	f
 handle_flash_event	handlers/sna_irc_handler.py	/^def handle_flash_event(event_data, irc_instance):$/;"	f
 handle_followage_command	handlers/sna_irc_handler.py	/^def handle_followage_command(event_data):$/;"	f
@@ -3828,7 +3779,6 @@ handle_goal_progress	handlers/snafu/snafu_goal_handler.py	/^def handle_goal_prog
 handle_hungry_event	handlers/sna_irc_handler.py	/^def handle_hungry_event(event_data, irc_instance):$/;"	f
 handle_hypetrain_begin	handlers/snafu/snafu_hypetrain_handler.py	/^def handle_hypetrain_begin(event: dict):$/;"	f
 handle_hypetrain_end	handlers/snafu/snafu_hypetrain_handler.py	/^def handle_hypetrain_end(event: dict):$/;"	f
-handle_increase_event	old/event_timer.py	/^    def handle_increase_event(self, data):$/;"	m	class:MultiTimerClass
 handle_irc_join	handlers/sna_irc_handler.py	/^def handle_irc_join(e_data):$/;"	f
 handle_irc_joined	handlers/sna_irc_handler.py	/^def handle_irc_joined( e_data ):$/;"	f
 handle_irc_left	handlers/sna_irc_handler.py	/^def handle_irc_left(event_data):$/;"	f
@@ -3846,9 +3796,7 @@ handle_reward_update	handlers/snafu/snafu_channelpoint_handler.py	/^def handle_r
 handle_shoutout_create	handlers/snafu/snafu_shoutout_handler.py	/^def handle_shoutout_create(event):$/;"	f
 handle_shoutout_receive	handlers/snafu/snafu_shoutout_handler.py	/^def handle_shoutout_receive(event):$/;"	f
 handle_start_event	events/event_timer.py	/^    def handle_start_event(self, data):$/;"	m	class:MultiTimerClass
-handle_start_event	old/event_timer.py	/^    def handle_start_event(self, data):$/;"	m	class:MultiTimerClass
 handle_status_query	events/event_timer.py	/^    def handle_status_query(self, data):$/;"	m	class:MultiTimerClass
-handle_status_query	old/event_timer.py	/^    def handle_status_query(self, data):$/;"	m	class:MultiTimerClass
 handle_stop	scripte/letterrain/tests/letterrain.py	/^def handle_stop():$/;"	f
 handle_stop_event	events/event_timer.py	/^    def handle_stop_event(self, data):$/;"	m	class:MultiTimerClass
 handle_stream_offline	handlers/obsws_handler.py	/^def handle_stream_offline(event):$/;"	f
@@ -3889,7 +3837,6 @@ height	scripte/letterrain/tests/letterrain_v8.js	/^        height: '100vh',$/;"	
 height	scripte/xpysay.py	/^    width, height = im.size$/;"	v
 height	utils/percentage_wled.py	/^    height = int(sys.argv[4])$/;"	v
 hex_to_rgb	utils/percentage_wled.py	/^def hex_to_rgb(hex_color):$/;"	f
-http_event	old/main.py	/^from dispatcher.http_event_api import app as http_event$/;"	Y	nameref:unknown:app
 http_event	test_irc.py	/^from dispatcher.http_event_api import app as http_event$/;"	Y	nameref:unknown:app
 i	utils/wled.json	/^{"seg": [{"i": [[0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 255, 255], [0, 2/;"	a	object:seg.0
 i	utils/wled_test.json	/^{"seg": [{"i": [[255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255, 0, 255], [255,/;"	a	object:seg.0
@@ -3897,14 +3844,9 @@ im	scripte/xpysay.py	/^    im = Image.open(gif_path)$/;"	v
 image	scripte/img_to_epaper_static.py	/^image = Image.new('P', (384, 184))$/;"	v
 image_path	scripte/img_to_epaper_static.py	/^image_path = 'output.jpg'$/;"	v
 img	test/sacn5.py	/^        img = Image.fromarray(seg * 255)$/;"	v
-img	test/siegerehrung/podiumData.json	/^{ "name": "Fluffiy_", "points": 6, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/1f/;"	s	object:6
-img	test/siegerehrung/podiumData.json	/^{ "name": "KahznMakesGames", "points": 6, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictu/;"	s	object:7
-img	test/siegerehrung/podiumData.json	/^{ "name": "Legomen68", "points": 5, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/c/;"	s	object:5
-img	test/siegerehrung/podiumData.json	/^{ "name": "Propz_tv", "points": 8, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/b9/;"	s	object:1
-img	test/siegerehrung/podiumData.json	/^{ "name": "WANDELSTUDIOS", "points": 2, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	s	object:3
-img	test/siegerehrung/podiumData.json	/^{ "name": "ZermalmerDoc", "points": 26, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	s	object:0
-img	test/siegerehrung/podiumData.json	/^{ "name": "my_kill_buzz", "points": 20, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	s	object:4
-img	test/siegerehrung/podiumData.json	/^{ "name": "stuttvoll", "points": 17, "img": "https:\/\/static-cdn.jtvnw.net\/user-default-pictur/;"	s	object:2
+img	test/siegerehrung/podiumData.json	/^{ "name": "5n4fu", "points": 34, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/412c/;"	s	object:1
+img	test/siegerehrung/podiumData.json	/^{ "name": "Legomen68", "points": 28, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\//;"	s	object:0
+img	test/siegerehrung/podiumData.json	/^{ "name": "snabady", "points": 22, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/71/;"	s	object:2
 important note	scripte/ddptools/README.md	/^### important note$/;"	S	section:ddptools""usage
 index	overlays/overlay_server.py	/^def index():$/;"	f
 index	scripte/htttp_wled.py	/^def index():$/;"	f
@@ -3913,18 +3855,13 @@ init_active_channelpoint_rewards	events/twitch_events.py	/^    def init_active_c
 init_bait_quotes	baitgame/bait.py	/^    def init_bait_quotes(self):$/;"	m	class:FishGame
 init_cmd_list	handlers/stream_stats.py	/^    def init_cmd_list(self):$/;"	m	class:ChatStats
 init_obswebsocket_ws	events/obsws.py	/^    async def init_obswebsocket_ws(self):$/;"	m	class:Obsws
-init_obswebsocket_ws	old/obs_events.py	/^def init_obswebsocket_ws():$/;"	f
 init_sna	handlers/twitchapi.py	/^    async def init_sna(self):$/;"	m	class:myTwitch
-init_snaman_obs_file	old/irc_events.py	/^    def init_snaman_obs_file(self):$/;"	m	class:Irc
 init_stats	handlers/stream_stats.py	/^    def init_stats(self):$/;"	m	class:ChatStats
-init_stats	old/data/stream_stats_data.py	/^    def init_stats(self):$/;"	m	class:ChatStats
 insert_bait_stats	handlers/db_handler.py	/^def insert_bait_stats(db_values):$/;"	f
 insert_new_follower	handlers/db_handler.py	/^def insert_new_follower(userdata):$/;"	f
 insert_new_follwer	handlers/db_handler.py	/^def insert_new_follwer(follower:dict) -> str:$/;"	f	typeref:typename:str
 insert_stream_stats	handlers/db_handler.py	/^def insert_stream_stats(db_values):$/;"	f
-irc_listen	old/main.py	/^async def irc_listen():$/;"	f
 irc_listen	test_irc.py	/^async def irc_listen():$/;"	f
-irc_task_runner	old/irc_events.py	/^    async def irc_task_runner(self):$/;"	m	class:Irc
 last_song	scripte/now_playing/oh_my_play.py	/^            last_song = song$/;"	v
 last_song	scripte/now_playing/oh_my_play.py	/^last_song = ""$/;"	v
 left	scripte/letterrain/static/letterrain.js	/^            left: 0,$/;"	p	variable:anonymousObject4c34a3930105
@@ -3998,9 +3935,6 @@ logger	handlers/twitchapi.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	handlers/twitchapi.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	handlers/twitchapi_handler.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	handlers/twitchapi_handler.py	/^logger = logging.getLogger(__name__)$/;"	v
-logger	old/irc_events.py	/^logger = logging.getLogger(__name__)$/;"	v
-logger	old/main.py	/^logger = log.add_logger_handler(logger)$/;"	v
-logger	old/main.py	/^logger = logging.getLogger(__name__)$/;"	v
 logger	test_irc.py	/^logger = log.add_logger_handler(logger)$/;"	v
 logger	test_irc.py	/^logger = logging.getLogger("MAINLOOP")$/;"	v
 logger	utils/run_command.py	/^logger = log.add_logger_handler(logger)$/;"	v
@@ -4009,7 +3943,6 @@ loop	handlers/sna_irc_handler.py	/^loop = asyncio.new_event_loop()$/;"	v
 lossless	scripte/7tv_to_webp.py	/^    lossless = bool(int(sys.argv[6])) if len(sys.argv) > 6 else False$/;"	v
 luminosity	scripte/wled_bin_to_ascii.py	/^def luminosity(r,g,b):$/;"	f
 mac	scripte/img_to_epaper_static.py	/^mac = "6838316E71D8B841"   # destination mac address$/;"	v
-main	old/main.py	/^async def main():$/;"	f
 main	scripte/ddp_wled.py	/^def main():$/;"	f
 main	scripte/ddp_wled2.py	/^def main():$/;"	f
 main	scripte/ddp_wled_3.py	/^def main():$/;"	f
@@ -4041,22 +3974,14 @@ media_input_playback_ended	handlers/obs_handler.py	/^def media_input_playback_en
 message_handler	scripte/now_playing/blub.py	/^    def message_handler(message):$/;"	f	function:main	file:
 message_handler	scripte/now_playing/blubb.py	/^    def message_handler(message):$/;"	f	function:main	file:
 msg_reaction_functions	handlers/sna_irc_handler.py	/^msg_reaction_functions = {$/;"	v
-multi_timer	old/event_timer.py	/^multi_timer = MultiTimerClass()$/;"	v
 myTwitch	handlers/twitchapi.py	/^class myTwitch(metaclass=Singleton):$/;"	c
-my_event_subscriptions	old/main.py	/^def my_event_subscriptions():$/;"	f
 my_event_subscriptions	test_irc.py	/^def my_event_subscriptions():$/;"	f
-my_handler	old/test_decorator_subscribe.py	/^def my_handler(data):$/;"	f
 mybaitstats_command	baitgame/bait.py	/^    def mybaitstats_command(self, event_data):$/;"	m	class:FishGame
 mytopbait_command_personal	baitgame/bait.py	/^    def mytopbait_command_personal(self, event_data):$/;"	m	class:FishGame
 n	utils/preset_wled.json	/^      "n": "bait-o-meter",$/;"	s	object:ps.14
-name	test/siegerehrung/podiumData.json	/^{ "name": "Fluffiy_", "points": 6, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/1f/;"	s	object:6
-name	test/siegerehrung/podiumData.json	/^{ "name": "KahznMakesGames", "points": 6, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictu/;"	s	object:7
-name	test/siegerehrung/podiumData.json	/^{ "name": "Legomen68", "points": 5, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/c/;"	s	object:5
-name	test/siegerehrung/podiumData.json	/^{ "name": "Propz_tv", "points": 8, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/b9/;"	s	object:1
-name	test/siegerehrung/podiumData.json	/^{ "name": "WANDELSTUDIOS", "points": 2, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	s	object:3
-name	test/siegerehrung/podiumData.json	/^{ "name": "ZermalmerDoc", "points": 26, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	s	object:0
-name	test/siegerehrung/podiumData.json	/^{ "name": "my_kill_buzz", "points": 20, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	s	object:4
-name	test/siegerehrung/podiumData.json	/^{ "name": "stuttvoll", "points": 17, "img": "https:\/\/static-cdn.jtvnw.net\/user-default-pictur/;"	s	object:2
+name	test/siegerehrung/podiumData.json	/^{ "name": "5n4fu", "points": 34, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/412c/;"	s	object:1
+name	test/siegerehrung/podiumData.json	/^{ "name": "Legomen68", "points": 28, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\//;"	s	object:0
+name	test/siegerehrung/podiumData.json	/^{ "name": "snabady", "points": 22, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/71/;"	s	object:2
 new	scripte/bait_o_meter.py	/^            new = acc.add(1)$/;"	v
 now_playing	events/twitch_irc_events.py	/^    async def now_playing(self):$/;"	m	class:Irc
 np	test/sacn5.py	/^import numpy as np$/;"	I	nameref:module:numpy
@@ -4065,35 +3990,23 @@ np	test/sacns_good_static.py	/^import numpy as np$/;"	I	nameref:module:numpy
 np	utils/ddp_wled.py	/^import numpy as np$/;"	I	nameref:module:numpy
 obs_hangry_cat_activate	handlers/obs_hangry_cat.py	/^def obs_hangry_cat_activate():$/;"	f
 obs_hangry_cat_deactivate	handlers/obs_hangry_cat.py	/^def obs_hangry_cat_deactivate():$/;"	f
-obs_listen	old/main.py	/^async def obs_listen():$/;"	f
 obs_listen	test_irc.py	/^async def obs_listen():$/;"	f
 obs_scene_change	events/obsws.py	/^    def obs_scene_change(self, event): $/;"	m	class:Obsws
 obs_set_input_mute	events/obsws.py	/^    def obs_set_input_mute(self, event):$/;"	m	class:Obsws
 obs_set_source_visibility	events/obsws.py	/^    def obs_set_source_visibility(self, event):$/;"	m	class:Obsws
 obs_task_worker	events/obsws.py	/^    async def obs_task_worker(self):$/;"	m	class:Obsws
-obs_url	old/obs_events.py	/^obs_url = "ws:\/\/127.0.0.1:4455"$/;"	v
-obsws_handler	old/main.py	/^import  handlers.obsws_handler as obsws_handler$/;"	I	nameref:module:handlers.obsws_handler
 obsws_handler	test_irc.py	/^import  handlers.obsws_handler as obsws_handler$/;"	I	nameref:module:handlers.obsws_handler
-on	old/test_decorator_subscribe.py	/^def on(event_type):$/;"	f
 on_bait	baitgame/bait.py	/^    def on_bait(self, user):$/;"	m	class:FishGame
-on_chat_event	old/irc_events.py	/^    async def on_chat_event(self, event: EventData):$/;"	m	class:Irc
-on_chat_msg	old/irc_events.py	/^    async def on_chat_msg(self, msg: ChatMessage):$/;"	m	class:Irc
-on_chat_sub	old/irc_events.py	/^    async def on_chat_sub(event: ChatSub):$/;"	m	class:Irc
-on_command	old/irc_events.py	/^    async def on_command(self, cmd: ChatCommand):$/;"	m	class:Irc
 on_dynamite	baitgame/bait.py	/^    def on_dynamite(self, user):$/;"	m	class:FishGame
 on_event	events/obsws.py	/^    async def on_event(self, eventType, eventData):$/;"	m	class:Obsws
-on_event	old/obs_events.py	/^async def on_event(eventType, eventData):$/;"	f
 on_fishis_left	baitgame/bait.py	/^    def on_fishis_left(self, event_data):$/;"	m	class:FishGame
-on_joined	old/irc_events.py	/^    async def on_joined(self, chatevent: JoinedEvent):$/;"	m	class:Irc
 on_mytopbait	baitgame/bait.py	/^    def on_mytopbait(self,event_data):$/;"	m	class:FishGame
 on_mytopbait_maxgramm	baitgame/bait.py	/^    def on_mytopbait_maxgramm(self, event_data):$/;"	m	class:FishGame
 on_obs_hangry_cat	baitgame/bait.py	/^    def on_obs_hangry_cat(self,event_data):$/;"	m	class:FishGame
-on_ready	old/irc_events.py	/^    async def on_ready(self, event: EventData):$/;"	m	class:Irc
 on_song_changed	scripte/now_playing/now_playing_auda.py	/^    def on_song_changed():$/;"	f	function:main	file:
 on_song_changed	scripte/now_playing/np_audacious.py	/^def on_song_changed():$/;"	f
 on_stream_offline	handlers/custom_rewards_manager.py	/^    def on_stream_offline(self, event_data):$/;"	m	class:ChannelPointManager
 on_stream_online	handlers/custom_rewards_manager.py	/^    def on_stream_online(self, event_data):$/;"	m	class:ChannelPointManager
-on_switchscenes	old/obs_events.py	/^async def on_switchscenes(eventData):$/;"	f
 on_topbait	baitgame/bait.py	/^    def on_topbait(self, event_data):$/;"	m	class:FishGame
 orientation	utils/percentage_wled.py	/^    orientation = sys.argv[5] if len(sys.argv) > 5 else "row"$/;"	v
 out	scripte/7tv_to_webp.py	/^    out = sys.argv[2]$/;"	v
@@ -4111,7 +4024,6 @@ parse_args	scripte/img_to_wled.py	/^def parse_args():$/;"	f
 parse_args	scripte/img_to_wled_deb.py	/^def parse_args():$/;"	f
 parse_args	scripte/wled_bin_to_ascii.py	/^def parse_args():$/;"	f
 parse_color	utils/percentage_wled.py	/^def parse_color(color_str):$/;"	f
-password	old/obs_events.py	/^password = "password"$/;"	v
 payload	scripte/img_to_epaper_static.py	/^payload = {"dither": dither, "mac": mac}  # Additional POST parameter$/;"	v
 percent	utils/ddp_wled.py	/^    percent = 50  # <-- set your percent here$/;"	v
 percent	utils/percentage_wled.py	/^    percent = int(sys.argv[1])$/;"	v
@@ -4142,14 +4054,9 @@ pointerEvents	scripte/letterrain/tests/letterrain_v6.js	/^            pointerEve
 pointerEvents	scripte/letterrain/tests/letterrain_v6.js	/^        pointerEvents: 'none',$/;"	p	variable:anonymousObject8cc881290105
 pointerEvents	scripte/letterrain/tests/letterrain_v8.js	/^            pointerEvents: 'none',$/;"	p	variable:anonymousObject8cc999eb0205
 pointerEvents	scripte/letterrain/tests/letterrain_v8.js	/^        pointerEvents: 'none',$/;"	p	variable:anonymousObject8cc999eb0105
-points	test/siegerehrung/podiumData.json	/^{ "name": "Fluffiy_", "points": 6, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/1f/;"	n	object:6
-points	test/siegerehrung/podiumData.json	/^{ "name": "KahznMakesGames", "points": 6, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictu/;"	n	object:7
-points	test/siegerehrung/podiumData.json	/^{ "name": "Legomen68", "points": 5, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/c/;"	n	object:5
-points	test/siegerehrung/podiumData.json	/^{ "name": "Propz_tv", "points": 8, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/b9/;"	n	object:1
-points	test/siegerehrung/podiumData.json	/^{ "name": "WANDELSTUDIOS", "points": 2, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	n	object:3
-points	test/siegerehrung/podiumData.json	/^{ "name": "ZermalmerDoc", "points": 26, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	n	object:0
-points	test/siegerehrung/podiumData.json	/^{ "name": "my_kill_buzz", "points": 20, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_picture/;"	n	object:4
-points	test/siegerehrung/podiumData.json	/^{ "name": "stuttvoll", "points": 17, "img": "https:\/\/static-cdn.jtvnw.net\/user-default-pictur/;"	n	object:2
+points	test/siegerehrung/podiumData.json	/^{ "name": "5n4fu", "points": 34, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/412c/;"	n	object:1
+points	test/siegerehrung/podiumData.json	/^{ "name": "Legomen68", "points": 28, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\//;"	n	object:0
+points	test/siegerehrung/podiumData.json	/^{ "name": "snabady", "points": 22, "img": "https:\/\/static-cdn.jtvnw.net\/jtv_user_pictures\/71/;"	n	object:2
 port	utils/udp_wled.py	/^port = 21324$/;"	v
 position	scripte/letterrain/static/letterrain.js	/^            position: 'absolute',$/;"	p	variable:anonymousObject4c34a3930205
 position	scripte/letterrain/static/letterrain.js	/^            position: 'fixed',$/;"	p	variable:anonymousObject4c34a3930105
@@ -4172,10 +4079,8 @@ print_matrix_ansi	scripte/wled_bin_to_ascii.py	/^def print_matrix_ansi(matrix, s
 print_song	scripte/now_playing/blub.py	/^    async def print_song():$/;"	f	function:main	file:
 print_song	scripte/now_playing/blubb.py	/^    async def print_song():$/;"	f	function:main	file:
 print_unique_viewers	handlers/stream_stats.py	/^    def print_unique_viewers(self):$/;"	m	class:ChatStats
-print_unique_viewers	old/data/stream_stats_data.py	/^    def print_unique_viewers(self):$/;"	m	class:ChatStats
 probe_frame_durations	scripte/avif_to_webp.py	/^def probe_frame_durations(avif_path: str) -> Optional[List[float]]:$/;"	f	typeref:typename:Optional[List[float]]
 process_msg	handlers/stream_stats.py	/^    def process_msg(self, msg: ChatMessage):$/;"	m	class:ChatStats
-process_msg	old/data/stream_stats_data.py	/^    def process_msg(self, msg: ChatMessage):$/;"	m	class:ChatStats
 process_task	baitgame/bait.py	/^    def process_task(self, user, task):$/;"	m	class:FishGame
 prodConn	events/twitch_events.py	/^    async def prodConn(self) -> Tuple[EventSubWebsocket, Twitch, TwitchUser]:$/;"	m	class:TwitchEvents	typeref:typename:Tuple[EventSubWebsocket,Twitch,TwitchUser]
 ps	utils/preset_wled.json	/^  "ps": {$/;"	o
@@ -4208,7 +4113,7 @@ randomRainStop	scripte/letterrain/tests/letterrain_v8.js	/^function randomRainSt
 raw rgb24 image	scripte/ddptools/README.md	/^## raw rgb24 image$/;"	s	chapter:ddptools
 read_last_line	scripte/utils/async_file_io.py	/^    async def read_last_line(self):$/;"	m	class:AsyncFileIO
 record_catch	baitgame/bait.py	/^    def record_catch(self, user, gramm, fish):$/;"	m	class:FishStats
-refresh	user_token.json	/^{"token": "ucinbk2re6slxtqsh4971nhgat1s2x", "refresh": "lozizyox00xgfi0fr67u88zizw98slhpcxyplg1p/;"	s
+refresh	user_token.json	/^{"token": "atlssdepzmitumqnt6lyb5f9g2u60u", "refresh": "mgco24hlafagkv8ql9kw9jiua47m2za5yo0b81pa/;"	s
 register_first_baiters	baitgame/bait.py	/^    def register_first_baiters(self, user):$/;"	m	class:FishStats
 release_slot	baitgame/bait.py	/^    def release_slot(self, slot):$/;"	m	class:RandomBaitSlotManager
 reload_browser_source	events/obsws.py	/^    async def reload_browser_source(self, browser_source_name: str):$/;"	m	class:Obsws
@@ -4231,10 +4136,8 @@ rgb2xterm256_lab	scripte/ddptools/xterm256/rgbconvert.py	/^    def rgb2xterm256_
 rgb_image	scripte/img_to_epaper_static.py	/^rgb_image = image.convert('RGB')$/;"	v
 rgb_to_ansi_bg	scripte/wled_bin_to_ascii.py	/^def rgb_to_ansi_bg(r,g,b):$/;"	f
 run	events/twitch_irc_events.py	/^    async def run(self):$/;"	m	class:Irc
-run	old/irc_events.py	/^    async def run(self):$/;"	m	class:Irc
 run	twitch_auth_generator.py	/^async def run():$/;"	f
 run_checked	scripte/avif_to_webp.py	/^def run_checked(cmd: List[str]) -> subprocess.CompletedProcess:$/;"	f	typeref:typename:subprocess.CompletedProcess
-run_flask	old/main.py	/^def run_flask():$/;"	f
 run_flask	test_irc.py	/^def run_flask():$/;"	f
 run_mpv	scripte/utils/run_sna_command.py	/^def run_mpv():$/;"	f
 run_mpv	utils/run_command.py	/^def run_mpv(filepath: str,  volume: str , no_video=False):$/;"	f
@@ -4264,7 +4167,6 @@ segments	test/sacn5.py	/^    segments = segment_matrix(matrix, SEGMENTS, SEGMENT
 select_something	handlers/db_handler.py	/^def select_something(query: str) :$/;"	f
 send_chat_message	events/twitch_irc_events.py	/^    async def send_chat_message(self, msg):$/;"	m	class:Irc
 send_chat_message	handlers/twitchapi.py	/^    async def send_chat_message(self, message):$/;"	m	class:myTwitch
-send_chat_message	old/irc_events.py	/^    async def send_chat_message(self, msg):$/;"	m	class:Irc
 send_ddp_frame	utils/ddp_wled.py	/^def send_ddp_frame(rgb_data):$/;"	f
 send_dmx_segments_multiuniverse	test/sacn5.py	/^def send_dmx_segments_multiuniverse(dmx_segments, universe_start, target_ip):$/;"	f
 send_http	scripte/img_to_wled.py	/^def send_http(wled_host, payload):$/;"	f
@@ -4277,7 +4179,6 @@ sendframe	scripte/ddptools/ddp/ddpdevice.py	/^    def sendframe(self, index=0):$
 sendnextframe	scripte/ddptools/ddp/ddpdevice.py	/^    def sendnextframe(self):$/;"	m	class:DDPdevice
 setEnv	events/obsws.py	/^    def setEnv(self):$/;"	m	class:Obsws
 setEnv	events/twitch_events.py	/^    def setEnv(self):$/;"	m	class:TwitchEvents
-setEnv	old/obs_events.py	/^def setEnv():$/;"	f
 set_bait	scripte/utils/templateMgr.py	/^    def set_bait(self, name, weight):$/;"	m	class:TemplateManager
 set_effect	scripte/wled.py	/^    def set_effect(self, effect_id, color=(255, 255, 255), brightness=128, segment_id=0, on=True/;"	m	class:WLEDController
 set_effect	utils/wled.py	/^    def set_effect(self, effect_id, color=(255, 255, 255), brightness=128, segment_id=0, on=True/;"	m	class:WLEDController
@@ -4287,20 +4188,15 @@ set_input_mute	events/obsws.py	/^    async def set_input_mute(self, muted: bool,
 set_preset	scripte/wled.py	/^    def set_preset(self, preset_id):$/;"	m	class:WLEDController
 set_preset	utils/wled.py	/^    def set_preset(self, preset_id):$/;"	m	class:WLEDController
 set_source_visibility	events/obsws.py	/^    async def set_source_visibility(self,scene_name, scene_item_id, visible=False):$/;"	m	class:Obsws
-set_source_visibility	old/obs_events.py	/^def set_source_visibility(scene_name, scene_item_id, visible=False):$/;"	f
 set_source_visibility_wrapper	events/obsws.py	/^def set_source_visibility_wrapper(scene_name, source_name, visible):$/;"	f
 set_stream_online	baitgame/bait.py	/^    def set_stream_online(self, event_data):$/;"	m	class:FishGame
 set_stream_online	events/twitch_irc_events.py	/^    def set_stream_online(self, event_data):$/;"	m	class:Irc
 set_stream_online	handlers/twitchapi.py	/^    def set_stream_online(self, event_data):$/;"	m	class:myTwitch
-set_stream_online	old/irc_events.py	/^    def set_stream_online(self, event_data):$/;"	m	class:Irc
 set_subscriber	scripte/utils/templateMgr.py	/^    def set_subscriber(self, name):$/;"	m	class:TemplateManager
 setrawframe	scripte/ddptools/ddp/ddpdevice.py	/^    def setrawframe(self, rawframe, index=0):$/;"	m	class:DDPdevice
 show_gif_on_window	scripte/xpysay.py	/^def show_gif_on_window(win, disp, gif_path):$/;"	f
-shutdown_event	old/main.py	/^shutdown_event = asyncio.Event()$/;"	v
 shutdown_event	test_irc.py	/^shutdown_event = asyncio.Event()$/;"	v
 sna	events/obsws.py	/^    async def sna():    $/;"	m	class:Obsws
-sna	old/obs_events.py	/^async def sna():$/;"	f
-sna_irc_handler	old/main.py	/^import handlers.sna_irc_handler as sna_irc_handler$/;"	I	nameref:module:handlers.sna_irc_handler
 sna_irc_handler	test_irc.py	/^import handlers.sna_irc_handler as sna_irc_handler$/;"	I	nameref:module:handlers.sna_irc_handler
 sock	utils/udp_wled.py	/^sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)$/;"	v
 socketio	scripte/letterrain/app.py	/^socketio = SocketIO(app, cors_allowed_origins="*")$/;"	v
@@ -4319,13 +4215,10 @@ startBtn	test/siegerehrung/se.html	/^    <button id="startBtn">Siegerehrung star
 start_decay	scripte/bait_o_meter.py	/^    def start_decay(self):$/;"	m	class:ThresholdAccumulatorSync
 start_display	emotes/display.py	/^def start_display():$/;"	f
 start_emote_display	emotes/display.py	/^def start_emote_display():$/;"	f
-stats_history_file	old/data/stream_stats_data.py	/^    stats_history_file = f'\/home\/sna\/src\/scripte_twitch\/data_files\/stats\/stats_history.cs/;"	v	class:ChatStats
 stats_history_map	handlers/stream_stats.py	/^    stats_history_map = get_stats_columns()$/;"	v	class:ChatStats
-stats_history_map	old/data/stream_stats_data.py	/^    stats_history_map = {$/;"	v	class:ChatStats
 stop	scripte/letterrain/tests/letterrain2.html	/^    <button id="stop">STOP!<\/button>$/;"	I
 stop_decay	scripte/bait_o_meter.py	/^    def stop_decay(self):$/;"	m	class:ThresholdAccumulatorSync
 stop_rain	scripte/letterrain/app.py	/^def stop_rain():$/;"	f
-stream_stats	old/main.py	/^import handlers.stream_stats as stream_stats$/;"	I	nameref:module:handlers.stream_stats
 stream_stats	test_irc.py	/^import handlers.stream_stats as stream_stats$/;"	I	nameref:module:handlers.stream_stats
 subscribe_event	dispatcher/event_dispatcher.py	/^def subscribe_event(event_type, fn):$/;"	f
 subscribe_event	test/pygameemotes.py	/^def subscribe_event(callback):$/;"	f
@@ -4338,7 +4231,6 @@ switch_scene	events/obsws.py	/^    async def switch_scene(self, scene_name):$/;"
 switch_scene_wrapper	events/obsws.py	/^def switch_scene_wrapper(scene_name: str):$/;"	f
 syncTimer	scripte/local_soundboard/sb.html	/^    <div id="syncTimer" hidden><\/div>$/;"	I
 t	handlers/sna_irc_handler.py	/^t = threading.Thread(target=loop.run_forever, daemon=True)$/;"	v
-tapi_listen	old/main.py	/^async def tapi_listen():$/;"	f
 tapi_listen	test_irc.py	/^async def tapi_listen():$/;"	f
 template_manager	scripte/utils/templateMgr.py	/^template_manager = TemplateManager()/;"	v
 test_loop	test/pygameemotes.py	/^def test_loop():$/;"	f
@@ -4352,7 +4244,7 @@ text_bbox_line2	scripte/img_to_epaper_static.py	/^text_bbox_line2 = draw.textbbo
 text_position_line1	scripte/img_to_epaper_static.py	/^text_position_line1 = ((image.width - (text_bbox_line1[2] - text_bbox_line1[0])) \/\/ 2, 20)$/;"	v
 text_position_line2	scripte/img_to_epaper_static.py	/^text_position_line2 = ((image.width - (text_bbox_line2[2] - text_bbox_line2[0])) \/\/ 2, 80)$/;"	v
 text_to_pixel_matrix	test/sacn5.py	/^def text_to_pixel_matrix(text, width, height, font_path, font_size):$/;"	f
-token	user_token.json	/^{"token": "ucinbk2re6slxtqsh4971nhgat1s2x", "refresh": "lozizyox00xgfi0fr67u88zizw98slhpcxyplg1p/;"	s
+token	user_token.json	/^{"token": "atlssdepzmitumqnt6lyb5f9g2u60u", "refresh": "mgco24hlafagkv8ql9kw9jiua47m2za5yo0b81pa/;"	s
 top	scripte/letterrain/static/letterrain.js	/^            top: 0,$/;"	p	variable:anonymousObject4c34a3930105
 top	scripte/letterrain/static/letterrain.js	/^            top: `-${fontSize}px`,$/;"	p	variable:anonymousObject4c34a3930205
 top	scripte/letterrain/tests/letter_rain.js	/^            top: `-${fontSize}px`,$/;"	p	variable:anonymousObjectbe76cafd0205
@@ -4383,7 +4275,6 @@ transition	scripte/letterrain/tests/letter_rain.js	/^            transition: 'co
 transition	scripte/letterrain/tests/letterrain_v2.js	/^            transition: 'color 0.3s',$/;"	p	variable:anonymousObject8cc64fa50205
 trigger-btn	scripte/letterrain/tests/letterrain.html	/^    <button id="trigger-btn">Rain!<\/button>$/;"	I
 trigger_ascii_rain	utils/run_command.py	/^def trigger_ascii_rain(count):$/;"	f
-trigger_cli_event	old/main.py	/^async def trigger_cli_event(event_key, event_id):$/;"	f
 trigger_cli_event	test_irc.py	/^async def trigger_cli_event(event_key, event_id):$/;"	f
 trigger_create_clip	handlers/twitchapi.py	/^def trigger_create_clip(user_name: str): $/;"	f
 trigger_event	dispatcher/http_event_api.py	/^def trigger_event():$/;"	f
@@ -4397,22 +4288,17 @@ trigger_hotkey_by_name	events/obsws.py	/^    async def trigger_hotkey_by_name(se
 trigger_hotkey_by_name_wrapper	events/obsws.py	/^def trigger_hotkey_by_name_wrapper(hotkey_name: str):$/;"	f
 trigger_rain	scripte/letterrain/app.py	/^def trigger_rain(count):$/;"	f
 trigger_send_message	handlers/twitchapi.py	/^def trigger_send_message(msg):$/;"	f
-trigger_send_message	old/irc_events.py	/^    def trigger_send_message(self, msg):$/;"	m	class:Irc
 trigger_sendmessage	events/twitch_irc_events.py	/^    def trigger_sendmessage(self, msg):$/;"	m	class:Irc
 trigger_sub_count	handlers/twitchapi.py	/^def trigger_sub_count():$/;"	f
 try_send_with_ddpsend	scripte/ddp_wled.py	/^def try_send_with_ddpsend(filename: str, ip: str = DDP_IP, port: int = DDP_PORT):$/;"	f
 try_send_with_ddpsend	scripte/ddp_wled2.py	/^def try_send_with_ddpsend(filename: str, ip: str = DDP_IP, port: int = DDP_PORT):$/;"	f
-tts_wav_filepath	utils/run_command.py	/^tts_wav_filepath= "\/home\/sna\/5n4fu_stream\/media\/tts_wav\/run_command.wav"$/;"	v
 tts_wav_filepath	utils/run_command.py	/^tts_wav_filepath=os.getenv("TTS_WAV_FILEPATH", "os.getenv error getting TTS_WAV_FILEPATH") $/;"	v
 turn_off	scripte/wled.py	/^    def turn_off(self):$/;"	m	class:WLEDController
 turn_off	utils/wled.py	/^    def turn_off(self):$/;"	m	class:WLEDController
 twapi_task_runner	handlers/twitchapi.py	/^    async def twapi_task_runner(self):$/;"	m	class:myTwitch
 twitch	events/twitch_events.py	/^    twitch: Optional[Twitch]                = None$/;"	v	class:TwitchEvents	typeref:typename:Optional[Twitch]
-twitch_handler	old/main.py	/^import handlers.twitch_event_handler as twitch_handler$/;"	I	nameref:module:handlers.twitch_event_handler
 twitch_handler	test_irc.py	/^import handlers.twitch_event_handler as twitch_handler$/;"	I	nameref:module:handlers.twitch_event_handler
-twitch_listen_live	old/main.py	/^async def twitch_listen_live():$/;"	f
 twitch_listen_live	test_irc.py	/^async def twitch_listen_live():$/;"	f
-twitchapi_handler	old/main.py	/^import handlers.twitchapi_handler as twitchapi_handler$/;"	I	nameref:module:handlers.twitchapi_handler
 twitchapi_handler	test_irc.py	/^import handlers.twitchapi_handler as twitchapi_handler$/;"	I	nameref:module:handlers.twitchapi_handler
 txt	utils/preset_wled.json	/^          "txt": "python is toll" $/;"	s	object:ps.14.win.seg.0
 txt	utils/preset_wled.json	/^          "txt":"Latest newsletter: Hello World!"$/;"	s	object:ps.14.win.seg.0
@@ -4420,8 +4306,6 @@ u	utils/dmx_wled.py	/^    u = UNIVERSE + (i \/\/ 510)$/;"	v
 u	utils/dmx_wled2.py	/^    u = UNIVERSE + (i \/\/ 510)$/;"	v
 ui	test/siegerehrung/gptlol.html	/^  <div id="ui">$/;"	I
 ui	test/siegerehrung/se.html	/^  <div id="ui">$/;"	I
-unify_chat_command	old/irc_events.py	/^    async def unify_chat_command(self, cmd: ChatCommand):$/;"	m	class:Irc
-unify_chat_event	old/irc_events.py	/^    async def unify_chat_event(self, chatevent: ChatEvent):$/;"	m	class:Irc
 update	baitgame/bait.py	/^    def update(self, user, gramm):$/;"	m	class:FishHighscore
 update	emotes/emote_anim.py	/^    def update(self):$/;"	m	class:BounceAnimation
 update	emotes/emote_anim.py	/^    def update(self):$/;"	m	class:EmoteAnimation
@@ -4472,7 +4356,6 @@ width	utils/percentage_wled.py	/^    width = int(sys.argv[3])$/;"	v
 win	scripte/xpysay.py	/^    win = create_argb_window(disp, width, height)$/;"	v
 win	utils/preset_wled.json	/^      "win": {$/;"	o	object:ps.14
 wled_ip	utils/udp_wled.py	/^wled_ip = "192.168.0.6"  # <-- your WLED device IP$/;"	v
-wled_listen	old/main.py	/^async def wled_listen():$/;"	f
 wled_listen	test_irc.py	/^async def wled_listen():$/;"	f
 wled_percent_2d_json	utils/percentage_wled.py	/^def wled_percent_2d_json(percent, color, width, height, orientation="row", off_color=[0,0,0]):$/;"	f
 wled_percent_2d_multipin_json	utils/percentage_wled.py	/^def wled_percent_2d_multipin_json(percent, color, pins=4, matrices_per_pin=3, matrix_size=8, off/;"	f
@@ -4494,11 +4377,8 @@ write_snaalert_file	utils/file_io.py	/^def write_snaalert_file(text=str):$/;"	f
 write_snafu_stats_history	scripte/utils/async_file_io.py	/^    async def write_snafu_stats_history(self, line):$/;"	m	class:AsyncFileIO
 write_snaman_file	utils/file_io.py	/^def write_snaman_file(text=str):$/;"	f
 write_stats_file	scripte/utils/async_file_io.py	/^    async def write_stats_file(self,filename,stats):$/;"	m	class:AsyncFileIO
-write_stats_history	old/data/stream_stats_data.py	/^    def write_stats_history(self):$/;"	m	class:ChatStats
 write_stats_history_to_db	handlers/stream_stats.py	/^    def write_stats_history_to_db(self):$/;"	m	class:ChatStats
 write_top_baiter	utils/file_io.py	/^def write_top_baiter(text=str):$/;"	f
-ws	old/obs_events.py	/^ws = None$/;"	v
-xterm-256color	old/tmux.conf	/^set -ga terminal-overrides ",xterm-256color:Tc"$/;"	k
 zIndex	scripte/letterrain/static/letterrain.js	/^            zIndex: 99999,$/;"	p	variable:anonymousObject4c34a3930105
 zIndex	scripte/letterrain/tests/letter_rain.js	/^        zIndex: 99999,$/;"	p	variable:anonymousObjectbe76cafd0105
 zIndex	scripte/letterrain/tests/letterrain.js	/^        zIndex: 99999,$/;"	p	variable:anonymousObject099fea5e0105

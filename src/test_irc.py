@@ -242,6 +242,7 @@ def bait_o_meter():
             decay_interval_seconds = 60,
             trigger_cooldown_seconds = 0, 
             max_value=90)
+
 async def emote_loop():
     start_emote_display()
 
@@ -259,7 +260,7 @@ def handle_exit(*args):
 shutdown_event = asyncio.Event()
 
 async def main():
-    
+     
     my_event_subscriptions()
     flask_thread = threading.Thread(target=run_flask, daemon=True)
     flask_thread.start()
@@ -277,6 +278,7 @@ async def main():
                 asyncio.create_task( irc_listen() ),
                 asyncio.create_task( obs_listen() ),
                 asyncio.create_task( twitch_listen_live() )
+                #asyncio.create_task( emote_loop())
                 ]
         post_event("set_stream_online", {"event_data": False})
         

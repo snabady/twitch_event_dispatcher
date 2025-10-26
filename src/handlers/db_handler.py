@@ -1,58 +1,98 @@
 import os
 import mysql.connector
+from mysql.connector import pooling, Error
 import logging
 import datetime
 from utils import log
 from datetime import datetime
 from dispatcher.event_dispatcher import post_event
-
-from handlers import twitchapi #import trigger_get_user_id
+from handlers import twitchapi 
 logger = logging.getLogger("DB_LOG")
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
 
+_pool: pooling.MySQLConnectionPool = None
 
-"""event_types = {
-            "stream.online": handle_stream_online,
-            "stream.offline": handle_stream_offline,
-            "channel.update_v2": handle_channel_update_v2,
-            "channel.update": handle_channel_update
-        }"""
+def init_db_pool():
+    
+    global _pool
+    if _pool is not None:
+        return
 
-def get_db_conn():
+    host_       = os.getenv("DB_HOST")
+    user_       = os.getenv("DB_USER")
+    passw_      = os.getenv("DB_PASS")
+    database_   = os.getenv("DB_DATABASE")
+    pool_size   = int(os.getenv("DB_POOL_SIZE", "5"))
+    pool_name   = os.getenv("DB_POOL_NAME")
 
-    host_=os.getenv("DB_HOST")
-    user_=os.getenv("DB_USER")
-    passw_=os.getenv("DB_PASS")
-    database_=os.getenv("DB_DATABASE")
-    print (host_,user_,passw_,database_)
+    _pool = pooling.MySQLConnectionPool(
+            pool_name=pool_name,
+            pool_size=pool_size,
+            host=host_,
+            user=user_,
+            password=passw_,
+            database=database_,
+            pool_reset_session=True,
+            )
+
     conn =  mysql.connector.connect(
         host=host_,      
         user=user_,  
         password=passw_,
         database=database_
     )
-    return conn
 
-
-def execute_query(query: str, values: []) -> bool:
-    conn = get_db_conn()
-    cursor = conn.cursor()
+def get_db_conn():
+    global _pool
+    if _pool is None:
+        init_db_pool()
     try:
-    # TODO check return...
-        ret = cursor.execute(query, values)
-    except Exception as e:
-        logger.debug(e)
-    if query.strip().lower().startswith("select"):
-        ret = cursor.fetchall()
-    else:
-        conn.commit()
-        ret = cursor.rowcount
+        return _pool.get_connection()
+    except Error as e:
+        logger.exception("Failed to get connection from pool, attempting re-init")
+        init_db_pool()
+        return _pool.get_connection()
 
-    cursor.close()
-    conn.close()
 
-    return ret 
+def execute_query(query: str, values=None):
+    """
+    Execute a query using a pooled connection.
+    - For SELECT queries returns fetched rows (list of tuples).
+    - For non-SELECT queries returns affected rowcount.
+    Values can be None or a sequence/mapping for parameterized queries.
+    """
+    conn = None
+    cursor = None
+    try:
+        conn = get_db_conn()
+        cursor = conn.cursor()
+        if values is None:
+            cursor.execute(query)
+        else:
+            cursor.execute(query, values)
+
+        if query.strip().lower().startswith("select"):
+            ret = cursor.fetchall()
+        else:
+            conn.commit()
+            ret = cursor.rowcount
+        return ret
+    except Exception:
+        logger.exception("Error executing query")
+        raise
+    finally:
+        if cursor:
+            try:
+                cursor.close()
+            except Exception:
+                logger.exception("Failed to close cursor")
+        if conn:
+            try:
+                conn.close()  # returns connection to pool
+            except Exception:
+                logger.exception("Failed to close/return connection")
+
 
 def check_excisting_twitch_user(user_name):
     query = """

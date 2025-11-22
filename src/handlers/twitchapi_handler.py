@@ -1,6 +1,6 @@
 import os
 import logging
-from utils import log,file_io
+from src.utils import log,file_io
 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)

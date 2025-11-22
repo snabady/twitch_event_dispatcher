@@ -1,10 +1,10 @@
 import threading
 import asyncio
-from dispatcher.event_dispatcher import post_event, subscribe_event
-from handlers import db_handler
-from handlers.twitchapi import myTwitch
+from src.dispatcher.event_dispatcher import post_event, subscribe_event
+from src.handlers import db_handler
+from src.handlers.twitchapi import myTwitch
 import logging
-from utils import log
+from src.utils import log
 
 class ChannelPointManager:
 

@@ -3,15 +3,15 @@ import requests
 import os
 import logging
 from threading import Thread
-from utils.run_command import run_mpv, run_xcowsay, run_tts, create_toilet_file
+from src.utils.run_command import run_mpv, run_xcowsay, run_tts, create_toilet_file
 import asyncio
-from utils.run_command import GatherTasks
-from utils import log
-from events import obsws
-from dispatcher.event_dispatcher import post_event, subscribe_event
-from utils.file_io import write_file
-from handlers import stream_stats , db_handler
-
+from src.utils.run_command import GatherTasks
+from src.utils import log
+from src.events import obsws
+from src.dispatcher.event_dispatcher import post_event, subscribe_event
+from src.utils.file_io import write_file
+from src.handlers import stream_stats , db_handler
+from src.handlers.twitchapi import get_dbarray_twitch_user
 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
@@ -81,7 +81,10 @@ def handle_channel_follow(event: dict):
     gather_tasks.run_tasks()    
 
     # update followerlist
-    db_handler.insert_new_follower([user_id, datetime.datetime.now()])
+    #user_db_data = get_dbarray_twitch_user(event_data)
+    #db_handler.add_new_twitch_user(user_db_data)
+    post_event("trigger_update_user_data", event_data.get("user_login"))
+
 
 def hanlde_channel_raid(event: dict):
     event_data = event.get("event_data")

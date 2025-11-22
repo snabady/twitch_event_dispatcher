@@ -4,8 +4,8 @@ import json
 from twitchAPI.chat import ChatCommand, ChatMessage
 import aiofiles
 import logging
-from utils import log
-from handlers.db_handler import get_chat_commands ,get_stats_columns, insert_stream_stats
+from src.utils import log
+from src.handlers.db_handler import get_chat_commands ,get_stats_columns, insert_stream_stats
 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)

@@ -1,6 +1,6 @@
 import logging
-from utils import log
-from dispatcher.event_dispatcher import subscribe_event, post_event
+from src.utils import log
+from src.dispatcher.event_dispatcher import subscribe_event, post_event
 
 
 logger = logging.getLogger(__name__)

@@ -3,10 +3,10 @@ import mysql.connector
 from mysql.connector import pooling, Error
 import logging
 import datetime
-from utils import log
+from src.utils import log
 from datetime import datetime
-from dispatcher.event_dispatcher import post_event
-from handlers import twitchapi 
+from src.dispatcher.event_dispatcher import post_event
+from src.handlers import twitchapi 
 logger = logging.getLogger("DB_LOG")
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
@@ -77,9 +77,11 @@ def execute_query(query: str, values=None):
         else:
             conn.commit()
             ret = cursor.rowcount
+        print(cursor.statement)
         return ret
     except Exception:
         logger.exception("Error executing query")
+        logger.exception(cursor.statement)
         raise
     finally:
         if cursor:
@@ -103,17 +105,50 @@ def check_excisting_twitch_user(user_name):
     logger.debug(ret)
     for x in ret:
         logger.debug(x)
+
 def add_new_twitch_user(user_data):
-    
-    query = """
-                        INSERT IGNORE INTO twitch_users(user_id, 
+   # user_id	user_name	user_displayname	followed_at	account_created	type	description	profile_image_url	offline_image_url	view_count	created_at 
+    logger.debug(f"user_data:{len(user_data)} |  {user_data}")
+    query = f"""
+                        INSERT INTO twitch_users(user_id, 
                                                         user_name, 
-                                                        user_displayname
+                                                        user_displayname,
+                                                        account_created, 
+                                                        type, 
+                                                        description, 
+                                                        profile_image_url,
+                                                        offline_image_url, 
+                                                        view_count,
+                                                        followed_at
                                                         )
-                        VALUES ( %s, %s, %s)
+                        VALUES (%s, %s, %s,  %s, %s, %s, %s, %s,  %s, {datetime.now()})
+                        ON DUPLICATE KEY UPDATE
+                        USER_ID             = values(user_id),
+                        user_name           = values(user_name),
+                        user_displayname    = values(user_displayname),
+                        type                = values(type),
+                        description         = values(description),
+                        profile_image_url   = values(profile_image_url),
+                        account_created     = values(account_created),
+                        view_count          = values(view_count),
+                        offline_image_url   = values(offline_image_url)
+
                         """
 
     execute_query(query, user_data)
+
+def update_special_users(data,is_vip=0):
+    query=f"""
+            INSERT INTO special_users (user_id, is_vip, user_login, user_name, vip_since,epaper_id)
+            VALUES(%s,%s, %s, %s, %s, 1)
+            ON DUPLICATE KEY UPDATE
+            user_id     = VALUES(user_id),
+            is_vip      = VALUES(is_vip), 
+            user_login  = VALUES(user_login),
+            user_name   = VALUES(user_name)
+    """
+    print (query)
+    execute_query(query,data)
 
 def remove_from_followerlist(user_id):
     query =f"delete from followerlist where user_id = {user_id}"
@@ -274,8 +309,8 @@ def update_current_mods(mods: list):
     for x in mods:
         
         query = """
-            INSERT INTO special_users (user_id, user_login, user_name,is_mod, is_vip, vip_since)
-            SELECT u.user_id, %s, %s, 1, 0, %s
+            INSERT INTO special_users (user_id, user_login, user_name,  vip_since)
+            SELECT u.user_id, %s, %s,  0, %s
             FROM twitch_users u
             WHERE u.user_id = %s
         """
@@ -286,18 +321,31 @@ def update_current_mods(mods: list):
     conn.close()
 
 
+def make_epaper_user_data():
+    user_data =[]
+    update_current_vips() # 
+
 def update_current_vips(vips: list):
     conn = get_db_conn()
     cursor =conn.cursor()
-
+    logger.debug(f"vips: {vips}")
     for x in vips:
+        logger.debug(f"vip: {x}")
         query = """
-            INSERT INTO special_users (user_id, user_login, user_name,is_mod, is_vip, vip_since) 
-            SELECT u.user_id, %s, %s, 0, 1, %s
+            INSERT INTO special_users (user_id,is_vip, user_login, user_name, vip_since,epaper_id) 
+            SELECT u.user_id, %s,%s, %s, %s, %s
             FROM twitch_users u
             WHERE u.user_id = %s
+            ON DUPLICATE KEY UPDATE
+            is_vip      = values(is_vip),
+            user_login  = values(user_login),
+            user_name   = values(user_name),
+            vip_since   = values(vip_since),
+            epaper_id   = values(epaper_id)
+
         """
-        cursor.execute(query, [ x.user_login, x.user_name,  datetime.now(),x.user_id])
+        #execute_query(query, [ 1, x.user_login,  x.user_name,  datetime.now(),x.user_id])
+        execute_query(query, x)
         print(f"{cursor.statement}")
     conn.commit()
     cursor.close()

@@ -4,8 +4,8 @@ import asyncio
 import time
 import logging
 import threading
-from utils import log 
-from dispatcher.event_dispatcher import subscribe_event
+from src.utils import log 
+from src.dispatcher.event_dispatcher import subscribe_event
 
 class Singleton(type):
     _instances = {}
@@ -104,7 +104,7 @@ class WLEDController(metaclass=Singleton):
         while True: 
             if self.chatstrobo > 0:
                 print (f'chatstrobo_cnt: {self.chatstrobo}')
-                self.set_preset(5)
+                self.set_preset(4)
                 self.chatstrobo -=1
             await asyncio.sleep(0.5)
 

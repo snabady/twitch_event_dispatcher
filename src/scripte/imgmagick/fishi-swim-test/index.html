@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Schwimmende Bilder mit Name</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+    font-family: sans-serif;
+  }
+
+  .swimmer {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 3px black;
+    pointer-events: none;
+  }
+
+  .swimmer img {
+    width: 600px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    pointer-events: none;
+  }
+
+  @keyframes swimRight {
+    0% { left: -150px; }
+    100% { left: 100vw; }
+  }
+
+  @keyframes swimLeft {
+    0% { left: 100vw; }
+    100% { left: -150px; }
+  }
+</style>
+</head>
+<body>
+
+<script>
+let currentSwimmer = null;
+
+/**
+ * Startet eine Schwimm-Animation quer über den Bildschirm
+ * @param {string} name - Text über dem Bild
+ * @param {string} imgSrc - URL oder Pfad des Bildes
+ * @param {'left'|'right'} direction - Schwimmrichtung
+ * @param {number} duration - Dauer in Sekunden
+ */
+function startSwim(name, imgSrc, direction = 'right', duration = 8) {
+  // Alten Schwimmer entfernen, falls vorhanden
+  if (currentSwimmer) {
+    currentSwimmer.remove();
+    currentSwimmer = null;
+  }
+
+  const swimmer = document.createElement('div');
+  swimmer.className = 'swimmer';
+  swimmer.style.top = Math.random() * 70 + 10 + '%'; // zufällige Höhe
+
+  const nameTag = document.createElement('div');
+  nameTag.textContent = name;
+
+  const img = document.createElement('img');
+  img.src = imgSrc;
+
+  swimmer.appendChild(nameTag);
+  swimmer.appendChild(img);
+  document.body.appendChild(swimmer);
+  currentSwimmer = swimmer;
+
+  // Animation auf den gesamten Container anwenden
+  swimmer.style.animation = `${direction === 'right' ? 'swimRight' : 'swimLeft'} ${duration}s linear forwards`;
+
+  // Nach Animation entfernen
+  setTimeout(() => {
+    swimmer.remove();
+    currentSwimmer = null;
+  }, duration * 1000);
+}
+
+// 🧪 Testfisch nach 1 Sekunde
+setTimeout(() => {
+  startSwim('snafu', 'testascii.png', 'left', 15);
+}, 1000);
+</script>
+
+</body>
+</html>
+

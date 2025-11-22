@@ -1,5 +1,5 @@
 import logging
-from utils import log
+from src.utils import log
 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)

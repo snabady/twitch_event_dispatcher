@@ -1,9 +1,9 @@
 import threading
 import time
 from typing import Optional
-from dispatcher.event_dispatcher import post_event, subscribe_event
+from src.dispatcher.event_dispatcher import post_event, subscribe_event
 import logging
-from utils import log
+from src.utils import log
 
 class ThresholdAccumulatorSync:
     """

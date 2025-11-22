@@ -1,9 +1,9 @@
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
-mac = "6838316E71D8B841"   # destination mac address
+mac = "1337346152ECA442"   # destination mac address
 #mac = "6C353C6758649341"
-dither = 0   # set dither to 1 is you're sending photos etc
+dither = 1  # set dither to 1 is you're sending photos etc
 apip = "192.168.0.12"   # ip address of your access point
 
 # Create a new paletted image with indexed colors
@@ -27,27 +27,17 @@ line1 = 'current VIP'
 line2 = 'ZermalmerDoc'
 
 # Define the fonts and sizes
-font_line1 = ImageFont.truetype('/home/sna/Downloads/kryptonb.ttf', size=46)  # Change the font file and size as per your preference
-font_line2 = ImageFont.truetype('/home/sna/Downloads/kryptonb.ttf', size=50)  # Change the font file and size as per your preference
 
 # Calculate the text bounding boxes to get the text widths and heights
-text_bbox_line1 = draw.textbbox((0, 0), line1, font=font_line1)
-text_bbox_line2 = draw.textbbox((0, 0), line2, font=font_line2)
-
-# Calculate the text positions to center the lines horizontally
-text_position_line1 = ((image.width - (text_bbox_line1[2] - text_bbox_line1[0])) // 2, 20)
-text_position_line2 = ((image.width - (text_bbox_line2[2] - text_bbox_line2[0])) // 2, 80)
-
-# Write the text on the image
-draw.text(text_position_line1, line1, fill=2, font=font_line1)  # Use palette index 1 for black color
-draw.text(text_position_line2, line2, fill=1, font=font_line2)  # Use palette index 2 for red color
 
 # Convert the image to 24-bit RGB
-rgb_image = image.convert('RGB')
+#rgb_image = image.convert('RGB')
 
 # Save the image as JPEG with maximum quality
-image_path = 'output.jpg'
-rgb_image.save(image_path, 'JPEG', quality="maximum")
+#image_path = 'output.jpg'
+#image_path = "/home/sna/src/twitch/src/scripte/imgmagick/create_vip_e_paper_image.sh"
+image_path = "/home/sna/src/twitch/src/scripte/imgmagick/vip_epaper.png"
+#rgb_image.save(image_path, 'JPEG', quality="maximum")
 
 # Prepare the HTTP POST request
 url = "http://" + apip + "/imgupload"

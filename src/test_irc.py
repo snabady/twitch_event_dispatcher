@@ -8,27 +8,27 @@ import asyncio
 import logging
 import time
 import signal
-from events import twitch_events,obsws, event_timer
-from dispatcher.event_dispatcher import subscribe_event, post_event
-import handlers.twitch_event_handler as twitch_handler
-import  handlers.obsws_handler as obsws_handler
-import handlers.stream_stats as stream_stats
-import handlers.twitchapi_handler as twitchapi_handler
-import handlers.sna_irc_handler as sna_irc_handler
-from handlers import asciiquarium
-from handlers import twitchapi
-from utils.run_command import run_subprocess, trigger_event_board, download_twitch_emote, trigger_ascii_rain
-from utils.file_io import write_score_chart_values, update_vip_fishing_chart
-from utils import log
-from baitgame.bait import FishGame
-from utils.wled import WLEDController
-from emotes.display import start_emote_display
-from dispatcher.http_event_api import app as http_event
-from scripte.bait_o_meter import ThresholdAccumulatorSync
-from events import twitch_irc_events
-from handlers import custom_rewards_manager 
+from src.events import twitch_events,obsws, event_timer
+from src.dispatcher.event_dispatcher import subscribe_event, post_event
+import src.handlers.twitch_event_handler as twitch_handler
+import  src.handlers.obsws_handler as obsws_handler
+import src.handlers.stream_stats as stream_stats
+import src.handlers.twitchapi_handler as twitchapi_handler
+import src.handlers.sna_irc_handler as sna_irc_handler
+from src.handlers import asciiquarium
+from src.handlers import twitchapi
+from src.utils.run_command import run_subprocess, trigger_event_board, download_twitch_emote, trigger_ascii_rain, create_epaper_vip_badge
+from src.utils.file_io import write_score_chart_values, update_vip_fishing_chart
+from src.utils import log
+from src.baitgame.bait import FishGame
+from src.utils.wled import WLEDController
+from src.emotes.display import start_emote_display
+from src.dispatcher.http_event_api import app as http_event
+from src.scripte.bait_o_meter import ThresholdAccumulatorSync
+from src.events import twitch_irc_events
+from src.handlers import custom_rewards_manager 
 
-from  handlers import db_handler
+from  src.handlers import db_handler
 logger = logging.getLogger("MAINLOOP")
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.INFO)   
@@ -65,6 +65,7 @@ def my_event_subscriptions():
     subscribe_event("twitch_shoutout_event",    twitch_handler.handle_twitch_shoutout_event)
     subscribe_event("twitch_streaminfo_event",  twitch_handler.handle_twitch_streaminfo_event)
     subscribe_event("twitch_action_event",      twitch_handler.handle_twitch_action_event)
+    subscribe_event("twitch_vip_event", twitch_handler.handle_channel_vip_event)
     #subscribe_event("twitch_charity_event", twitch_handler.handle_twitch_charity_event)
     #subscribe_event("twitch_moderate_event", twitch_handler.hanle_twitch_moderate_event)
 
@@ -74,6 +75,7 @@ def my_event_subscriptions():
     subscribe_event("trigger_ascii_rain",       trigger_ascii_rain)
     subscribe_event("write_score_chart_values", write_score_chart_values)
     subscribe_event("update_vip_fishing_chart", update_vip_fishing_chart)
+    subscribe_event("update_epaper_badge", create_epaper_vip_badge )
     #subscribe_event("asciiquarium_start",       asciiquarium.asciiquarium_start)
     #subscribe_event("asciiquarium_end",         asciiquarium.asciiquarium_end)
     #subscribe_event("asciiquarium_streamstart", asciiquarium.asciiquarium_streamstart)
@@ -179,6 +181,7 @@ async def twitch_listen_live():
             #test_ids = await tevents.listen_charity_events()
             test_ids = await tevents.listen_channel_action_events()
             #test_ids = await tevents.listen_channel_moderate_events()
+            test_ids = await tevents.listen_vip_events()
             logger.debug("successfully subscribed 5n4fu events")
         except Exception as e:
             logger.debug(e)
@@ -228,7 +231,7 @@ async def tapi_listen():
 
 async def wled_listen():
     try:
-        wled = WLEDController("192.168.0.143")
+        wled = WLEDController("192.168.0.134")
         await wled.start()
     except asyncio.CancelledError:
         logger.debug("asyncio wled_listen EXIT--->")

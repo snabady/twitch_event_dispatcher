@@ -1,18 +1,19 @@
+import datetime
 import os
 import json
 import math
 import random
 import logging
-from utils import log
+from src.utils import log
 from queue import Queue
 import threading
-from dispatcher.event_dispatcher import post_event, subscribe_event
+from src.dispatcher.event_dispatcher import post_event, subscribe_event
 import time
 from collections import defaultdict
-from utils import file_io
-from utils.file_io import write_bait_counter, bait_quotes_array
-from events.obsws import set_source_visibility_wrapper
-from handlers import db_handler 
+from src.utils import file_io, run_command
+from src.utils.file_io import write_bait_counter, bait_quotes_array
+from src.events.obsws import set_source_visibility_wrapper
+from src.handlers import db_handler 
 
 MAX_SLOTS           = os.getenv("BAIT_MAX_SLOTS", "BAIT_MAX_SLOTS")
 USER_MAX_SLOTS      = os.getenv("BAIT_USER_MAX_SLOTS","BAIT_USER_MAX_SLOTS")
@@ -170,7 +171,7 @@ class FishSlotManager_:
 
 class FishPopulation:
 
-    def __init__(self, max_fish=69, max_weight=1337, min_weight=23):
+    def __init__(self, max_fish=70, max_weight=1337, min_weight=23):
         self.max_fish = int(os.getenv("BAIT_TOTAL_FISHIS","BAIT_TOTAL_FISHIS"))
         self.max_weight = int(os.getenv("BAIT_MAX_WEIGHT","BAIT_MAX_WEIGHT"))
         self.min_weight = int(os.getenv("BAIT_MIN_WEIGHT","BAIT_MIN_WEIGHT"))
@@ -251,6 +252,9 @@ class FishPopulation:
 
         random.shuffle(weights)
         return weights
+
+
+
 
     def weight_mix(self, minweight: int, maxweight: int, nslots: int) -> list:
 
@@ -425,7 +429,8 @@ class FishGame:
         self.logger = log.add_logger_handler(self.logger)
         self.logger.setLevel(logging.DEBUG)   
         self.stream_online = False
-        
+        self.current_bait_vip = "" 
+        self.current_vip_time = None
         # Registriere Event-Handler
         subscribe_event("fish_bait", self.on_bait)
         subscribe_event("fish_dynamite", self.on_dynamite)
@@ -527,6 +532,46 @@ class FishGame:
         msg = f"there are {fishies_left} fishis left from a total of {fishies_total} fishis!"
         post_event("irc_send_message", msg)
 
+    def check_vip(self, user):
+        self.logger.debug(f"user: {user}")
+        
+        if self.current_bait_vip == user:
+            x = random.randint(1,10)
+            if x == 5:
+                self.current_vip_time = datetime.datetime.now()
+                msg=f"{user} refreshed their VIP timer!"
+                post_event("irc_send_message", msg)
+            return
+
+        if self.current_bait_vip == "":
+ 
+            if random.choice([0,1])==1:
+                self.current_bait_vip=user
+                
+                self.current_vip_time = datetime.datetime.now()
+                post_event("trigger_add_or_remove_vip", {"user_name":user, "add_vip":True})
+            #INSERT INTO special_users (user_id,is_vip, user_login, user_name, vip_since,epaper_id) 
+                msg = f"new VIP {user}"
+                post_event("irc_send_message", msg)
+                post_event("trigger_udpate_vip_epaper", user)
+            return 
+
+        if self.current_bait_vip != user:
+            delta = datetime.datetime.now() - self.current_vip_time
+            if delta.seconds > random.choice([300, 200, 100]) :
+                vip = random.choice([self.current_bait_vip, user])
+                if vip == self.current_bait_vip:
+                    return
+                
+                post_event("trigger_add_or_remove_vip", {"user_name":user, "add_vip":True})
+                post_event("trigger_add_or_remove_vip", {"user_name":self.current_bait_vip, "add_vip":False})
+                msg = f"{user} has stolen VIP from {self.current_bait_vip}"
+                post_event("irc_send_message", msg)
+                post_event("trigger_udpate_vip_epaper", user)
+                self.current_bait_vip = vip
+                self.current_vip_time = datetime.datetime.now()
+                self.logger.debug(f"new vip: {self.current_bait_vip}")
+
     def process_task(self, user, task):
         gramm, fish = self.population.catch_fish()
         task.result = (gramm, fish)
@@ -557,22 +602,28 @@ class FishGame:
         
         self.fishstats.record_catch(user, gramm, fish)
         post_event("create_vip_points_chart", "")
+        self.check_vip(user)
         if is_top and not gramm == -1:
             file_io.write_top_baiter(user)
-        
+            run_command.create_last_bait_matrix(user)
+        if fish.find("fishis left")>-1:
+            msg = "!alarm "+fish
+            post_event("irc_send_message", msg)
         if fish == "a 🥠":
             self.logger.debug(f"{len(self.bait_quotes)} {type(self.bait_quotes)}")
             x = random.randint(0, len(self.bait_quotes)-1)
             s =  f"{user} got a fortune🥠{self.bait_quotes[x]}"
             post_event("irc_send_message",s)
-        if gramm==69:
+        elif gramm==69:
             post_event("trigger_event_board", "sexy_fish.webm")
-        if gramm in [23,42,66,96,1337,1001]:
+            run_command.create_last_bait_matrix(user)
+        elif gramm in [23,42,66,96,1337,1001]:
+            run_command.create_last_bait_matrix(user)
             flashvids = ["flashfish.webm","falshfish_2.webm","dori_light.webm"]
             rnd = random.choice(flashvids)
             self.logger.debug(f"random flash-video: {rnd}")
             post_event("trigger_event_board", rnd)
-            post_event("irc_send_message", f"{user} u lucky bastard: fishcc ChillGirl lanternfish1 , +1 event point")
+            post_event("irc_send_message", f"{user} lucky u you caught a lanternfish: fishcc ChillGirl lanternfish1 , +1 event point")
             
             post_event("snafu_flash_event", {"sna"})
         next_user, next_task = self.slots.finish_task(user)
@@ -658,7 +709,7 @@ class FishStats:
         subscribe_event("finish_vip_chart_with_profile_pics", self.create_vip_points_chart_part2)
         self.logger = logging.getLogger("FISHI STATS -->")
         self.logger = log.add_logger_handler(self.logger)
-        self.logger.setLevel(logging.DEBUG)   
+        self.logger.setLevel(logging.INFO)   
  
     def record_catch(self, user, gramm, fish):
         with self.lock:

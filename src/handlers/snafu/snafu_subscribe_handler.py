@@ -1,8 +1,8 @@
 import logging 
-from utils import log
-from utils.run_command import run_xcowsay, run_mpv, run_tts
-from utils.run_command import GatherTasks
-from utils.file_io import write_file
+from src.utils import log
+from src.utils.run_command import run_xcowsay, run_mpv, run_tts
+from src.utils.run_command import GatherTasks
+from src.utils.file_io import write_file
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   

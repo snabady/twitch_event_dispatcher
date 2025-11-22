@@ -14,9 +14,9 @@ import os
 import logging
 import asyncio
 import logging
-from utils import log
-from dispatcher.event_dispatcher import post_event, subscribe_event
-from handlers import db_handler, stream_stats
+from src.utils import log
+from src.dispatcher.event_dispatcher import post_event, subscribe_event
+from src.handlers import db_handler, stream_stats
 import time
 
 
@@ -61,6 +61,7 @@ class Irc(metaclass=Singleton):
         self.cmd_list           = db_handler.get_chat_commands()
         self.stream_online      = False
         subscribe_event("set_stream_online", self.set_stream_online)
+        subscribe_event("update_current_vips", self.update_current_vips)
         subscribe_event("irc_send_message", self.trigger_sendmessage)
         subscribe_event("trigger_send_message", self.trigger_sendmessage)
         self.auto_commands = self.create_auto_command_list()
@@ -135,7 +136,8 @@ class Irc(metaclass=Singleton):
         await self.twitch.close()
     
     async def dispatch_event(self, event_type, event):
-        self.logger.debug(f"dispatching: {event_type}")
+        if event_type != ChatEvent.MESSAGE:
+            self.logger.debug(f"dispatching: {event_type}")
         eventt={"irc_instance":self,
                 "event_type": event_type,
                 "event_data": event}
@@ -166,7 +168,10 @@ class Irc(metaclass=Singleton):
                 #await self.send_chat_message(msg)
         except subprocess.CalledProcessError:
             pass
-
+    def update_current_vips(self, sna):
+        query = "select t.user_name, s.user_id from special_users as s  left join twitch_users as t on s.user_id = t.user_id where s.is_vip=1"
+        self.current_vips =db_handler.execute_query(query, None)
+    
     async def run(self):
         self.twitch = await Twitch(self.client_id, self.client_secret) 
         helper = UserAuthenticationStorageHelper(self.twitch, USER_SCOPE, storage_path=self.auth_storage_file, auth_generator_func=self.auth_token_generator)

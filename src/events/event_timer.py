@@ -1,7 +1,7 @@
 import threading
 import time
-from dispatcher.event_dispatcher import post_event, subscribe_event
-from utils.file_io import write_screenkey_timer
+from src.dispatcher.event_dispatcher import post_event, subscribe_event
+from src.utils.file_io import write_screenkey_timer
 class MultiTimerClass:
     _instance = None
 

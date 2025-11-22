@@ -1,11 +1,9 @@
-
 import logging
-
-from dispatcher.event_dispatcher import subscribe_event,post_event
-from handlers.snafu import snafu_subscribe_handler, snafu_streaminfo_handler,snafu_charity_handler, snafu_action_handler, snafu_moderate_handler, snafu_ban_handler, snafu_goal_handler, snafu_channelpoint_handler, snafu_poll_handler, snafu_prediction_handler, snafu_hypetrain_handler, snafu_shoutout_handler
-from utils.run_command import EventQueue
-from utils import log
-from utils.file_io import  write_event_received
+from src.dispatcher.event_dispatcher import subscribe_event,post_event
+from src.handlers.snafu import snafu_subscribe_handler, snafu_streaminfo_handler,snafu_charity_handler, snafu_action_handler, snafu_moderate_handler, snafu_ban_handler, snafu_goal_handler, snafu_channelpoint_handler, snafu_poll_handler, snafu_prediction_handler, snafu_hypetrain_handler, snafu_shoutout_handler, snafu_vip_handler
+from src.utils.run_command import EventQueue
+from src.utils import log
+from src.utils.file_io import  write_event_received
 
 alerts = EventQueue()
 logger = logging.getLogger(__name__)
@@ -13,7 +11,16 @@ logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
 
 
+def handle_channel_vip_event(event):
+    vip_events = {
+            "channel.vip.add" : snafu_vip_handler.handle_vip_add,
+            "channel.vip.remove"    : snafu_vip_handler.handle_vip_remove
+            }
+    event_type =event.get("event_type")
+    fn =vip_events.get(event_type)
 
+    alerts.enqueue(lambda: fn(event))
+    write_event_received(f"event_type: {event_type}")
 
 def handle_twitch_subscribe_event(event):
     
@@ -30,6 +37,7 @@ def handle_twitch_subscribe_event(event):
     alerts.enqueue(lambda: fn(event))
     write_event_received(f"event_type: {event_type}")
     logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
+
 def handle_twitch_streaminfo_event(event):
     streaminfo_events = { 
         "stream.online":         snafu_streaminfo_handler.handle_stream_online,
@@ -44,6 +52,7 @@ def handle_twitch_streaminfo_event(event):
 
     write_event_received(f"event_type: {event_type}")
     logger.info (f'current queue size: {alerts.taskqueue.qsize()}')
+
 def handle_twitch_charity_event(event):
     charity_events = {
         "channel.charity_campaign.donate":      snafu_charity_handler.handle_charity_campaign_donate,

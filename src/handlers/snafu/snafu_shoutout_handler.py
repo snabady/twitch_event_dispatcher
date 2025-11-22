@@ -1,4 +1,4 @@
-from dispatcher.event_dispatcher import post_event
+from src.dispatcher.event_dispatcher import post_event
 
 def handle_shoutout_create(event):
     print("SHOUTOUT CREATE ")

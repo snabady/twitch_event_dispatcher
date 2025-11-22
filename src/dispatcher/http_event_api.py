@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
-from dispatcher.event_dispatcher import post_event
+from src.dispatcher.event_dispatcher import post_event
 import logging
-from utils import log
+from src.utils import log
 
 
 app = Flask (__name__)

@@ -2,17 +2,17 @@ import os
 import random
 import requests
 import logging
-from utils import log
-from handlers import db_handler 
+from src.utils import log
+from src.handlers import db_handler 
 import asyncio
 from twitchAPI.chat import ChatCommand, JoinEvent, LeftEvent
-from dispatcher.event_dispatcher import post_event
-#from baitgame.bait import FishGame
-logger = logging.getLogger(__name__)
+from src.dispatcher.event_dispatcher import post_event
+logger = logging.getLogger("IRC_HANDLER")
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
 import threading
-from utils.run_command import run_xcowsay, run_tts, run_mpv
+from src.utils.run_command import run_xcowsay, run_tts, run_mpv
+from src.utils import file_io
 
 
 loop = asyncio.new_event_loop()
@@ -34,7 +34,6 @@ def handle_irc_message(e_data):
     irc_instance = e_data.get("irc_instance")
 
     text = event_data.text
-    logger.debug(f"can we get the message: {text}")
     for x in msg_reaction_functions:
         if text.find(x) > -1:
             msg_reaction_functions[x](event_data, irc_instance)
@@ -64,9 +63,12 @@ def handle_chat_command(e_data):
         post_event("fishis_left", event_data)
     
     elif event_data.name == "flash":
-        if any (name == event_data.user.display_name for name, _ in irc_instance.current_vips):
+        logger.debug(f"event_data:{event_data}")
+        if any (name == event_data.user.name for name, _ in irc_instance.current_vips):
             post_event("snafu_flash_event", {"sna"})
-            self.logger.debug("flash received.. user was vip")
+            logger.debug("flash received.. user was vip")
+            
+            file_io.update_flash_counter(1)
         else:
             msg = "sorry you are no vip, try more bait to increase your chances vor VIP"
             post_event("irc_send_message", msg)
@@ -120,25 +122,50 @@ def handle_chat_command(e_data):
         msg = irc_instance.stream_stats_data.get_stats_str()
         post_event("irc_send_message", msg)
 
+
+    elif event_data.name == "giga":
+        if any (name == event_data.user.name for name, _ in irc_instance.current_vips):
+            msg ="TODO for snafuqi"
+            emote = event_data.emotes
+            if emote !=  None:
+                logger.debug("got twitch-emote for gigantify")
+                for x in emote:
+                    print(x)
+                    post_event("download_twitch_emote",x) 
+                    dest = f"{x}.gif"
+                    post_event("trigger_event_board", dest)
+                    post_event("trigger_ascii_rain", 23)
+                    return
+            else:
+                logger.debug(f"probably 7tv? emote for giga.... here is the text given: {event_data.text}")
+                post_event("trigger_ascii_rain", 23)
+
+
+ 
 def handle_followage_command(event_data):
     logger.debug("handle_followage_command")
     logger.debug(f'event_data: {event_data}')
     
-
 def handle_flash_event(event_data, irc_instance):
     logger.debug("Flash event received...")
-    if any (name == event_data.user.display_name for name, _ in irc_instance.current_vips):
+    if any (name == event_data.user.name for name, _ in irc_instance.current_vips):
         post_event("snafu_flash_event", {"sna"})
-        self.logger.debug("flash received.. user was vip")
+        logger.debug("flash received.. user was vip")
+        file_io.update_flash_counter(1)
     else:
-        msg = "sorry you are no vip, try more bait to increase your chances vor VIP"
+        msg = "sorry you are no vip, try more !bait to increase your chances vor VIP"
         post_event("irc_send_message", msg)
 
-    update_flash_counter(1)
+
+def handle_ameno(event_data, irc_instance):
+    requests.get("http://localhost:8000/play?sound=webm/ameno.webm") 
+
 
 def handle_bobr_event(event_data, irc_instance):
     requests.get("http://localhost:8000/play?sound=webm/bobr.webm") 
 
+def handle_cat_kiss(event_data, irc_instance):
+    requests.get("http://localhost:8000/play?sound=webm/kisscat.webm")
 def handle_lightning_event(event_data, irc_instance):
     post_event("irc_send_message", "KEKW")
 
@@ -164,7 +191,9 @@ msg_reaction_functions = {
         "lightning":handle_lightning_event,
         "!lightning":handle_lightning_event,
         "!hungry":handle_hungry_event,
-        "!bobr": handle_bobr_event
+        "!bobr": handle_bobr_event,
+        "!kisscat": handle_cat_kiss,
+        "!ameno":handle_ameno
         } 
 
 

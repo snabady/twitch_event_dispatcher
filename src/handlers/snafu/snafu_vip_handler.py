@@ -1,8 +1,8 @@
 import logging
-from utils import log
-from handlers import db_handler
+from src.utils import log
+from src.handlers import db_handler
 from datetime import datetime
-from dispatcher.event_dispatcher import post_event
+from src.dispatcher.event_dispatcher import post_event
 logger = logging.getLogger("VIP handler")
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   

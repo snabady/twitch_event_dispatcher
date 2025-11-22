@@ -1,3 +1,4 @@
+import datetime 
 import os
 from collections import defaultdict 
 import logging
@@ -8,10 +9,10 @@ from twitchAPI.type import AuthScope
 from twitchAPI.eventsub.websocket import EventSubWebsocket
 from twitchAPI.twitch import Twitch, TwitchUser
 from twitchAPI.oauth import UserAuthenticator, UserAuthenticationStorageHelper
-from utils import log
-from handlers import db_handler
+from src.utils import log
+from src.handlers import db_handler
 from twitchAPI.type import CustomRewardRedemptionStatus
-from dispatcher.event_dispatcher import post_event, subscribe_event
+from src.dispatcher.event_dispatcher import post_event, subscribe_event
 
 
 logger = logging.getLogger(__name__)
@@ -57,6 +58,36 @@ def trigger_get_user_profile_imgs(user_names:list):
         #post_event("finish_vip_chart_with_profile_pics", ret)
     myTwitch().enqueue(runner())
 
+def trigger_get_vipsis(sna):
+    async def runner():
+        twapi=myTwitch()
+        ret = await twapi.get_vipsis()
+    myTwitch().enqueue(runner())
+
+def trigger_update_user_data(user_names:list):
+    async def runner():
+        twapi=myTwitch()
+        ret = await twapi.update_user_data(user_names)
+        #post_event("finish_vip_chart_with_profile_pics", ret)
+    myTwitch().enqueue(runner())
+
+def trigger_add_or_remove_vip(event_data):
+    user_name = event_data.get("user_name")
+    add_vip = event_data.get("add_vip")
+    logger.debug(f"{event_data} user_name: {user_name} add_vip: {add_vip}")
+    async def runner():
+        twapi=myTwitch()
+        ret = await twapi.add_or_remove_vip(user_name, add_vip)
+    myTwitch().enqueue(runner())
+    
+def trigger_update_vip_epaper(user_name):
+    logger.debug("blub ........")
+    async def runner():
+        twapi=myTwitch()
+        ret = await twapi.update_vip(user_name)
+    myTwitch().enqueue(runner())
+        
+    
 class Singleton(type):
     _instances = {}
     def __call__(cls, *args, **kwargs):
@@ -80,9 +111,12 @@ class myTwitch(metaclass=Singleton):
         self.current_vips = None
         self.session_unfollowed_user_ids = defaultdict(int)
         self.is_stream_online = False
-
+        subscribe_event("trigger_get_vipsis", trigger_get_vipsis)
         subscribe_event("stream_online_event", self.set_stream_online)
         subscribe_event("trigger_get_user_profile_imgs", trigger_get_user_profile_imgs)
+        subscribe_event("trigger_update_user_data", trigger_update_user_data)
+        subscribe_event("trigger_add_or_remove_vip", trigger_add_or_remove_vip)
+        subscribe_event("trigger_udpate_vip_epaper", trigger_update_vip_epaper)
     async def __aenter__(self):
         self.twitch, self.user = await self.get_twitch_api_conn()
         #asyncio.create_task(self.twapi_task_runner())
@@ -95,7 +129,7 @@ class myTwitch(metaclass=Singleton):
     async def init_sna(self):
         self.logger.debug("aenter")
         self.twitch, self.user = await self.get_twitch_api_conn()
-        self.broadcaster_id = self.get_user_id("5n4fu")
+        self.broadcaster_id = await self.get_user_id_str("5n4fu")
 
     async def get_user_id(self, user_name):
 
@@ -116,6 +150,11 @@ class myTwitch(metaclass=Singleton):
         
         post_event("finish_vip_chart_with_profile_pics", user_imgs)    
         return user_imgs    
+    
+    async def update_user_data(self, user_name):
+        x = await first(self.twitch.get_users(logins=[user_name]))
+        user_array = get_dbarray_twitch_user(x)
+        db_handler.add_new_twitch_user(user_array) 
 
     async def get_moderators(self):
         b_id = await first(self.twitch.get_users(logins=["5n4fu"]))
@@ -123,7 +162,8 @@ class myTwitch(metaclass=Singleton):
         async for mod in self.twitch.get_moderators(b_id.id):
             if not db_handler.check_excisting_twitch_user(mod.user_id):
                 user_data = await first(self.twitch.get_users(logins=[mod.user_name]))
-                db_handler.add_new_twitch_user([user_data.id, user_data.login, user_data.display_name])
+                user_db_data = self.get_dbarray_twitch_user(user_data)
+                db_handler.add_new_twitch_user(user_db_data)
 
             self.logger.debug(f"moderartor: {mod}")
             mods.append(mod)
@@ -134,13 +174,13 @@ class myTwitch(metaclass=Singleton):
         vips =[]
         async for vip in self.twitch.get_vips(b_id.id):
             self.logger.debug(f"vip: {vip.user_id}")
-            vips.append(vip)
+            vips.append([vip.user_id, 1, vip.user_login, vip.user_name, datetime.datetime.now(), 1])
+            #user_id,is_vip, user_login, user_name, vip_since,epaper_id)
         db_handler.update_current_vips(vips)
         vips = db_handler.execute_query("select user_name, user_id from special_users where is_vip=1", None)
         self.logger.debug(vips)
         self.current_vips = vips
         
-    # TODO RECONNECT OBS EINBAUEN!!!!!!!!!!!!1
     async def twapi_task_runner(self):
         try:
             while True:
@@ -260,7 +300,32 @@ class myTwitch(metaclass=Singleton):
                 "event_data" : {"total_follower": result.total} }
         self.logger.info(f"xx total_followers: {result.total}")
         post_event("twitchapi_follower_counter", data)
+   
+    async def update_vip(self, user_name):
+        logger.debug("blub .. blubll....")
+        user_data = await self.get_user_data(user_name)
+        vip_user_image = user_data.profile_image_url
+        post_event("update_epaper_badge", {"user_name": user_name, "vip_user_image":vip_user_image})     
         
+        user_d = [ user_data.id, 1, user_data.login, user_data.display_name, datetime.datetime.now(), 1]
+        logger.debug(f"type: {type(user_d)} data: {user_d}")
+        db_handler.update_current_vips([user_d])
+   
+    async def get_user_data(self, user_name):
+        user_data = await first(self.twitch.get_users(logins=[user_name]))
+        return user_data
+
+    async def add_or_remove_vip(self, user_name, vip=True):
+        
+        user_id = await (self.get_user_id_str(user_name))
+        #await self.init_sna() 
+        bc_id = await (self.get_user_id_str("5n4fu"))
+        if vip:
+            #add_vip
+            await self.twitch.add_channel_vip(bc_id, user_id)
+        else:
+            #remove_vip
+            await self.twitch.remove_channel_vip(bc_id, user_id)
 
     async def create_clip(self):
         clip = await self.twitch.create_clip(self.user.id)
@@ -375,5 +440,24 @@ TARGET_SCOPES = [
                  AuthScope.USER_READ_BLOCKED_USERS,
                  AuthScope.USER_WRITE_CHAT,
                  AuthScope.CHANNEL_READ_REDEMPTIONS,
-                 AuthScope.CHANNEL_READ_VIPS
+                 AuthScope.CHANNEL_READ_VIPS,
+                 AuthScope.CHANNEL_MANAGE_VIPS
                  ]
+
+
+def get_dbarray_twitch_user(user_data):
+   #user_id  | user_name     | user_displayname | followed_at         | account_created     | type | description | profile_image_url | offline_image_url | view_count | created_at     
+    #user_data = await first(self.twitch.get_users(logins=[user_name]))
+    print(f"get_dbarray_twitch_user: {user_data}{type(user_data)} ")
+    return [user_data.id, 
+                  user_data.login,
+                  user_data.display_name,
+                  user_data.created_at,
+                  user_data.type,
+                  user_data.description,
+                  user_data.profile_image_url,
+                  user_data.offline_image_url,
+                  user_data.view_count,
+                  ]
+    
+

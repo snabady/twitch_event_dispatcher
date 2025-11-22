@@ -1,12 +1,12 @@
 import datetime 
 import logging
-from utils import log
-from events import obsws
-from handlers.twitchapi import trigger_follower_count, trigger_sub_count
-from dispatcher.event_dispatcher import post_event
+from src.utils import log
+from src.events import obsws
+from src.handlers.twitchapi import trigger_follower_count, trigger_sub_count
+from src.dispatcher.event_dispatcher import post_event
 import os
 #from handlers.twitchapi import myTwitch
-from utils.file_io import write_file
+from src.utils.file_io import write_file
 
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)

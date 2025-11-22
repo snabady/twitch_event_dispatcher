@@ -1,12 +1,13 @@
 import os
 import logging 
-from utils import log
+from src.utils import log
 import random
-from handlers.db_handler import get_active_channelpoint_rewards
-from dispatcher.event_dispatcher import post_event
-from utils.run_command import run_mpv
-from utils import run_command
-from utils.file_io import write_file, write_snaalert_file
+from src.handlers.db_handler import get_active_channelpoint_rewards
+from src.dispatcher.event_dispatcher import post_event
+from src.utils.run_command import run_mpv
+from src.utils import run_command
+from src.utils import file_io
+from src.utils.file_io import write_file, write_snaalert_file
 logger = logging.getLogger(__name__)
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
@@ -149,6 +150,7 @@ def handle_reward_redemption_add (event: dict):
         post_event("snafu_flash_event", {"sna"})
         msg = f"{event_data.get("user_name")} flashed ChillGirl lanternfish1 "
         post_event("irc_send_message", msg)
+        file_io.update_flash_counter(1)
     else:
         logger.debug(f"sorry REWARD {val2} is not active right now")
                                                                                      

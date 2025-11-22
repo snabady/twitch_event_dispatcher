@@ -1,20 +1,20 @@
 from twitchAPI.twitch import Twitch, TwitchUser
 from twitchAPI.oauth import UserAuthenticator, UserAuthenticationStorageHelper
-from twitchAPI.object.eventsub import ChannelSubscribeEvent, ChannelRaidEvent, ChannelFollowEvent, StreamOnlineEvent, StreamOfflineEvent, ChannelUpdateEvent, GoalEvent, ChannelPredictionEvent, ChannelPointsCustomRewardRedemptionUpdateEvent, ChannelPointsCustomRewardRedemptionAddEvent, ChannelPointsCustomRewardUpdateEvent, ChannelPointsCustomRewardRemoveEvent, ChannelPointsCustomRewardAddEvent, HypeTrainEvent, HypeTrainEndEvent, ChannelUnbanRequestResolveEvent, ChannelBanEvent, ChannelUnbanEvent, ChannelUnbanRequestCreateEvent, CharityCampaignProgressEvent, CharityCampaignStartEvent, CharityCampaignStopEvent, CharityDonationEvent, ChannelSubscriptionEndEvent, ChannelSubscriptionGiftEvent, ChannelSubscriptionMessageEvent, ChannelShoutoutCreateEvent, ChannelShoutoutReceiveEvent, ChannelCheerEvent,ChannelPointsAutomaticRewardRedemptionAddEvent, ChannelPollBeginEvent, ChannelPollEndEvent, ChannelPollProgressEvent, ChannelModeratorAddEvent, ChannelModeratorRemoveEvent, ChannelBanEvent, ChannelUnbanEvent, ChannelAdBreakBeginEvent
+from twitchAPI.object.eventsub import ChannelSubscribeEvent, ChannelRaidEvent, ChannelFollowEvent, StreamOnlineEvent, StreamOfflineEvent, ChannelUpdateEvent, GoalEvent, ChannelPredictionEvent, ChannelPointsCustomRewardRedemptionUpdateEvent, ChannelPointsCustomRewardRedemptionAddEvent, ChannelPointsCustomRewardUpdateEvent, ChannelPointsCustomRewardRemoveEvent, ChannelPointsCustomRewardAddEvent, HypeTrainEvent, HypeTrainEndEvent, ChannelUnbanRequestResolveEvent, ChannelBanEvent, ChannelUnbanEvent, ChannelUnbanRequestCreateEvent, CharityCampaignProgressEvent, CharityCampaignStartEvent, CharityCampaignStopEvent, CharityDonationEvent, ChannelSubscriptionEndEvent, ChannelSubscriptionGiftEvent, ChannelSubscriptionMessageEvent, ChannelShoutoutCreateEvent, ChannelShoutoutReceiveEvent, ChannelCheerEvent,ChannelPointsAutomaticRewardRedemptionAddEvent, ChannelPollBeginEvent, ChannelPollEndEvent, ChannelPollProgressEvent, ChannelModeratorAddEvent, ChannelModeratorRemoveEvent, ChannelBanEvent, ChannelUnbanEvent, ChannelAdBreakBeginEvent, ChannelVIPAddEvent, ChannelVIPRemoveEvent
 from twitchAPI.eventsub.websocket import EventSubWebsocket
 from twitchAPI.helper import first
 from twitchAPI.type import TwitchBackendException
 from typing import Tuple, Optional
 import os
 from typing import Union, cast
-from utils import log
-from dispatcher.event_dispatcher import post_event
-from events.twitch_auth_scopes import TARGET_SCOPES, CLI_SCOPES
+from src.utils import log
+from src.dispatcher.event_dispatcher import post_event
+from src.events.twitch_auth_scopes import TARGET_SCOPES, CLI_SCOPES
 import logging #.config
 import colorlog
 import datetime
-from utils.log import add_logger_handler
-from handlers.db_handler import get_active_channelpoint_rewards
+from src.utils.log import add_logger_handler
+from src.handlers.db_handler import get_active_channelpoint_rewards
 
 class TwitchEvents:
     """
@@ -180,20 +180,20 @@ class TwitchEvents:
         ChannelShoutoutReceiveEvent:"twitch_shoutout_event",
         ChannelPollBeginEvent: "twitch_poll_event",
         ChannelPollEndEvent: "twitch_poll_event",
-        ChannelPollProgressEvent: "twitch_poll_event"
+        ChannelPollProgressEvent: "twitch_poll_event",
+        ChannelVIPAddEvent: "twitch_vip_event",
+        ChannelVIPRemoveEvent: "twitch_vip_event"
+
         } 
     
     async def dispatch_twitch_event(self, x: Union[ChannelSubscribeEvent, ChannelBanEvent, ChannelFollowEvent, ChannelRaidEvent, ChannelCheerEvent]):
         event_source = "twitch_event"
         ts = datetime.datetime.now()
         data = ""
-        self.logger.debug(f'x: {type(x)}')
+#        self.logger.debug(f'x: {type(x)}')
         if self.event_map[type(x)] != None:
-            
             x = cast(ChannelSubscribeEvent, x)
-
             self.logger.debug(f"dispatching **** event_type:------> >>> {x.subscription.type} <<<")
-            
             data = {
                 "timestamp_received": ts, 
                 "timestamp_created": x.subscription.created_at,
@@ -203,11 +203,8 @@ class TwitchEvents:
                 "type": self.event_map[type(x)],
                 "event_data": x.event.to_dict()
             }
-            self.logger.debug(f"**POST TWITCH EVENT**: {self.event_map[type(x)]} ")
             post_event(self.event_map[type(x)], data)
     
-
-         
     async def listen_stream_info_events(self):
         """
         EVENT_LISTENER
@@ -496,5 +493,14 @@ class TwitchEvents:
         except Exception as e:
             self.logger.error('collection_of_events' , e)
 
+
+    async def listen_vip_events(self):
+        vip_add_id = await self.eventsub.listen_channel_vip_add(self.user.id, self.dispatch_twitch_event)
+        vip_remove_id = await self.eventsub.listen_channel_vip_remove(self.user.id, self.dispatch_twitch_event)
+        self.logger.info("successfully subscribed to vip events")
+        return {
+                "channel.vip.add" : vip_add_id, 
+                "channel.vip.remove" : vip_remove_id
+                }
 
 

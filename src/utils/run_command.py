@@ -1,3 +1,4 @@
+import time
 import os
 import urllib
 import requests
@@ -8,10 +9,10 @@ import logging
 import re
 from threading import Thread
 import threading
-from utils import log
+from src.utils import log
 from num2words import num2words
-
-logger = logging.getLogger(__name__)
+import requests
+logger = logging.getLogger("RUN_CMD:")
 logger = log.add_logger_handler(logger)
 logger.setLevel(logging.DEBUG)   
 
@@ -29,7 +30,7 @@ class EventQueue:
         self.thread_worker.start()
         
     def enqueue(self, event):
-        self.cmdpr.info(f'enquue: {event}')
+  #      self.cmdpr.info(f'enquue: {event}')
         self.taskqueue.put(event)
 
     def dequeue( self ):
@@ -37,8 +38,8 @@ class EventQueue:
         while self.running:
             #self.taskqueue.qsize()
             task = self.taskqueue.get()
-            self.cmdpr.debug(f'type (task) {type(task)} ')
-            self.cmdpr.info(f'queue-size: {self.taskqueue.qsize()}')
+#            self.cmdpr.debug(f'type (task) {type(task)} ')
+ #           self.cmdpr.info(f'queue-size: {self.taskqueue.qsize()}')
             if task == None:
                 break
             task()
@@ -94,7 +95,7 @@ def run_mpv(filepath: str,  volume: str , no_video=False):
     subprocess.run(['mpv', filepath])
 
 
-def run_xcowsay(image:str , text: str, time: int, monitor:int, block=True):
+def run_xcowsay(image:str , text: str, time: int, monitor:int, block=False):
     
     cow_time  = f"--time={str(time)}"
     monitor = f'--monitor={str(monitor)}'
@@ -145,4 +146,82 @@ def trigger_event_board(filename):
     url += filename
     requests.get(url)
 
+def create_epaper_vip_badge(event_data):
+    vip_name = event_data.get("user_name")
+    vip_user_image = event_data.get("vip_user_image") 
+    logger.debug(f"user_name: {vip_name} vip_user_imag: {vip_user_image}")
+    #subprocess.run(["/home/sna/src/twitch/src/scripte/imgmagick/create_vip_e_paper_image.sh" , vip_name, vip_user_image])
+    
+    proc = subprocess.run(["/home/sna/src/twitch/src/scripte/imgmagick/create_vip_e_paper_image.sh" , 
+                    vip_name,
+                    vip_user_image
+                    ], 
+                   check=True)
+    
+    image_path = "/home/sna/src/twitch/src/scripte/imgmagick/vip_epaper.jpg"
+    url = "http://192.168.0.12/imgupload" 
+    mac = "13373C6758BED341"
+    mac = "1337346152ECA442"
+    dither=1
+    payload = {"dither": dither ,"mac": mac}
+    try:
+        with open(image_path, "rb") as file:
+            files = {"file":(file)}
+            files = { "file": ("vip_epaper.png", file) }
+            response = requests.post(url, data=payload, files=files)
+            logger.debug("blub")
+            if response.status_code==200:
+                logger.debug("epaper-updated successfully")
+            else:
+                logger.debug("epaper, shit happened")
+    except FileNotFoundError:
+        logger.error(f"img not found: {image_path}")
+    except Exception as e:
+        logger.error(f"error uploading {str(e)}")
 
+
+def show_structure(data, indent=0):
+    prefix = " " * indent
+    if isinstance(data, dict):
+        for key, value in data.items():
+            print(f"{prefix}{key}/")  # Schlüssel anzeigen
+            show_structure(value, indent + 2)  # Rekursiv weitergehen
+    elif isinstance(data, list):
+        print(f"{prefix}[]")  # Liste anzeigen
+        if len(data) > 0:
+            show_structure(data[0], indent + 2)  # Beispiellistenelement prüfen
+    else:
+        print(f"{prefix}WERT")  # Wert ohne Anzeige
+
+def create_last_bait_matrix(user_name):
+    
+    try:
+        logger.debug(f"trying to set matrix for bait user: {user_name}")
+        payload = {
+            "on": True,
+            "bri": 128,
+            "transition": 7,
+            "ps": 13,
+            "pl": -1,
+            "ledmap": 0,
+            "mainseg": 1,
+            "seg": [
+                {
+                    "id": 0,
+                    "n": "ZermalmerDoc",  
+                    "fx": 122
+                },
+                {
+                    "id": 1,
+                    "fx": 186
+                }
+            ]
+        }
+        response =requests.get("http://192.168.0.91/json/state" )
+        payload = response.json()
+        show_structure(payload)
+        payload["seg"][0]["n"] = user_name
+        response = requests.post("http://192.168.0.91/json/state", json=payload)
+        logger.debug(response.text)
+    except requests.exceptions.RequestException as e:
+        logger.debug(e)

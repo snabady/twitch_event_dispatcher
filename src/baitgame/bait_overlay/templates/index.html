@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fishing Overlay</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            pointer-events: none;
+        }
+
+        .slot {
+            position: relative;
+            border: 0px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .fishing-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: rgba(0, 255, 255, 0.4);
+            transform: translateX(-50%);
+        }
+
+        .fish {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            background: gray;
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        .result {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-shadow: 0 0 5px black;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div>
+    <script src="{{ url_for('static', filename='overlay.js') }}"></script>
+</body>
+</html>
+

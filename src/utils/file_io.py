@@ -1,7 +1,7 @@
 import os
 import time 
 import json
-from dispatcher.event_dispatcher import post_event
+from src.dispatcher.event_dispatcher import post_event
 import asyncio
 
 def write_file(filepath=str, mode= str , text= str):
@@ -15,9 +15,11 @@ async def asnyc_write_file(filepath, mode, text):
 # TODO is it still needed?
 def write_event_received(text=str):
     pass
-
+flashcounter =0
 def update_flash_counter(text=str):
-    write_file(os.getenv("FLASH_COUNTER"), "w", text)
+    global flashcounter
+    flashcounter +=1
+    write_file(os.getenv("FLASH_COUNTER"), "w", str(flashcounter))
 
 def write_bait_counter(text=str):
     filename = os.getenv("BAIT_COUNTER_FILE", "BAIT_HISTORX_FILE")

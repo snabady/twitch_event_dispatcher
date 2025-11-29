@@ -62,6 +62,7 @@ class TwitchEvents:
         else:
             self.logger.debug("__aenter__ live - setting up eventsub")
             self.eventsub, self.twitch, self.user = await self.prodConn()
+            self.logger.debug("successfull auth with twitch-events")
         self.eventsub.start()
         return self
 

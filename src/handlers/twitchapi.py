@@ -118,6 +118,7 @@ class myTwitch(metaclass=Singleton):
         subscribe_event("trigger_add_or_remove_vip", trigger_add_or_remove_vip)
         subscribe_event("trigger_udpate_vip_epaper", trigger_update_vip_epaper)
     async def __aenter__(self):
+        self.logger.debug("TWAPI __aenter__")
         self.twitch, self.user = await self.get_twitch_api_conn()
         #asyncio.create_task(self.twapi_task_runner())
         return self
@@ -241,10 +242,12 @@ class myTwitch(metaclass=Singleton):
     async def get_twitch_api_conn(self) -> Tuple[ Twitch, TwitchUser]:
         auth_base_url = os.getenv("TWAPI_AUTH_BASE_URL", "ERROR_AUTH_BASE_URL")
         twitch = await Twitch(os.getenv("TWAPI_CLIENT_ID"), os.getenv("TWAPI_CLIENT_SECRET"))
-        helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path=os.getenv("TWAPI_AUTH_STORAGE_FILE"), auth_generator_func=self.auth_token_generator)
+        #helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path=os.getenv("TWAPI_AUTH_STORAGE_FILE"), auth_generator_func=self.auth_token_generator)
+
+        helper = UserAuthenticationStorageHelper(twitch, self.scopes, storage_path=os.getenv("TWAPI_AUTH_STORAGE_FILE"))
         await helper.bind()
         user = await first(twitch.get_users())
-
+        self.logger.debug("successfully connected twapi handler")
         return twitch, user
 
 

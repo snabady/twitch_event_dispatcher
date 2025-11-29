@@ -1,4 +1,4 @@
-DOTENV_PATH="/home/sna/src/twitch/.env"
+DOTENV_PATH=".env"
 from dotenv import load_dotenv
 load_dotenv(DOTENV_PATH)
 
@@ -151,6 +151,9 @@ async def cli_twitch_listen():
             test_ids = await tevents.listen_stream_info_events()
             xxx = test_ids
             cli_ids = append_ids(cli_ids, test_ids)
+
+
+            await trigger_cli_event (test_ids[0], test_ids[1])
             db_handler.write_cli_params(cli_ids)
 
             try: 
@@ -195,10 +198,11 @@ async def twitch_listen_live():
             logger.debug("cu later...")
 
 async def obs_listen():
-
+    logger.debug("connection obs-ws")
     obs = obsws.Obsws()
     await obs.init_obswebsocket_ws()
     logger.debug(obs)
+    logger.debug("connected to obs-ws")
 
 async def irc_listen():
     sna = twitch_irc_events.Irc()
@@ -210,7 +214,7 @@ async def irc_listen():
 
 async def tapi_listen():
     async with twitchapi.myTwitch() as twitch_instance:
-
+        logger.debug("XXXXXXXXXXXXXXXXXXXXX starting twitch api-handler") 
         asyncio.create_task(twitch_instance.twapi_task_runner())
         global_rewards_manager = custom_rewards_manager.ChannelPointManager(twitch_instance) 
         print(f"Angemeldeter Nutzer: {twitch_instance.user.display_name}")
@@ -274,12 +278,12 @@ async def main():
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, handle_exit)
 
+#                asyncio.create_task( cli_twitch_listen() ),
         tasks = [
                 asyncio.create_task( wled_listen() ), 
-                asyncio.create_task( cli_twitch_listen() ),
+                asyncio.create_task( obs_listen() ),
                 asyncio.create_task( tapi_listen() ),
                 asyncio.create_task( irc_listen() ),
-                asyncio.create_task( obs_listen() ),
                 asyncio.create_task( twitch_listen_live() )
                 #asyncio.create_task( emote_loop())
                 ]

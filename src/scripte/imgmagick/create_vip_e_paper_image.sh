@@ -4,10 +4,10 @@
 # magick -size 3x1 xc:"#333333" xc:"#EEEEEE" xc:"#888888" +append palette.png
 # magick text.png -colorspace Gray -contrast-stretch 0x10% -posterize 4 -dither None  -remap palette.png output.png
 #
-OUT="/home/sna/src/twitch/src/scripte/imgmagick/vip_epaper.jpg"
+OUT="/home/orangepi/twitch/src/scripte/imgmagick/vip_epaper.jpg"
 SIZE="384x184"
-FONT="/usr/share/fonts/OTF/MonaspaceKrypton-Regular.otf"
-FONT1="/usr/share/fonts/OTF/MonaspaceKrypton-Bold.otf"
+FONT="/home/orangepi/fonts/MonaspaceKrypton-Regular.otf"
+FONT1="/home/orangepi/fonts/MonaspaceKrypton-Bold.otf"
 NAME=$1
 BGIMAGE=$2
 echo "$1"

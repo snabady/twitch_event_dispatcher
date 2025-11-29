@@ -12,7 +12,6 @@ def subscribe_event(event_type, fn):
     subscribers[event_type].append(fn)
 
 def get_handlers(event_name):
-    """Retrieve all handlers for a given event name."""
     return _event_handlers.get(event_name, [])
 
 def post_event(event_type, data) :

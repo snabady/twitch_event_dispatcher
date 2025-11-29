@@ -113,7 +113,7 @@ class Irc(metaclass=Singleton):
         asyncio.run_coroutine_threadsafe(runner(), self.loop)
 
     async def auth_token_generator(self,  twitch: Twitch, USER_SCOPE) -> (str, str):
-        
+        # hier refresh nur wenn auth nicht mit auth_storage_file moeglich 
         auth = UserAuthenticator(twitch, 
                                  USER_SCOPE,
                                  url=self.redirection_url,  
@@ -160,7 +160,8 @@ class Irc(metaclass=Singleton):
     async def now_playing(self):
 
         try:
-            song = subprocess.check_output(["audtool", "current-song"], text=True).strip()
+            song =""
+            #song = subprocess.check_output(["audtool", "current-song"], text=True).strip()
             if song != self.last_now_playing:
                 msg=(f"now_playing: {song}")
                 self.last_now_playing = song
@@ -174,7 +175,9 @@ class Irc(metaclass=Singleton):
     
     async def run(self):
         self.twitch = await Twitch(self.client_id, self.client_secret) 
-        helper = UserAuthenticationStorageHelper(self.twitch, USER_SCOPE, storage_path=self.auth_storage_file, auth_generator_func=self.auth_token_generator)
+        self.logger.debug(f"auth storage: {self.auth_storage_file}")
+        #helper = UserAuthenticationStorageHelper(self.twitch, USER_SCOPE, storage_path=self.auth_storage_file, auth_generator_func=self.auth_token_generator)
+        helper = UserAuthenticationStorageHelper(self.twitch, USER_SCOPE, storage_path=self.auth_storage_file)
         await helper.bind()
         
         self.user_id = await self.getUser(self.client_name)

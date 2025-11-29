@@ -158,21 +158,21 @@ def handle_flash_event(event_data, irc_instance):
 
 
 def handle_ameno(event_data, irc_instance):
-    requests.get("http://localhost:8000/play?sound=webm/ameno.webm") 
+    requests.get("http://192.168.0.177:8000/play?sound=webm/ameno.webm") 
 
 
 def handle_bobr_event(event_data, irc_instance):
     requests.get("http://localhost:8000/play?sound=webm/bobr.webm") 
 
 def handle_cat_kiss(event_data, irc_instance):
-    requests.get("http://localhost:8000/play?sound=webm/kisscat.webm")
+    requests.get("http://192.168.0.177:8000/play?sound=webm/kisscat.webm")
 def handle_lightning_event(event_data, irc_instance):
     post_event("irc_send_message", "KEKW")
 
 def handle_hungry_event(event_data, irc_instance):
     # the cat is hungry... take care of your fish
     
-    requests.get("http://localhost:8000/play?sound=webm/hangry.webm") 
+    requests.get("http://192.168.0.177:8000/play?sound=webm/hangry.webm") 
     if random.choice([True,False]):
         #obs-setsourcevisibility.
         logger.debug("you should trigger hangry now and build a game of it")

@@ -106,7 +106,7 @@ class Obsws(metaclass=Singleton):
         """
         loads the .env variables
         """
-        self.obs_url = os.getenv("OBSWS_URL", "ws://127.0.0.1:4455")
+        self.obs_url = os.getenv("OBSWS_URL", "ws://192.168.0.41:4455")
         self.password = os.getenv("OBSWS_PASSWORD", None)
 
     async def stop(self):
@@ -200,6 +200,7 @@ class Obsws(metaclass=Singleton):
         self.logger.debug(f"OBS_QUEUE: {self.obs_task_queue.qsize()}")
 
     async def _connect(self) -> bool:
+        self.logger.debug(f"trying to OBSWEBSAOCKEt connect")
         """Try to connect once and set connected_event on success."""
         async with self._connect_lock:
             if self.ws is not None:
@@ -228,7 +229,7 @@ class Obsws(metaclass=Singleton):
                 try:
                     post_event("obs_connected", {"url": self.obs_url})
                 except Exception:
-                    self.logger.debug("post_event failed for obs_connected")
+                    self.logger.debug(f"post_event failed for obs_connected {self.obs_url}")
                 return True
             except Exception as e:
                 self.logger.debug("Failed to connect to OBS: %s", e)

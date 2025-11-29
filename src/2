@@ -111,7 +111,7 @@ def run_xcowsay(image:str , text: str, time: int, monitor:int, block=False):
     if block:
         subprocess.run(["ssh sna@192.168.0.41", 'DISPLAY=:0 xcowsay', text , "--image" , image, '--think', monitor , cow_time])
     else:    
-        subprocess.Popen(["ssh", "sna@192.168.0.41", 'DISPLAY=:0.0 /usr/bin/xcowsay', text , "--image" , image, '--think', monitor , cow_time, "&"])
+        subprocess.Popen(["ssh", "sna@192.168.0.41", 'DISPLAX=:0.0 /usr/bin/xcowsay', text , "--image" , image, '--think', monitor , cow_time])
 
 
 
